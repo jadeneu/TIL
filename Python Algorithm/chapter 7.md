@@ -288,6 +288,138 @@ def trap(self, height: List[int]) -> int:
 ### 09. 세 수의 합
 > 184p
 
+* **내가 짠 코드**
+```python
+def sum(nums: list) -> list:
+  nums.sort()
+  dict_nums = {}
+  new_list = []
+
+  for i,num in enumerate(nums):
+    dict_nums[num] = i # 딕셔너리에 '값':'인덱스' 형태로 넣는다
+    for j in range(i+1,len(nums)):
+      two_sum = nums[i] + nums[j]
+      last_num = 0 - two_sum
+      
+      # last_num이 dict_num(키)에 있다면
+      if last_num in dict_nums:
+        # dict_num[last_num]의 값(=인덱스)이 i 또는 j가 아니라면
+        if dict_nums[last_num] != i or j:
+          # 세 수를 정렬한 리스트가 new_list에 없다면
+          if sorted([nums[i],nums[j],last_num]) not in new_list:
+            new_list.append(sorted([nums[i],nums[j],last_num]))
+
+  return(new_list)
+
+
+nums = [-1,0,1,2,-1,-4]
+print(sum(nums))
+```
+<br>
+
+### 09. 세 수의 합 풀이
+#### 풀이1. 브루트 포스로 계산
+가장 먼저 브루트 포스로 풀이해보자.<br>
+언뜻 보면 O(n^3) 정도에 풀이가 가능해 보인다. 그러나 이 경우 타임아웃이 발생해 풀리지 않을 것도 같다.<br>
+어쨌든 일단 쉽게 접근할 수 있는 브루트 포스 풀이법을 한번 시도해보자.
+
+앞뒤로 같은 값이 있을 경우, 이를 쉽게 처리하기 위해 먼저 다음과 같이 sort() 함수를 사용해 정렬부터 한다.
+```python
+nums.sort()
+```
+정렬의 시간 복잡도는 O(nlogn)이며, 정렬한 결과 [-4, -1, -1, 0, 1, 2] 가 나온다.
+
+이 브루트 포스 풀이에는 중복된 값이 있을 수 있으므로 이 경우 다음과 같이 continue로 건너뛰도록 처리한다.
+```python
+if i > 0 and nums[i] == nums[i - 1]:
+  continue
+```
+
+이제 전체 코드는 다음과 같다.
+```python
+def threeSum(self, nums: List[int]) -> List[List[int]]:
+  results = []
+  nums.sort()
+  
+  # 브루트 포스 n^3 반복
+  for i in range(len(nums) - 2):
+    # 중복된 값 건너뛰기
+    if i > 0 and nums[i] == nums[i - 1]:
+      continue
+    for j in range(i + 1, len(nums) - 1):
+      if j > i + 1 and nums[j] == nums[j - 1]:
+        continue
+      for k in range(j + 1, len(nums)):
+        if k > j + 1 and nums[k] == nums[k - 1]:
+          continue
+        if nums[i] + nums[j] + nums[k] == 0:
+          results.append([nums[i], nums[j], nums[k]])
+          
+  return results
+```
+틀린 부분은 없지만 예상대로 이 방식으로는 문제가 풀리지 않는다. 타임아웃으로 풀이에 실패한다.
+<br><br>
+
+#### 풀이2. 투 포인터로 합 계산
+i를 축으로 하고, 중복된 값을 건너뛰게 한 부분은 다음과 같이 앞서 풀이와 동일하다.
+```python
+for i in range(len(nums) - 2):
+  if i > 0 and nums[i] == nums[i - 1]:
+    continue
+```
+<br>
+
+이제 중복이 아닌 경우 투 포인터로 풀이할 수 있다. 이를 도식화해보면 그림 7-8(186p)과 같다.
+
+i의 다음 지점과 마지막 지점을 left, right로 설정하고 간격을 좁혀가며 sum을 계산한다.<br> 
+이 부분을 코드로 구현해보면 다음과 같다.
+```python
+left, right = i + 1, len(nums) - 1
+while left < right:
+  sum = nums[i] + nums[left] + nums[right]
+```
+투 포인터가 간격을 좁혀나가며 합 sum을 계산한다.<br>
+
+이제 다음 코드를 살펴보자.
+```python
+if sum < 0:
+  left += 1
+elif sum > 0:
+  right -= 1
+```
+sum이 0보다 작다면 값을 더 키워야 하므로 left를 우측으로 이동하고, 0보다 크다면 값을 더 작게 하기 위해 right를 좌측으로 이동한다.
+<br>
+
+```python
+if sum < 0:
+  ...
+elif sum > 0:
+  ...
+else:
+  results.append((nums[i], nums[left], nums[right]))
+  
+  while left < right and nums[left] == nums[left + 1]:
+    left += 1
+  while left < right and nums[right] == nums[right - 1]:
+    right -= 1
+```
+sum = 0이면 정답이므로, 이 경우 결과를 리스트 변수 results에 추가한다. 추가한 다음에는 left, right 양 옆으로 동일한 값이 있을 수 있으므로 이를 left += 1, right -= 1을 반복해서 스킵하도록 처리한다.
+<br>
+
+```python
+left += 1
+right -= 1
+```
+마지막으로 left를 한 칸 우측으로, right를 한 칸 왼쪽으로 더 이동하고 다음으로 넘긴다.
+
+
+
+
+
+
+
+
+
 
 
 
