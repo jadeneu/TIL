@@ -188,9 +188,30 @@ end = start.next
 
 이렇게 할당된 start와 end는 꿑까지 값이 변하지 않는다. 즉 1과 2로 마지막까지 유지되며, start와 end를 기준으로 그림 8-9(238p)와 같이 반복하면서 역순으로 뒤집는다.
 
-그림에서 2)부터가 반복하며 진행되는 부분이다.
+그림에서 2)부터가 반복하며 진행되는 부분이다.<br>
+start.next를 tmp로 지정하고, start.next는 end.next가 된다. 그리고 end.next는 end.next.next로 한 칸 더 앞의 값을 끌어온다. 그리고 start.next.next를 tmp로 지정한다.<br>
+즉 이전에 start.next였던 노드를 배치하는 것과 동일하다. 이를 코드로 구현해보면 다음과 같다.
+```python
+for _ in range(n - m):
+  tmp, start.next, end.next = start.next, end.next, end.next.next
+  start.next.next = tmp
+```
+이 같은 구조로 n - m만큼 반복하면 최종 결과는 그림 8-9(238p)에서 5)번 결과가 된다.<br>
+연결 리스트에서 인덱스 m에서 n까지 노드가 잘 뒤집어졌다. 이제 root.next를 리턴하면 된다.
 
-
+다중 할당으로 간편하게 처리했지만, 굳이 다중 할당으로 처리하지 않고 다음과 같이 모두 한 줄씩 따로 처리해도 문제 없이 동일한 결과를 얻을 수 있다.
+```python
+for _ in range(n - m):
+  tmp = start.next
+  start.next = end.next
+  end.next = end.next.next
+  start.next.next = tmp
+```
+그러나 전체 코드는 되도록 간결한 형태로 다중 할당으로 처리한다.<br>
+예외 처리를 추가한 전체 코드는 다음과 같다.
+```python
+def reverseBetween
+```
 
 
 
