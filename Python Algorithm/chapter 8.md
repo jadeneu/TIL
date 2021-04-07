@@ -92,6 +92,104 @@ p는 head.next가 되고, p.next는 head가 된다. 물론 그 사이에 재귀 
 * **내가 짠 코드**<br>
 
 ### 문제 18 홀짝 연결 리스트 풀이
+#### 풀이1. 반복 구조로 홀짝 노드 처리
+쉽게 풀 수 있을 것 같은 문제이지만, 공간 복잡도와 시간 복잡도의 제약 사항이 있다.<br>
+여러 번 언급한 바 있지만, 이런 문제는 제약이 없을 경우 연결 리스트를 리스트로 바꾸고 파이썬 리스트가 제공하는 슬라이싱과 같은 다양한 함수를 사용하면 좀 더 쉽고 직관적이며 또한 빠르게 풀 수 있다. 그러나 이러한 풀이 방식은 우아하지 않다.<br>
+특히 오프라인 코딩 테스트 시에 이 같은 편법을 시도하다가는 면접관에게 다시 풀어달라는 지적을 받게 될 수 있다.
+
+홀수 노두 다음에 짝수 노두가 오게 재구성하라고 했으니 홀(odd), 짝(even) 각 노드를 구성한 다음 홀수 노드의 마지막을 짝수 노드의 처음과 이어주면 될 것 같다.<br>
+먼저 입력값은 1->2->3->4->5로 구성된 연결 리스트로 가정해보자.
+```python
+odd = head
+even = head.next
+even_head = head.next
+```
+홀수 변수는 head이고, 짝수 변수는 head.next이다. 짝수의 헤드는 head.next이므로 even_head = even = head.next로 일단 시작한다.
+<br>
+
+```python
+while even and even.next:
+  odd.next = odd.next.next
+  odd = odd.next
+  even.next = even.next.next
+  even = even.next
+```
+이와 같이 while 반복문으로 루프를 돌면서 처리한다. 각 반복의 결과를 도식화해보면 그림 8-8(234p)과 같다.
+
+첫 번째 반복 시 홀수 odd는 1->3으로 연결되고, 3을 값으로 갖게 된다. 짝수 even은 2->4가 되고, 4를 값으로 갖는다.<br>
+두 번째는 3->5와 4->None이 되고, 마지막으로 5와 None이 남게 된다.<br>
+그렇다면 다중 할당을 이용해 코드의 라인 수를 좀 더 줄여볼 수 있을까?
+```python
+odd.next, odd = odd.next.next, odd.next
+```
+이런 형태가 가능할까?
+
+아쉽게도 가능하지 않다. 다시 한번 자세히 살펴보자.<br>
+이 코드의 첫 번째 반복의 경우 1->3이 되지만 odd는 2가 된다. 아직 odd는 head와 동일한 참조며, head.next가 2이기 때문이다.<br>
+즉 우리가 기대하는 결과는 1->3이 되고 odd가 3이 되는 것인데, 이처럼 다중 할당으로 처리하게 되면 서로 다른 결과가 된다.<br>
+따라서 이렇게 처리할 수 없다. 다만, 홀짝 처리를 하나로 묶어서 다음과 같이 두 줄로 처리하는 다중 할당은 가능하다.
+```python
+odd.next, even.next = odd.next.next, even.next.next
+odd, even = odd.next, even.next
+```
+이렇게 해서 끝까지 처리되면 홀수 odd는 5, 짝수 even은 None이 된다.
+<br>
+
+```python
+odd.next = even_head
+```
+이제 odd.next를 짝수의 헤드 even_head와 연결한다. 즉 5->2가 된다. 마지막으로 다음과 같이 head를 리턴한다
+```python
+return head
+```
+head는 1, even_head는 2가 되기 때문에, 앞서 처리된 내용을 바탕으로 1부터 결과를 쭉 나열해보면 1->3->5->2->4->None이 된다. 우리가 기대했던 결과다.<br>
+아울러 odd, even, even_head 등의 변수들은 n의 크기에 관계 없이 항상 일정하게 사용하기 때문에, 공간 복잡도 또한 O(1)으로 제약 조건을 만족한다.<br>
+간단한 예외 처리를 추가한 전체 코드는 다음과 같다.
+```python
+def oddEvenList(self, head: ListNode) -> ListNode:
+  # 예외 처리
+  if head is None:
+    return None
+    
+  odd = head
+  even = head.next
+  even_head = head.next
+  
+  # 반복하면서 홀짝 노드 처리
+  while even and even.next:
+    odd.next, even.next = odd.next.next, even.next.next
+    odd, even = odd.next, even.next
+    
+  # 홀수 노드의 마지막을 짝수 헤드로 연결
+  odd.next = even_head
+  return head
+```
+<br><br>
+
+### 문제 19 역순 연결 리스트 II
+> 237p
+
+* **내가 짠 코드**<br>
+
+<br><br>
+
+### 문제 19 역순 연결 리스트 II 풀이
+#### 풀이1. 반복 구조로 노드 뒤집기
+연결 리스트는 1->2->3->4->5->6, m은 2, n은 5로 가정하고 풀이를 진행해보자.
+```python
+root = start = ListNode(None)
+root.next = head
+for _ in range(m - 1):
+  start = start.next
+end = start.next
+```
+여기서 start는 변경이 필요한 2의 바로 앞 지점인 1을 가리키게 하고 end는 start.next인 2로 지정한다.<br>
+그리고 head는 1인데, 그보다도 더 앞에 root를 만들어 head보다 이전에 위치시킨다. 나중에는 root.next를 최종 결과로 리턴하게 될 것이다.
+
+이렇게 할당된 start와 end는 꿑까지 값이 변하지 않는다. 즉 1과 2로 마지막까지 유지되며, start와 end를 기준으로 그림 8-9(238p)와 같이 반복하면서 역순으로 뒤집는다.
+
+그림에서 2)부터가 반복하며 진행되는 부분이다.
+
 
 
 
