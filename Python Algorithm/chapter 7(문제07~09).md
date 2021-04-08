@@ -242,7 +242,7 @@ volume += left_max - height[left]
 ...
 volume += right_max - height[right]
 ```
-이처럼 최대 높이의 막대까지 각각 좌우 기둥 최대 높이 left_max, right_max가 현재 높이와의 차이만틈 물 높이 volume을 더해 나간다.
+이처럼 최대 높이의 막대까지 각각 좌우 기둥 최대 높이 left_max, right_max가 현재 높이와의 차이만큼 물 높이 volume을 더해 나간다.
 <br><br>
 
 ```python
