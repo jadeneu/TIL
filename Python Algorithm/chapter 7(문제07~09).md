@@ -226,6 +226,10 @@ def towSum(self, nums: List[int], target: int) -> List[int]:
 ### 문제 08 빗물 트래핑
 > 180p
 
+* **내가 짠 코드**<br>
+
+<br><br>
+
 
 ### 문제 08 빗물 트래핑 풀이
 #### 풀이1. 투 포인터를 최대로 이동
