@@ -1,3 +1,25 @@
+# 목차
+* [chapter 8. 연결 리스트](#8장-연결-리스트)
+* [리트코드 문제](#리트코드-문제)
+  + [문제 17 페어의 노드 스왑](#문제-17-페어의-노드-스왑)
+  + [문제 17 페어의 노드 스왑 풀이](#문제-17-페어의-노드-스왑-풀이)
+    - [풀이1. 값만 교환](#풀이1-값만-교환)
+    - [풀이2. 반복 구조로 스왑](#풀이2-반복-구조로-스왑)
+    - [풀이3. 재귀 구조로 스왑](#풀이3-재귀-구조로-스왑)
+  + [문제 18 홀짝 연결 리스트](#문제-18-홀짝-연결-리스트)
+  + [문제 18 홀짝 연결 리스트 풀이](#문제-18-홀짝-연결-리스트-풀이)
+    - [풀이1. 반복 구조로 홀짝 노드 처리](#풀이1-반복-구조로-홀짝-노드-처리)
+  + [문제 19 역순 연결 리스트 II](#문제-19-역순-연결-리스트-ii)
+  + [문제 19 역순 연결 리스트 II 풀이](#문제-19-역순-연결-리스트-ii-풀이)
+    - [풀이1. 반복 구조로 노드 뒤집기](#풀이1-반복-구조로-노드-뒤집기)
+<br><br>
+
+
+
+
+
+
+
 # 8장 연결 리스트
 ## 리트코드 문제
 ### 문제 17 페어의 노드 스왑
@@ -210,8 +232,25 @@ for _ in range(n - m):
 그러나 전체 코드는 되도록 간결한 형태로 다중 할당으로 처리한다.<br>
 예외 처리를 추가한 전체 코드는 다음과 같다.
 ```python
-def reverseBetween
+def reverseBetween(self, head: ListNode, m: int, n: int) -> ListNode:
+  # 예외 처리
+  if not head or m == n:
+    return head
+    
+  root = start = ListNode(None)
+  root.next = head
+  # start, end 지정
+  for _ in range(m - 1):
+    start = start.next
+  end = start.next
+  
+  # 반복하면서 노드 차례대로 뒤집기
+  for _ in range(n - m):
+    tmp, start.next, end.next = start.next, end.next, end.next.next
+    start.next.next = tmp
+  return root.next
 ```
+<br><br>
 
 
 
