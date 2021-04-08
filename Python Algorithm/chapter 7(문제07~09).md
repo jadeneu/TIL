@@ -48,7 +48,7 @@
 그렇다면 파이썬의 더블링 구조를 잠깐 살펴보자.<br>
 CPython의 내부 구현을 살펴보면 동적 배열인 리스트의 구현은 CPython의 listobject.c에 정의되어 있다.<br>
 여기에는 다음 코드에서 주석에 기술된 수치만큼인 0, 4, 8, 16, ... 순으로 재할당하도록 정의되어 있다.
-```python
+```c
 // cpython/Objects/listobject.c
 // The growth pattern is: 0, 4, 8, 16, 25, 35, 46, 58, 72, 88, ...
 new_allocated = (size_t)newsize + (newsize >> 3) + (newsize < 9 ? 3 : 6);
