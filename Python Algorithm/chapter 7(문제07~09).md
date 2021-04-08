@@ -141,7 +141,7 @@ def twoSum(self, nums: List[int], target: int) -> List[int]:
 
 ```python
 def twoSum(self, nums: List[int], target: int) -> List[int]:
-  nums_map + {}
+  nums_map = {}
   # 키와 값을 바꿔서 딕셔너리로 저장
   for i, num in enumerate(nums):
     nums_map[num] = i
