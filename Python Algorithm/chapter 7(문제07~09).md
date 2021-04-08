@@ -73,7 +73,7 @@ def two_sum(nums:list,target:int) -> list:
   new_list = []
   sum = 0
 
-  for i in range(len(nums)):
+  for i in range(len(nums) - 1):
     for j in range(i+1,len(nums)):
       sum = nums[i] + nums[j]
       if sum == target:
