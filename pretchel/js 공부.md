@@ -6,8 +6,7 @@
 * [.select()](5-select)
 * [document.execCommand()](#6-documentexeccommand)
 * [document.body.removeChild()](#7-documentbodyremovechild)
-* [.addEventListener()](#8-addeventlistener)<br>
-
+* [.addEventListener()](#8-addeventlistener)
 * [출처](#출처)
 
 <br><br>
