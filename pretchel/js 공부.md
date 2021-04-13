@@ -1,4 +1,13 @@
 # 목차
+* [document.querySelector()](#1-documentqueryselector)
+* [document.createElement()](#2-documentcreateelement)
+* [document.body.appendChild()](#3-documentbodyappendchild)
+* [.value](#4-value)
+* [.select()](5-select)
+* [document.execCommand()](#6-documentexeccommand)
+* [document.body.removeChild()](#7-documentbodyremovechild)
+* [.addEventListener()](#8-addeventlistener)<br>
+
 * [출처](#출처)
 
 <br><br>
@@ -72,6 +81,18 @@ Select text 버튼을 클릭하면
 
 형식 -> "**부모노드.removeChild(delNode)**"
 
+<img src="https://user-images.githubusercontent.com/55045377/114501581-3af9a000-9c65-11eb-87d8-0003fc1202fd.png" width=70% height=70%>
+
+<br><br>
+
+## 8. .addEventListener()
+addEventListener은 이벤트를 등록하는 가장 권장되는 방식이다. 
+
+<img src="https://user-images.githubusercontent.com/55045377/114501821-ae031680-9c65-11eb-98cc-b0f352faa30f.png" width=70% height=70%>
+
+<img src="https://user-images.githubusercontent.com/55045377/114501818-ad6a8000-9c65-11eb-9e16-330ffd0bf294.png" width=70% height=70%>
+
+<br><br>
 
 
 
@@ -90,7 +111,10 @@ https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/select
 * 6.document.execCommand()<br>
 https://dororongju.tistory.com/30<br>
 https://jamesdreaming.tistory.com/220
-
+* 7.document.body.removeChild()<br>
+https://m.blog.naver.com/PostView.nhn?blogId=5340579&logNo=220908240262&proxyReferer=https:%2F%2Fwww.google.com%2F
+* 8..addEventListener()<br>
+https://m.blog.naver.com/PostView.nhn?blogId=qbxlvnf11&logNo=220877806711&proxyReferer=https:%2F%2Fwww.google.com%2F
 
 
 
