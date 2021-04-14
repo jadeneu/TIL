@@ -24,3 +24,72 @@
 
 스택 추상 자료형(Abstract Data Type)(이하 ADT)을 연결 리스트로 구현한 것은 그림 9-1(242p)과 같다. 참고로 ADT는 자료형의 연산을 정의한 것으로 실제 구현 방법은 명시하지 않는다. <br>
 이 그림에서 ADT는 스택의 연산을 지원하기 위해 1부터 5까지 각 요소가 접시 쌓듯 차곡차곡 놓이겠지만, 실제로 연결 리스트로 구현하게 된다면 물리 메모리 상에는 순서와 관계 없이 여기저기에 무작위로 배치되고 포인터로 가리키게 될 것이다.
+<br><br>
+
+## 연결 리스트를 이용한 스택 ADT 구현
+연결 리스트를 이용해 실제로 스택을 한번 구현해보자. 먼저 다음과 같이 연결 리스트를 담을 Node 클래스부터 정의한다.
+```python
+class Node:
+  def __init__(self, item, next):
+    self.item = item
+    self.next = next
+```
+초기화 함수 __ init __ ()에서 노드의 값을 item으로, 다음 노드를 가리키는 포인터는 next로 정의한다. 이제 스택의 연산인 push()와 pop()을 담은 Stack 클래스를 다음과 같이 정의한다.
+```python
+class Stack:
+  def __init__(self):
+    self.last = None
+    
+  def push(self, item):
+    self.last = Node(item, self.last)
+    
+  def pop(self):
+    item = self.last.item
+    self.last = self.last.next
+    return item
+```
+push()는 연결 리스트에 요소를 추가하면서 가장 마지막 값을 next로 지정하고, 포인터인 last는 가장 마지막으로 이동시킨다.<br>
+pop()은 가장 마지막 아이템을 끄집어내고 last 포인터를 한 칸 앞으로 전진시킨다. 즉 이전에 추가된 값을 가리키게 한다.<br>
+이제 다음과 같이 1부터 5까지 값을 스택에 입력해보자.
+```python
+stack = Stack()
+stack.push(1)
+stack.push(2)
+stack.push(3)
+stack.push(4)
+stack.push(5)
+```
+스택 변수 stack의 입력된 값을 도식화하면 그림 9-2(244p)와 같다.
+
+stack은 각각 이전 값을 가리키는 연결 리스트로 구현되어 있으며, 가장 마지막 값은 last 포인터가 가리킨다. 이제 pop() 메소드로 스택의 값을 차례대로 출력해보자.
+```python
+>>> for _ in range(5):
+...     print(stack.pop())
+...
+5
+4
+3
+2
+1
+```
+가장 최근에 입력된 순서대로, 즉 LIFO 순으로 잘 출력되는 것을 확인할 수 있다. 이렇게 연결 리스트를 이용해 스택 ADT를 어렵지 않게 구현해보았다. 이제 스택과 관련한 문제를 몇 가지 풀어보자.
+<br><br>
+
+## 리트코드
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
