@@ -89,6 +89,8 @@ class ListNode:
 head = ListNode(1,ListNode(2, ListNode(2, ListNode(1))))
 ```
 
+<br><br>
+
 * **내가 짠 코드**<br>
 연결 리스트를 잘 모르겠어서 풀이 보고 파악함
 <br><br>
