@@ -35,6 +35,60 @@
 ### 문제 13 팰린드롬 연결 리스트
 > 201p
 
+* **연결리스트에 노드값 넣기(예)**<br>
+```python
+# 13. 팰린드롬 연결 리스트
+import time
+start_time = time.time()
+
+class ListNode:
+  def __init__(self, x):
+    self.val = x
+    self.next = None
+
+def init_list() -> None:
+  global node_A
+  node_A = ListNode('1')
+  node_B = ListNode('2')
+  # node_C = ListNode('2')
+  # node_D = ListNode('1')
+  
+  node_A.next = node_B
+  # node_B.next = node_C
+  # node_C.next = node_D
+
+def print_list() -> None:
+  global node_A
+  node = node_A
+
+  while node:
+    print(node.val)
+    node = node.next
+  
+"""
+my code is here
+"""
+def isPalindrome(head: ListNode) -> bool:
+  pass
+
+
+init_list()
+print_list()
+
+print(isPalindrome(node_A))
+end_time = time.time()
+print(end_time - start_time)
+```
+or
+```python
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+head = ListNode(1,ListNode(2, ListNode(2, ListNode(1))))
+```
+
 * **내가 짠 코드**<br>
 연결 리스트를 잘 모르겠어서 풀이 보고 파악함
 <br><br>
