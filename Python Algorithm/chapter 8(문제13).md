@@ -93,6 +93,52 @@ head = ListNode(1,ListNode(2, ListNode(2, ListNode(1))))
 
 * **내가 짠 코드**<br>
 연결 리스트를 잘 모르겠어서 풀이 보고 파악함
+
+  -> 다시 작성해본 코드
+  ```python
+  class Node(object):
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+  class Linked_List(object):
+      def __init__(self):
+        self.head = None
+        self.size = 0  # 항목 수
+
+      def append(self, node):
+          if self.head == None:
+              self.head = node
+          else:
+              cur = self.head
+              while cur.next != None:
+                  cur = cur.next
+              cur.next = node    
+
+      def palindrome_list(self):
+          new_list = []
+          head = self.head
+
+          while head:
+            new_list.append(head.val)
+            head = head.next
+
+
+          while len(new_list) > 0:
+              if new_list.pop(0) != new_list.pop():
+                  return False
+
+          return True
+
+
+
+  head = Linked_List()
+  head.append(Node(1))
+  head.append(Node(2))
+  head.append(Node(2))
+  head.append(Node(1))
+  print(head.palindrome_list())
+  ```
 <br><br>
 
 ### 문제 13 팰린드롬 연결 리스트 풀이
