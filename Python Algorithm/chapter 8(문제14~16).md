@@ -203,6 +203,10 @@ next, node.next = node.next, prev로 다중 할당하는 부분은 재귀나 반
 > 221p
 
 * **내가 짠 코드**<br>
+```python
+
+```
+
 
 <br><br>
 
