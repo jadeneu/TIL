@@ -43,7 +43,9 @@ def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
     l1.next = self.mergeTwoLists(l1.next, l2)
   return l1
 ```
-하나씩 풀어서 살펴보자. 먼저 l1과 l2의 값을 비교해 작은 값이 왼쪽에 오게 하고, next는 그다음 값이 엮이도록 재귀 호출하는 게 이 전체 코드의 전부다. 여기서 첫 번째 if 문인 괄호로 엮인 부분과 변수를 스왑(Swap)하는 부분부터 살펴보자.
+하나씩 풀어서 살펴보자. 먼저 l1과 l2의 값을 비교해 작은 값이 왼쪽에 오게 하고, next는 그다음 값이 엮이도록 재귀 호출하는 게 이 전체 코드의 전부다. 
+
+여기서 첫 번째 if 문인 괄호로 엮인 부분과 변수를 스왑(Swap)하는 부분부터 살펴보자.
 ```python
 if (not l1) or (12 and l1.val > l2.val):
     l1, l2 = l2, l1
