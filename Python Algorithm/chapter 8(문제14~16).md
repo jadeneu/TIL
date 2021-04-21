@@ -27,8 +27,102 @@
 
 * **내가 짠 코드**<br>
 ```python
+class Node(object):
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
 
+class Merge(object):
+    def __init__(self):
+        self.head = None
+        self.size = 0
+
+    def append(self, node):
+        if self.head == None:
+            self.head = node
+        else:
+            cur = self.head
+            while cur.next != None:
+                cur = cur.next
+            cur.next = node
+
+    def merge(self,one, two):
+        one = one.head
+        two = two.head
+        while one.next != None:
+            one = one.next
+        
+        one.next = two
+        
+        # self.print() # head node 확인
+        
+        self.compare()
+        
+    # 미완성된 메소드..
+    def compare(self):
+        head = self.head
+        one = head
+        two = head.next
+        flag = 0 # aligned check
+        print(one.size)
+        
+        while two != None:
+            if one.val > two.val:
+                tmp = two.val
+                two.val = one.val
+                one.val = tmp
+            one = one.next
+            two = two.next
+                
+
+
+
+
+    # new_head = Merge()
+    # head1 = one
+    # head2 = two
+
+    # while head1 != None and head2 != None:
+    #   if head1 == None:
+    #     new_head.append(head2.val)
+    #     head2 = head2.next
+    #     continue
+    #   elif head2 == None:
+    #     new_head.append(head1.val)
+    #     head1 = head1.next
+    #     continue
+    #   elif head1.val < head2.val:
+    #     new_head.append(head1.val)
+    #     new_head.append(head2.val)
+    #   else:
+    #     new_head.append(head2.val)
+    #     new_head.append(head1.val)
+
+    #   head1 = head1.next
+    #   head2 = head2.next
+
+    # new_head.print()
+
+
+      
+    def print(self):
+        head = self.head
+        while head:
+            print(head.val)
+            head = head.next
+
+
+head = Merge()
+head.append(Node(1))
+head.append(Node(2))
+head.append(Node(3))
+other = Merge()
+other.append(Node(1))
+other.append(Node(4))
+other.append(Node(5))
+head.merge(head, other)
 ```
+-> 삽질함.. 쉽게 풀려다가 결국 못 풀었다
 <br><br>
 
 ### 문제 14 두 정렬 리스트의 병합 풀이
