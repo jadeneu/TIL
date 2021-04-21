@@ -64,7 +64,6 @@ class Merge(object):
         one = head
         two = head.next
         flag = 0 # aligned check
-        print(one.size)
         
         while two != None:
             if one.val > two.val:
