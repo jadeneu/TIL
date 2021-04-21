@@ -27,6 +27,9 @@
 > 229p
 
 * **내가 짠 코드**<br>
+```python
+
+```
 
 <br><br>
 
@@ -113,6 +116,10 @@ p는 head.next가 되고, p.next는 head가 된다. 물론 그 사이에 재귀 
 > 233p
 
 * **내가 짠 코드**<br>
+```python
+
+```
+<br><br>
 
 ### 문제 18 홀짝 연결 리스트 풀이
 #### 풀이1. 반복 구조로 홀짝 노드 처리
@@ -193,6 +200,9 @@ def oddEvenList(self, head: ListNode) -> ListNode:
 > 237p
 
 * **내가 짠 코드**<br>
+```python
+
+```
 
 <br><br>
 
