@@ -205,7 +205,63 @@ x -= y
 
 * **내가 짠 코드**<br>
 ```python
+class Node(object):
+  def __init__(self, val=0, next=None):
+    self.val = val
+    self.next = next
 
+class LinkedList(object):
+  def __init__(self):
+    self.head = None
+    self.size = 0
+
+  def append(self, node):
+    if self.head == None:
+      self.head = node
+    else:
+      cur = self.head
+      while cur.next != None:
+        cur = cur.next
+      cur.next = node
+
+  def reverse(self):
+    q = self.head
+    new_list: List = []
+
+    # 연결리스트 노드값을 리스트에 append
+    while q:
+      new_list.append(q.val)
+      q = q.next
+      self.head = self.head.next
+
+    new_list.reverse()
+    
+    # 뒤집은 리스트 값을 연결리스트에 다시 삽입
+    for num in new_list:
+      self.append(Node(num))
+
+  def print(self):
+    q = self.head
+    while q:
+      print(q.val)
+      q = q.next
+
+
+
+
+q = LinkedList()
+q.append(Node(1))
+q.append(Node(2))
+q.append(Node(3))
+q.append(Node(4))
+q.append(Node(5))
+q.reverse()
+q.print()
+
+
+
+# 1->2->3->4->5->None
+# 5->4->3->2->1->None
 ```
 
 
