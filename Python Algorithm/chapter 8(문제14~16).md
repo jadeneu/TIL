@@ -342,7 +342,7 @@ def reverseList(self, head: ListNode) -> ListNode:
   
   while node:
     next, node.next = node.next, prev
-    prev, node - node, next
+    prev, node = node, next
     
   return prev
 ```
