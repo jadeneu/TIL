@@ -307,8 +307,9 @@ class Solution:
     
   def reverseList(self, head: ListNode) -> ListNode:
     return self.reverse(head, None)
-```
-```
+    
+    
+    
 solution = Solution()
 L1_3 = ListNode(4)
 L1_2 = ListNode(2,L1_3)
@@ -318,8 +319,9 @@ print("Before : ", end=" ")
 L1_1._print_all()
 result = solution.reverseList(L1_1)
 print("After : ", end=" ")
-result._print_all()
+result._print_all()  
 ```
+
 출력 결과 ↓
 ```
 Before : 1 2 4
