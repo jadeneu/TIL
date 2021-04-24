@@ -549,7 +549,7 @@ class Solution:
                 int(''.join(str(e) for e in b))
                 
     # 최종 계산 결과 연결 리스트 변환
-    return self.roReversedLinkedList(str(resultStr))
+    return self.toReversedLinkedList(str(resultStr))
 ```
 코드가 다소 길지만 풀이 자체는 전혀 어렵지 않다. 수행 속도에도 아무런 문제가 없다.<br>
 그러나 이 같은 방식이 깔끔한 풀이라고 할 수도 없다. 좀 더 우아한 방식으로 풀이할 수 있는 방법을 찾아보자.
