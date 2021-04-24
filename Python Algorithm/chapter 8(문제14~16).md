@@ -357,6 +357,79 @@ next, node.next = node.next, prev로 다중 할당하는 부분은 재귀나 반
 
 * **내가 짠 코드**<br>
 ```python
+class Node(object):
+  def __init__(self, val=0, next=None):
+    self.val = val
+    self.next = next
+
+class LinkedList(object):
+  def __init__(self):
+    self.head = None
+    self.size = 0
+
+  def append(self, node):
+    if self.head == None:
+      self.head = node
+    else:
+      cur = self.head
+      while cur.next != None:
+        cur = cur.next
+      cur.next = node
+
+
+  def get_str(self,l1,l2):
+    l1 = l1.head
+    l2 = l2.head
+    str1 = ''
+    str2 = ''
+
+    # 연결리스트 노드값을 문자열에 추가
+    while l1 or l2:
+      if not l1:
+        str2 = str2+str(l2.val)
+        l2 = l2.next
+      elif not l2:
+        str1 = str1+str(l1.val)
+        l1 = l1.next
+      else:
+        str1 = str1+str(l1.val)
+        str2 = str2+str(l2.val)
+        l1 = l1.next
+        l2 = l2.next
+
+    sum = int(str1)+int(str2) # 문자열의 정수형 더하기
+    sum = str(sum)[::-1] # 더한 값을 뒤집기
+    return self.get_LinkedList(sum)
+    
+
+  def get_LinkedList(self,strs):
+    new = LinkedList()
+
+    for num in strs:
+      new.append(Node(num))
+
+    return new
+
+  def print(self):
+    head = self.head
+
+    while head:
+      print(head.val)
+      head = head.next
+
+
+q = LinkedList()
+q.append(Node(2))
+q.append(Node(4))
+q.append(Node(3))
+
+p = LinkedList()
+p.append(Node(5))
+p.append(Node(6))
+p.append(Node(4))
+
+result = q.get_str(q,p)
+result.print()
 
 ```
 
