@@ -410,12 +410,14 @@ class LinkedList(object):
 
     return new
 
+
   def print(self):
     head = self.head
 
     while head:
       print(head.val)
       head = head.next
+
 
 
 q = LinkedList()
