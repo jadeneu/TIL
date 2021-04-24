@@ -28,6 +28,56 @@
 
 * **내가 짠 코드**<br>
 ```python
+class Node(object):
+  def __init__(self, val=0, next=None):
+    self.val = val
+    self.next = next
+
+class LinkedList(object):
+  def __init__(self):
+    self.head = None
+    self.size = 0
+
+  def append(self, node):
+    if self.head == None:
+      self.head = node
+    else:
+      cur = self.head
+      while cur.next != None:
+        cur = cur.next
+      cur.next = node
+
+  def swap(self):
+    head = self.head
+
+    while head != None:
+      if head.next == None:
+        break
+
+      tmp = head.next.val
+      head.next.val = head.val
+      head.val = tmp
+
+      head = head.next.next
+
+
+  def print(self):
+    head = self.head
+
+    while head:
+      print(head.val)
+      head = head.next
+
+
+
+
+q = LinkedList()
+q.append(Node(1))
+q.append(Node(2))
+q.append(Node(3))
+q.append(Node(4))
+q.swap()
+q.print()
 
 ```
 
