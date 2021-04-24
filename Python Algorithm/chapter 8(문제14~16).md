@@ -505,7 +505,7 @@ resultStr = int(''.join(str(e) for e in a)) +
 앞서 만들어둔 toReversedLinkedList()를 사용하면 쉽게 변환할 수 있을 것 같다.<br>
 단 여기서는 문자열을 입력값으로 받기 때문에 다음과 같이 str()로 한 번 변환하는 작업은 필요하다.
 ```python
-return self.roReversedLinkedList(str(resultStr))
+return self.toReversedLinkedList(str(resultStr))
 ```
 <br>
 
