@@ -267,7 +267,7 @@ end = start.next
 여기서 start는 변경이 필요한 2의 바로 앞 지점인 1을 가리키게 하고 end는 start.next인 2로 지정한다.<br>
 그리고 head는 1인데, 그보다도 더 앞에 root를 만들어 head보다 이전에 위치시킨다. 나중에는 root.next를 최종 결과로 리턴하게 될 것이다.
 
-이렇게 할당된 start와 end는 꿑까지 값이 변하지 않는다. 즉 1과 2로 마지막까지 유지되며, start와 end를 기준으로 그림 8-9(238p)와 같이 반복하면서 역순으로 뒤집는다.
+이렇게 할당된 start와 end는 끝까지 값이 변하지 않는다. 즉 1과 2로 마지막까지 유지되며, start와 end를 기준으로 그림 8-9(238p)와 같이 반복하면서 역순으로 뒤집는다.
 
 그림에서 2)부터가 반복하며 진행되는 부분이다.<br>
 start.next를 tmp로 지정하고, start.next는 end.next가 된다. 그리고 end.next는 end.next.next로 한 칸 더 앞의 값을 끌어온다. 그리고 start.next.next를 tmp로 지정한다.<br>
