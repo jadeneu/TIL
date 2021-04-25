@@ -137,7 +137,7 @@ def swapPairs(self, head: ListNode) -> ListNode:
     prev.next = b
     
     # 다음번 비교를 위해 이동
-    head - head.next
+    head = head.next
     prev = prev.next.next
   return root.next
 ```
