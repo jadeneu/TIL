@@ -249,9 +249,60 @@ def oddEvenList(self, head: ListNode) -> ListNode:
 
 * **내가 짠 코드**<br>
 ```python
+class Node(object):
+  def __init__(self, val=0, next=None):
+    self.val = val
+    self.next = next
 
+class LinkedList(object):
+  def __init__(self):
+    self.head = None
+    self.size = 0
+
+  def append(self, node):
+    if self.head == None:
+      self.head = node
+    else:
+      cur = self.head
+      while cur.next != None:
+        cur = cur.next
+      cur.next = node
+
+  def reverse(self,m,n):
+    head = self.head
+    tmp = LinkedList
+
+    for _ in range(m-1):
+      head = head.next
+    tmp = head
+
+    for _ in range(n-m):
+      tmp = tmp.next
+    tmp.next = None
+
+    # 노드 뒤집기
+    node,prev = tmp,None
+    while node != None:
+      next, node.next = tmp.next, prev
+      prev, node = node, next
+      
+    return prev
+
+
+
+
+
+m = 2
+n = 4
+q = LinkedList()
+q.append(Node(1))
+q.append(Node(2))
+q.append(Node(3))
+q.append(Node(4))
+q.append(Node(5))
+q.reverse(m, n)
 ```
-
+삽질하다가 다 못 풀었다....
 <br><br>
 
 ### 문제 19 역순 연결 리스트 II 풀이
