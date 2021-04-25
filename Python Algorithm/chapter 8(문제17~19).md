@@ -289,9 +289,6 @@ class LinkedList(object):
     return prev
 
 
-
-
-
 m = 2
 n = 4
 q = LinkedList()
