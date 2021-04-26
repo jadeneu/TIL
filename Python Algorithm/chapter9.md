@@ -209,6 +209,32 @@ def removeDuplicateLetters(self, s: str) -> str:
   ```
   replace(old, new, [count]) -> replace("찾을값", "바꿀값", 바꿀횟수)
   ```
+<br><br>
+#### 풀이2. 스택을 이용한 문자 제거
+```python
+stack.append(char)
+seen.add(char)
+```
+먼저 스택에는 이 코드와 같이 앞에서부터 차례대로 쌓아 나간다.
+<br><br>
+
+```python
+counter, stack = collections.Counter(s), []
+...
+while stack and char < stack[-1] and counter[stack[-1]] > 0:
+    seen.remove(stack.pop())
+```
+만약 현재 문자 char가 스택에 쌓여 있는 문자(이전 문자보다 앞선 문자)이고, 뒤에 다시 붙일 문자가 남아 있다면(카운터가 0 이상이라면), 쌀아둔 걸 꺼내서 없앤다.<br>
+카운팅에는 collections.Counter()를 이용한다. 
+
+입력값 cbacdcbc에서 a가 들어올 때, 이미 이전에 들어와 있던 c와 b는 다음 그림 9-4(250p)와 같이 제거가 된다. 카운터가 0 이상인 문자인 c와 b는 뒤에 다시 붙일 문자가 남아 있기 때문이다.
+
+
+
+
+
+
+
 
 
 
