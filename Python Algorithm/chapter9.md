@@ -204,6 +204,7 @@ def removeDuplicateLetters(self, s: str) -> str:
 
 * **참고 | replace()**<br>
   replace()는 문자열 변경을 할 수 있는 함수이다.<br>
+  
   replace()의 사용 방법은 아래와 같다.<br>
   ```
   replace(old, new, [count]) -> replace("찾을값", "바꿀값", 바꿀횟수)
