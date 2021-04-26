@@ -156,18 +156,12 @@ def isValid(self, s: str) -> bool:
 
 * **내가 짠 코드**<br>
 ```python
-def duplicate(s):
-  to_set = sorted(set(s))
-  to_str = ''
-  for char in to_set:
-    to_str += char
 
-  return to_str
-  
-
-s = input()
-print(duplicate(s))
 ```
+<br><br>
+
+### 문제 21 중복 문자 제거 풀이
+#### 풀이1. 재귀를 이용한 분리
 
 
 
