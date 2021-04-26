@@ -156,7 +156,17 @@ def isValid(self, s: str) -> bool:
 
 * **내가 짠 코드**<br>
 ```python
+def duplicate(s):
+  to_set = sorted(set(s))
+  to_str = ''
+  for char in to_set:
+    to_str += char
 
+  return to_str
+  
+
+s = input()
+print(duplicate(s))
 ```
 
 
