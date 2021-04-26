@@ -75,13 +75,31 @@ stack은 각각 이전 값을 가리키는 연결 리스트로 구현되어 있�
 가장 최근에 입력된 순서대로, 즉 LIFO 순으로 잘 출력되는 것을 확인할 수 있다. 이렇게 연결 리스트를 이용해 스택 ADT를 어렵지 않게 구현해보았다. 이제 스택과 관련한 문제를 몇 가지 풀어보자.
 <br><br>
 
-## 리트코드
-### 문제 20 유효한 괄호
+## 문제 20 유효한 괄호
 > 245p
 
-* **내가 짠 코드**
+* **내가 짠 코드**<br>
+문제 이해가 안 돼서 풀이 보고 코드 짜봄
 ```python
+def isValid(s):
+    stack = []
+    table = {
+        ')' : '(',
+        ']' : '[',
+        '}' : '{'
+    }
 
+    for i in s:
+      if i not in table:
+        stack.append(i)
+      elif not stack or table[i] != stack.pop():
+        return False
+    return len(stack) == 0
+
+
+
+s = '()[]{}'
+print(isValid(s))
 ```
 
 
