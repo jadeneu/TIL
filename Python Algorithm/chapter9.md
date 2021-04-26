@@ -170,7 +170,36 @@ bcabc에서 중복 문자를 제외하면 사전에서 가장 먼저 찾을 수 
 만약 앞에 e가 하나 더 붙은 ebcabc가 입력값이라면 결과는 eabc가 될 것이다.<br>
 반면 입력값이 ebcabce라면 결과는 abce가 될 수 있을 것이다.
 
+입력값 cbacdcbc를 사전식 순서로 중복 문자를 제거하는 과정의 알고리즘은 다음 그림 9-3(248p)과 같이 나타낼 수 있으며, 결과는 파란색 글자인 acdb가 된다.
 
+이 그림에서 중복 문자를 제외한(여기서는 집합으로 처리) 알파벳 순으로 문자열 입력값을 모두 정렬한 다음, 가장 빠른 a부터 접미사 suffix를 분리하여 확인한다.<br>
+다음 순서는 b인데, b의 경우 c,d가 뒤에 올 수 없기 때문에 이를 기준으로 분리할 수 없다.
+```python
+if set(s) == set(suffix):
+    ...
+```
+분리 가능 여부는 이 코드와 같이 전체 집합과 접미사 집합이 일치하는지 여부로 판별한다.<br>
+집합은 중복된 문자가 제거된 자료형이므로, 그림 9-3(248p)에서 b를 기준으로 했을 때는 s = {'b', 'c', 'd'}, suffix = {'b', 'c'}가 되며 d를 처리할 수 없으므로 분리할 수 없다. 따라서 다음 순서인 c로 넘긴다.<br>
+이제 c는 s = {'b', 'c', 'd'}, suffix = {'b', 'c', 'd'}로 일치 여부를 판별하는 if문이 True이므로 분리할 수 있다.<br>
+이제 다음과 같이 진행한다.
+```python
+return char + self.removeDuplicateLetters(suffix.replace(char, ''))
+```
+여기서부터 실제로 분리하는 처리를 하게 되는데, 현재 문자, 즉 c를 리턴하는 재귀 호출 구조로 처리한다.<br>
+또한 c는 이미 분리되는 기준점이 되었으므로 이후에 이어지는 모든 c는 replace()로 제거한다.<br>
+이렇게 하면 일종의 분할 정복(자세한 내용은 22장 참조)과 비슷한 형태로 접미사 suffix의 크기는 점점 줄어들게 되고 더 이상 남지 않을 때 백트래킹(12장 참조)되면서 결과가 조합된다.
+
+전체 코드는 다음과 같다.
+```python
+def removeDuplicateLetters(self, s: str) -> str:
+    # 집합으로 정렬
+    for char in sorted(set(s)):
+        suffix = s[s.index(char):]
+        # 전체 집합과 접미사 집합이 일치할 때 분리 진행
+        if set(s) == set(suffix):
+            return char + self.removeDuplicateLetters(suffix.replace(char, ''))
+    return ''
+```
 
 
 
