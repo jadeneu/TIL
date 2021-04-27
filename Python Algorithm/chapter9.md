@@ -155,8 +155,28 @@ def isValid(self, s: str) -> bool:
 > 247p
 
 * **내가 짠 코드**<br>
+풀이 방법이 떠오르지 않아서 풀이보고 코드 짜봄
 ```python
+import collections
 
+def duplicate(s):
+  counter, seen, stack = collections.Counter(s), set(), []
+
+  for char in s:
+    counter[char] -= 1
+    if char in seen:
+      continue
+    if stack and char < stack[-1] and counter[stack[-1]] > 0:
+      seen.remove(stack.pop())
+    stack.append(char)
+    seen.add(char)
+  
+  return ''.join(stack)
+  
+
+
+s = 'cbacdcbc'
+print(duplicate(s))
 ```
 <br><br>
 
