@@ -228,10 +228,56 @@ counter, stack = collections.Counter(s), []
 while stack and char < stack[-1] and counter[stack[-1]] > 0:
     seen.remove(stack.pop())
 ```
-만약 현재 문자 char가 스택에 쌓여 있는 문자(이전 문자보다 앞선 문자)이고, 뒤에 다시 붙일 문자가 남아 있다면(카운터가 0 이상이라면), 쌀아둔 걸 꺼내서 없앤다.<br>
+만약 현재 문자 char가 스택에 쌓여 있는 문자(이전 문자보다 앞선 문자)이고, 뒤에 다시 붙일 문자가 남아 있다면(카운터가 0 이상이라면), 쌓아둔 걸 꺼내서 없앤다.<br>
 카운팅에는 collections.Counter()를 이용한다. 
 
 입력값 cbacdcbc에서 a가 들어올 때, 이미 이전에 들어와 있던 c와 b는 다음 그림 9-4(250p)와 같이 제거가 된다. 카운터가 0 이상인 문자인 c와 b는 뒤에 다시 붙일 문자가 남아 있기 때문이다.
+```python
+if char in seen:
+    continue
+```
+여기서 seen은 집합(Set) 자료형으로, 이미 처리된 문자 여부를 확인하기 위해 사용했으며, 이처럼 이미 처리된 문자는 스킵한다.<br>
+여기서는 처리된 문자 여부를 확인하기 위해 in을 이용한 검색 연산으로 찾아냈다. 그러나 해당 기능은 스택에는 존재하지 않는 연산이기 때문에 별도의 집합 자료형에만 사용했다.
+
+사실 여기서 스택으로 가정하고 사용한 파이썬의 자료형은 리스트이고, 리스트는 검색도 잘 지원하기 때문에 굳이 스택이라는 자료 구조로 한정짓지 않고 풀이한다면 seen 변수 없이도 다음과 같은 형태로 얼마든지 풀이가 가능하다.
+
+전체코드 자체는 오히려 더 깔끔해진다.
+```python
+def removeDuplicateLetters(self, s: str) -> str:
+    counter, stack = collections.Counter(s), []
+    
+    for char in s:
+        counter[char] -= 1
+        if char in stack:
+            continue
+        # 뒤에 붙일 문자가 남아 있다면 스택에서 제거
+        while stack and char < stack[-1] and counter[stack[-1]] > 0:
+            stack.pop()
+        stack.append(char)
+     
+     return ''.join(stack)
+```
+그러나 이 방식은 스택에 없는 검색 연산을 수행한 변칙적인 풀이 방법이기 때문에, 여기서는 정석대로 스택에서 가능한 연산만을 수행하고 검색 기능은 seen 변수에서 실행되게 하여 다음과 같이 풀이한다.<br>
+최종 풀이 코드는 다음과 같다.
+```python
+def removeDuplicateLetters(self, s: str) -> str:
+    counter, seen, stack = collections.Counter(s), set(), []
+    
+    for char in s:
+        counter[char] -= 1
+        if char in seen:
+            continue
+        # 뒤에 붙일 문자가 남아 있다면 스택에서 제거
+        while stack and char < stack[-1] and counter[stack[-1]] > 0:
+            seen.remove(stack.pop())
+        stack.append(char)
+        seen.add(char)
+     
+     return ''.join(stack)
+```
+stack 변수라는 이름에 걸맞게 스택 ADT에 정의된 연산만을 사용해 문제를 풀이했다.<br>
+물론 딱 한 군데, -1로 가장 최근 요소를 조회하기는 했지만, 적어도 전체 요소 검색과 같은 정의되지 않은 연산은 수행하지 않고 되도록 정석대로 풀이하고자 했다.
+
 
 
 
