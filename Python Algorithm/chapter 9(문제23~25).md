@@ -143,7 +143,7 @@ print(q.empty())
 앞서 문제 풀이에서 push() 부분을 다시 한번 살펴보면 다음과 같다.
 ```python
 self.q.append(x)
-for _ in range(len(self.q )- 1):
+for _ in range(len(self.q) - 1):
     self.q.append(self.q.popleft()
 ```
 여기에는 앞서와는 다른 중요한 차이점이 있다.<br>
