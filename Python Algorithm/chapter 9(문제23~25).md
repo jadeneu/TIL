@@ -78,8 +78,8 @@ class MyStack:
   def push(self, x):
     self.q.append(x)
     # 요소 삽입 후 맨 앞에 두는 상태로 재정렬
-    for _ in range(len(self.q )- 1):
-      self.q.append(self.q.popleft()
+    for _ in range(len(self.q) - 1):
+      self.q.append(self.q.popleft())
 
   def pop(self):
     return self.q.popleft()
@@ -144,7 +144,7 @@ print(q.empty())
 ```python
 self.q.append(x)
 for _ in range(len(self.q) - 1):
-    self.q.append(self.q.popleft()
+    self.q.append(self.q.popleft())
 ```
 여기에는 앞서와는 다른 중요한 차이점이 있다.<br>
 지난 풀이에서는 큐에 요소를 삽입한 후 맨 앞의 요소부터 끄집어냈다. 그렇게 해서 원래의 큐에 덧붙여 나가는 형태로, 추가 공간 없이 풀이가 가능했다.<br>
