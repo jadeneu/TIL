@@ -184,6 +184,125 @@ class MyQueue:
 앞서 문제와 달리 좀 더 효율적으로 구현하기 위해 2개의 스택을 사용했고, 앞서와 달리 push()는 간단한 반면, 여기서는 peek()를 좀 더 복잡한 형태로 구현했다.
 <br><br>
 
+### 문제 25 원형 큐 디자인
+* **내가 짠 코드**<br>
+```python
+class MyCircularQueue(object):
+  def __init__(self, k):
+    self.q = [None] * k
+    self.size = k
+    self.idx = 0
+    self.rear = 0
+
+  def enQueue(self, x):
+    if self.q[idx] == None:
+      self.q[idx] = x
+      self.rear = idx
+      self.idx  = (self.rear + 1)
+      return True
+    else:
+      return False
+
+  def Rear(self):
+    return self.q[rear]
+
+  def isFull(self):
+    for i in range(self.size):
+      if self.q[i] != None:
+        continue
+      else:
+        return False
+    return True
+
+  def deQueue(self):
+    self.q[0] = None
+```
+-> 풀기 실패함<br>
+
+```python
+class MyCircularQueue(object):
+  def __init__(self, k):
+    self.q = [None] * k
+    self.size = k
+    self.front = 0 # 원소가 있는 첫 인덱스
+    self.rear = 0 # 원소가 없는 첫 인덱스
+
+  def enQueue(self, x):
+    rear = self.rear
+    if self.q[rear] == None:
+      self.q[rear] = x
+      
+      if self.rear == self.size-1:
+        self.rear = 0
+      else:
+        self.rear += 1
+      return True
+    else:
+      return False
+
+  def Rear(self):
+    if self.q[self.rear - 1] != None:
+      return self.q[self.rear - 1]
+    else:
+      return '리턴할 요소가 없습니다.'
+
+  def isFull(self):
+    for i in range(self.size):
+      if self.q[i] != None:
+        continue
+      else:
+        return False
+    return True
+
+  def deQueue(self):
+    if self.q[self.front] != None:
+      self.q[self.front] = None
+      
+      if self.front == self.size-1:
+        self.front = 0
+      else:
+        self.front += 1
+      return True
+    else:
+      return False
+
+  def Front(self):
+    if self.q[self.front] != None:
+      return self.q[self.front]
+    else:
+      return '리턴할 요소가 없습니다.'
+
+
+
+circularQueue = MyCircularQueue(5)
+print(circularQueue.enQueue(10))
+print(circularQueue.enQueue(20))
+print(circularQueue.enQueue(30))
+print(circularQueue.enQueue(40))
+print(circularQueue.Rear())
+print(circularQueue.isFull())
+print(circularQueue.deQueue())
+print(circularQueue.deQueue())
+print(circularQueue.enQueue(50))
+print(circularQueue.enQueue(60))
+print(circularQueue.Rear())
+print(circularQueue.Front())
+```
+-> 원형 큐의 삽입과 삭제 원리 파악 후 다시 짜본 코드(완성)
+<br><br>
+
+### 문제 25 원형 큐 디자인 풀이
+#### 풀이1. 배열을 이용한 풀이
+원형 큐(Circular Queue)라는 명칭은 생소할 수도 있을 것 같다. 오래된 국내 책에서는 '원형 큐'가 아닌 '환형 큐'로 표기되어 있어, 예전에 공부한 분들이라면 '환형 큐'라는 명칭이 더 낯익을지도 모르겠다.
+
+'원형 큐'는 FIFO 구조를 지닌다는 점에서 기존의 큐와 동일하다. <br>
+그러나 마지막 위치가 시작 위치와 연결되는 다음 그림 9-6(259p)과 같은 원형 구조를 띠기 때문에, 링 버퍼(Ring Buffer)라고도 부른다.
+
+기존의 큐는 공간이 꽉 차게 되면 더 이상 요소를 추가할 수 없었다. 심지어 앞쪽에 요소들이 deQueue()로 모두 빠져서 충분한 공간이 남게 돼도 그쪽으로는 추가할 수 있는 방법이 없다.<br>
+그래서 앞쪽에 공간이 남아 있다면 이 그림처럼 동그랗게 연결해 앞쪽으로 추가할 수 있도록 재활용 가능한 구조가 바로 원형 큐다.<br>
+원형 큐의 삽입과 삭제 원리는 다음 그림 9-7(260p)과 같다.
+
+
 
 
 
