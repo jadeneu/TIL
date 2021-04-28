@@ -95,8 +95,94 @@ class MyStack:
 ### 문제 24 스택을 이용한 큐 구현
 * **내가 짠 코드**<br>
 ```python
+class Node(object):
+  def __init__(self, val=0, next=None):
+    self.val = val
+    self.next = next
 
+class Stack(object):
+  def __init__(self):
+    self.last = None
+
+  def push(self, x):
+    self.last = Node(x, self.last)
+    cur = self.last
+    
+    if cur.next != None:
+        while cur.next != None:
+          cur = cur.next
+        last = Node(self.last.val,None)
+        self.last = self.last.next
+        cur.next = last
+
+  def pop(self):
+    last = self.last.val
+    self.last = self.last.next
+    return last
+
+  def peek(self):
+    return self.last.val
+
+  def empty(self):
+    return self.last == None
+
+
+q = Stack()
+q.push(1)
+q.push(2)
+print(q.peek())
+print(q.pop())
+print(q.empty())
 ```
+<br><br>
+
+### 문제 24 스택을 이용한 큐 구현
+#### 풀이1. 스택 2개 사용
+이번에는 큐를 스택으로 구현하는 방법이다. 앞서 스택 구현과 비슷한 방법으로 할 수 있을까?
+
+앞서 문제 풀이에서 push() 부분을 다시 한번 살펴보면 다음과 같다.
+```python
+self.q.append(x)
+for _ in range(len(self.q )- 1):
+    self.q.append(self.q.popleft()
+```
+여기에는 앞서와는 다른 중요한 차이점이 있다.<br>
+지난 풀이에서는 큐에 요소를 삽입한 후 맨 앞의 요소부터 끄집어냈다. 그렇게 해서 원래의 큐에 덧붙여 나가는 형태로, 추가 공간 없이 풀이가 가능했다.<br>
+그러나 이번에는 맨 뒤의 아이템을 끄집어낼 수밖에 없다. 이렇게 하면 다음번에 또 다시 맨 뒤의 아이템을 끄집어 내게 되는데, 결국은 무한반복 문제에서 헤어나올 수 없다는 점이 문제다.
+
+즉 이전과 동일하게 하나의 큐를 이용해서는 풀이할 수 없다. 따라서 이 문제를 스택의 연산만을 사용해서 풀기 위해서는 2개의 스택이 필요하다.<br>
+특히 pop()과 peek()는 결국 같은 데이터를 끄집어낸다는 점에 착안해, 이번에는 pop()을 할 때 peek()를 호출하고 여기에 재입력하는 알고리즘을 다음과 같이 구현했다.
+```python
+if not self.output:
+    while self.input:
+        self.output.append(self.input.pop())
+```
+또한 이렇게 구현해도 output의 값이 모두 팝(pop())되기 전까지는 다시 재입력이 일어나지 않기 때문에, 분할 상환 분석에 따른 시간 복잡도는 여전히 O(1)이다.
+```python
+class MyQueue:
+    def __init__(self):
+        self.input = []
+        self.output = []
+        
+    def push(self, x):
+        self.input.append(x)
+        
+    def pop(self):
+        self.peek()
+        return self.output.pop()
+        
+    def peek(self):
+        # output이 없으면 모두 재입력
+        if not self.output:
+            while self.input:
+                self.output.append(self.input.pop())
+        return self.output[-1]
+        
+    def empty(self):
+        return self.input == [] and self.output == []
+```
+앞서 문제와 달리 좀 더 효율적으로 구현하기 위해 2개의 스택을 사용했고, 앞서와 달리 push()는 간단한 반면, 여기서는 peek()를 좀 더 복잡한 형태로 구현했다.
+<br><br>
 
 
 
