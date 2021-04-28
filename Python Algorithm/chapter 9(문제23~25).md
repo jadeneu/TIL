@@ -185,6 +185,8 @@ class MyQueue:
 <br><br>
 
 ### 문제 25 원형 큐 디자인
+> 259p
+
 * **내가 짠 코드**<br>
 ```python
 class MyCircularQueue(object):
@@ -331,8 +333,68 @@ def enQueue(self, value: int) -> bool:
     else:
         return False
 ```
-rear 포인터 p2 위치에 값을 넣고, 포인터를 한 칸
+rear 포인터 p2 위치에 값을 넣고, 포인터를 한 칸 앞으로 이동한다. <br>
+단, 전체 길이만큼 모듈로(나머지) 연산을 하여 포인터의 위치가 전체 길이를 벗어나지 않게 한다.<br>
+만약 rear 포인터의 위치가 None이 아니라면 다른 요소가 있는 공간이 꽉 찬 상태이거나 비정상적인 경우이므로 False를 리턴한다.
 
+이제 요소를 삭제하는 deQueue() 연산을 구현할 차례다. 그런데 이 문제에서 요구하는 deQueue() 연산은 요소를 꺼내지 않고 삭제만 수행하도록 정의되어 있다.<br>
+큐에서 요소를 꺼내는 것은 문제의 예제에서 보듯 앞쪽은 Front()로, 뒤쪽은 Rear()로, 각기 서로 다른 연산으로 정의되어 있다. 다소 특이한 제약 사항으로, "Introduction to Algorithms" 책이나 리스트 9-1(261p)에 정리한 워싱턴 주립대학 강의 자료 수도코드르 살펴보면, 동일한 원형 큐를 구현하면서 분명히 deQueue()에는 요소 삭제뿐만 아니라 추출도 함께 수행한다.<br>
+그러나 원래 리트코드의 문제에서는 삭제만 하도록 정의하고 있다.<br>
+어쨌든 문제의 제약 사항인 만큼, 여기서도 문제의 조건에 따라 deQueue()는 다음과 같이 삭제만 수행하도록 구현해본다.
+```python
+def deQueue(self) -> bool:
+    if self.q[self.p1] is None:
+        return False
+    else:
+        self.q[self.p1] = None
+        self.p1 = (self.p1 + 1) % self.maxlen
+        return True
+```
+먼저, front 포인터 p1의 위치에 None을 넣어 삭제를 하고, 포인터를 한 칸 앞으로 이동한다.<br>
+다음으로, 마찬가지로 모듈로 연산으로 최대 길이를 넘지 않도록 한다.
+
+정리하면, enQueue()는 rear 포인터를 이동하고 데큐는 front 포인터를 이동한다. 이게 배열을 이용한 원형 큐 구현의 전부다.<br>
+이제 문제에서 정의한 나머지 연산을 모두 구현해서 정리한 전체 코드는 다음과 같다.
+```python
+class MyCircularQueue:
+    def __init__(self, k: int):
+        self.q = [None] * k
+        self.maxlen = k
+        self.p1 = 0
+        self.p2 = 0
+        
+    # enQueue(): rear 포인터 이동
+    def enQueue(self, value: int) -> bool:
+        if self.q[self.p2] is None:
+            self.q[self.p2] = value
+            self.p2 = (self.p2 + 1) % self.maxlen
+            return True
+        else:
+            return False
+            
+    # deQueue(): front 포인터 이동
+    def deQueue(self) -> bool:
+        if self.q[self.p1] is None:
+            return False
+        else:
+            self.q[self.p1] = None
+            self.p1 = (self.p1 + 1) % self.maxlen
+            return True
+            
+    def Front(self) -> int:
+        return -1 if self.q[self.p1] is None else self.q[self.p1]
+        
+    def Rear(self) -> int:
+        return -1 if self.q[self.p2 - 1] is None else self.q[self.p2 - 1]
+        
+    def isEmpty(self) -> bool:
+        return self.p1 == self.p2 and self.q[self.p1] is None
+        
+    def isFull(self) -> bool:
+        return self.p1 == self.p2 and self.q[self.p1] is not None
+```
+여기서 구현한 모든 연산은 리트코드 문제의 풀이 기준을 따랐으나, 원래 큐에는 Rear() 연산이 없다. 큐는 맨 앞에 있는 요소를 가져오는 front() 또는 peek()라는 이름으로 정의된 연산만 있기 때문이다.<br>
+그러나 원형 큐를 구현하기 위해서는 2개의 포인터를 사용하는 만큼, Rear() 연산을 구현하는 일이 그리 어려운 일은 아니다. 또한 이후에 소개할 데크 등의 자료형은 애초에 ADT에서 이러한 연산을 정의하고 있기도 하다.
 
 
 
