@@ -606,7 +606,7 @@ def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
   root = head = ListNode(0)
   
   carry = 0
-  while l1 or 12 or carry:
+  while l1 or l2 or carry:
     sum = 0
     # 두 입력값의 합 계산
     if l1:
