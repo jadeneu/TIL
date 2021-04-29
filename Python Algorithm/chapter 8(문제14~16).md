@@ -576,8 +576,8 @@ class Solution:
 ```python
 sum = 0
 if l1:
-  sum += li.val
-  l1 = li.next
+  sum += l1.val
+  l1 = l1.next
 if l2:
   sum += l2.val
   l2 = l2.next
