@@ -172,9 +172,9 @@ def twoSum(self, nums: List[int], target: int) -> List[int]:
   nums_map ={}
   # 하나의 for 문으로 통합
   for i, num in enumerate(nums):
-    nums_map[num] = i
     if target - num in nums_map:
-      return [nums_map[target - nums], i]
+      return [nums_map[target - num], i]
+    nums_map[num] = i
 ```
 
 실행 속도를 확인해보니 예상했던 것처럼 **44밀리초**로 앞서 풀이와 큰 차이는 없다.<br>
