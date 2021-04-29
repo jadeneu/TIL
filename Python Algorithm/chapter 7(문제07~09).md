@@ -181,6 +181,20 @@ def twoSum(self, nums: List[int], target: int) -> List[int]:
 그러나 코드는 한결 더 간결해졌다.
 <br><br>
 
+* **참고 | ↓ 내가 맞다고 생각한 코드**
+  ```python
+  def twoSum(self, nums: List[int], target: int) -> List[int]:
+    nums_map ={}
+    # 하나의 for 문으로 통합
+    for i, num in enumerate(nums):
+      nums_map[num] = i
+      if target - num in nums_map:
+        return [nums_map[target - num], i]
+  ```
+  직접 구현해보니 계산 과정에서 문제가 없었고 출력도 잘 됐다.<br>
+  책에 나온 원래 코드가 계산을 13번 시행했다면, 내가 수정한 코드가 14번 시행한 정도여서 수행 시간도 큰 차이는 없는 것 같다. (계산하면서 이동한 줄 갯수가 각각 13, 14)
+<br><br>
+
 #### 풀이5. 투 포인터 이용<br>
   + 투 포인터란<br>
     왼쪽 포인터와 오른쪽 포인터의 합이 타겟보다 크다면 오른쪽 포인터를 왼쪽으로, 작다면 왼쪽 포인터를 오른쪽으로 옮기면서 값을 조정하는 방식이다.
