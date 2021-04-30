@@ -254,6 +254,7 @@ def removeDuplicateLetters(self, s: str) -> str:
   ```
   replace(old, new, [count]) -> replace("찾을값", "바꿀값", 바꿀횟수)
   ```
+<br>
   
 * **참고 | 집합이 같을 때(==)**<br>
   아래의 코드를 보면 두 집합이 같은지 확인하는 if 문에 '=='이 쓰였다.
@@ -262,7 +263,8 @@ def removeDuplicateLetters(self, s: str) -> str:
       return char + self.removeDuplicateLetters(suffix.replace(char, ''))
   ```
   set()은 집합 안 원소들이 중구난방으로 섞여 있지만, 집합은 원소만 같으면 같다고(==) 인식된다.
-<br><br>
+<br><br><br>
+
 #### 풀이2. 스택을 이용한 문자 제거
 ```python
 stack.append(char)
