@@ -131,5 +131,6 @@ float RSum(float a[], int n)
 
 ---
 # 출처
-* https://qwe1qwe.tistory.com/880 [Roopretelcham]
+* https://qwe1qwe.tistory.com/880<br>
+[Roopretelcham]
 * https://madplay.github.io/post/time-complexity-space-complexity
