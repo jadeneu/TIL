@@ -49,7 +49,7 @@ typedef struct {
     ...
 } dequeobject;
 ```
-<br><br>
+<br>
 
 이번에는 이중 연결 리스트를 이용해 데크 자료형을 직접 구현하는 문제를 한번 풀이해보자.
 <br><br>
