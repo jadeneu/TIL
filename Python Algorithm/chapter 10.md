@@ -19,6 +19,48 @@
 
 이중 연결 리스트로 구현하게 되면, 그림 10-1(266p)처럼 양쪽으로 head와 tail이라는 이름의 두 포인터를 갖고 있다가 새로운 아이템이 추가될 때마다 앞쪽 또는 뒤쪽으로 연결시켜 주기만 하면 된다. 당연히 연결 후에는 포인터를 이동하면 된다.
 
+파이썬은 데크 자료형을 다음과 같이 collections 모듈에서 deque라는 이름으로 지원한다.
+```python
+>>> import collections
+>>> d = collections.deque()
+>>> type(d)
+<class 'collections.deque'>
+```
+이 collections.deque는 그림 10-1(266p)과 마찬가지로 이중 연결 리스트로 구현되어 있다.
+
+CPython에서는 고정 길이 하위 배열(Subarray)을 지닌 이중 연결 리스트로 구현되어 있으며, 내부 구현을 살펴보면 마친가지로 다음과 같이 구조체인 dequeobject가 block노드의 이중 연결 리스트로 구현되어 있는 것을 확인할 수 있다.<br>
+또한 dequeobject는 왼쪽, 오른쪽 인덱스 정보와 최대 길이 등 여러 가지 부가 정보를 함께 보관하고 있는 풍부한 구조체임을 확인할 수 있다.
+```c
+// cpython/Modules/_collectionsmodule.c
+typedef struct BLOCK {
+    struct BLOCK *leftlink;
+    PyObject *data[BLOCKLEN];
+    struct BLOCK *rightlink;
+} block;
+
+typedef struct {
+    ...
+    block *leftblock;
+    block *rightblock;
+    Py_ssize_t leftindex;
+    Py_ssize_t rightindex;
+    Py_ssize_t maxlen;
+    ...
+} dequeobject;
+```
+<br><br>
+
+이번에는 이중 연결 리스트를 이용해 데크 자료형을 직접 구현하는 문제를 한번 풀이해보자.
+<br><br>
+
+## 리트코드
+### 문제 26 원형 데크 디자인
+* **내가 짠 코드**<br>
+
+
+
+
+
 
 
 
