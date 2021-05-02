@@ -302,7 +302,7 @@ CPython 개발이 시작된 것이 1994년이었으니, CPU가 하나던 당시�
 ---
 
 # 출처
-* [heapq 모듈](#heapq-모듈)<br>
+* heapq 모듈 [[heapq 모듈](#heapq-모듈)]<br>
   https://www.daleseo.com/python-heapq/
 <br><br>
 
