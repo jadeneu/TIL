@@ -86,8 +86,125 @@ def mergeKLists(self, lists: List[ListNode]) -> ListNode:
 우선순위 큐 문제는 힙 문제와 사실상 중복되므로, 다른 우선순위 큐 문제들은 15장에서 다시 풀이해본다.
 <br><br>
 
-#### 파이썬. PriorityQueue vs heapq
+### heapq 모듈
+heapq 모듈은 이진 트리(binary tree) 기반의 최소 힙(min heap) 자료구조를 제공한다.
 
+min heap을 사용하면 원소들이 항상 정렬된 상태로 추가되고 삭제되며, min heap에서 가장 작은값은 언제나 인덱스 0, 즉, 이진 트리의 루트에 위치한다.<br> 
+내부적으로 min heap 내의 모든 원소(k)는 항상 자식 원소들(2k+1, 2k+2) 보다 크기가 작거나 같도록 원소가 추가되고 삭제된다.
+
+* **모듈 임포트**<br>
+  우선 heapq 모듈은 내장 모듈이기 때문에 파이썬만 설치되어 있으면 다음과 같이 간단하게 임포트 후에 힙 관련 함수를 사용할 수 있다.
+  ```python
+  import heapq
+  ```
+  
+* **최소 힙 생성**<br>
+  heapq 모듈에은 파이썬의 보통 리스트를 마치 최소 힙처럼 다룰 수 있도록 도와준다.<br>
+  그렇기 때문에, 그냥 빈 리스트를 생성해놓은 다음 heapq 모듈의 함수를 호출할 때 마다 이 리스트를 인자로 넘겨야 한다.<br>
+  다시말해, 파이썬에서는 heapq 모듈을 통해서 원소를 추가하거나 삭제한 리스트가 그냥 최소 힙이다.
+  ```python
+  heap = []
+  ```
+  
+* **힙에 원소 추가**<br>
+  heapq 모듈의 **heappush() 함수**를 이용하여 힙에 원소를 추가할 수 있다. 첫번째 인자는 원소를 추가할 대상 리스트이며 두번째 인자는 추가할 원소를 넘긴다.
+  ```python
+  heapq.heappush(heap, 4)
+  heapq.heappush(heap, 1)
+  heapq.heappush(heap, 7)
+  heapq.heappush(heap, 3)
+  print(heap)
+  ```
+  ```python
+  [1, 3, 7, 4]
+  ```
+  가장 작은 1이 인덱스 0에 위치하며, 인덱스 1(= k)에 위치한 3은 인덱스 3(= 2k + 1)에 위치한 4보다 크므로 힙의 공식을 만족한다.<br>
+  내부적으로 이진 트리에 원소를 추가하는 heappush() 함수는 O(logn)의 시간 복잡도를 가진다.
+  
+* **힙에서 원소 삭제**<br>
+  heapq 모듈의 heappop() 함수를 이용하여 힙에서 원소를 삭제할 수 있다.<br>
+  원소를 삭제할 대상 리스트를 인자로 넘기면, 가장 작은 원소를 삭제 후에 그 값을 리턴한다.
+  ```python
+  print(heapq.heappop(heap))
+  print(heap)
+  ```
+  ```python
+  1
+  [3, 4, 7]
+  ```
+  가장 작았던 1이 삭제되어 리턴되었고, 그 다음으로 작었던 3이 인덱스 0으로 올라왔다.
+  ```python
+  print(heapq.heappop(heap))
+  print(heap)
+  ```
+  ```python
+  3
+  [4, 7]
+  ```
+  가장 작었던 3이 삭제되어 리턴되었고, 그 다음으로 작았던 4가 인덱스 0으로 올라왔다.<br>
+  내부적으로 이진 트리로부터 원소를 삭제하는 heappop() 함수도 역시 O(logn)의 시간 복잡도를 갖는다.
+  
+* **최소값 삭제하지 않고 얻기**<br>
+  힙에서 최소값을 삭제하지 않고 단순히 읽기만 하려면 일반적으로 리스트의 첫번째 원소에 접근하듯이 인덱스를 통해 접근하면 된다.
+  ```python
+  print(heap[0])
+  ```
+  ```python
+  4
+  ```
+  여기서 주의사항은 인덱스 0에 가장 작은 원소가 있다고 해서, 인덱스 1에 두번째 작은 원소, 인덱스 2에 세번째 작은 원소가 있다는 보장은 없다는 것이다.<br>
+  왜냐하면 힙은 heappop() 함수를 호출하여 원소를 삭제할 때마다 이진 트리의 재배치를 통해 매번 새로운 최소값을 인덱스 0에 위치시키기 때문이다.
+  
+  따라서 두번째로 작은 원소를 얻으려면 바로 heap[1]으로 접근하면 안되고, 반드시 heappop()을 통해 가장 작은 원소를 삭제 후에 heap[0]를 통해 새로운 최소값에 접근해야 한다.
+  
+* **기존 리스트를 힙으로 변환**<br>
+  이미 원소가 들어있는 리스트 힙으로 만들려면 heapq 모듈의 heapify()라는 함수에 사용하면 됩니다.
+  ```python
+  heap = [4, 1, 7, 3, 8, 5]
+  heapq.heapify(heap)
+  print(heap)
+  ```
+  ```python
+  [1, 3, 5, 4, 8, 7]
+  ```
+  heapify() 함수에 리스트를 인자로 넘기면 리스트 내부의 원소들의 위에서 다룬 힙 구조에 맞게 재배치되며 최소값이 0번째 인덱스에 위치된다.<br>
+  즉, 비어있는 리스트를 생성한 후 heappush() 함수로 원소를 하나씩 추가한 효과가 난다.<br>
+  heapify() 함수의 성능은 인자로 넘기는 리스트의 원소수에 비례한다. 즉 O(n)의 시간 복잡도를 갖는다.
+  
+* **[응용] 힙 정렬**<br>
+  힙 정렬(heap sort)은 힙 자료구조의 성질을 이용한 대표적인 정렬 알고리즘이다.
+  ```python
+  import heapq
+
+  def heap_sort(nums):
+    heap = []
+    for num in nums:
+        heapq.heappush(heap, num)
+  
+    sorted_nums = []
+    while heap:
+        sorted_nums.append(heapq.heappop(heap))
+    return sorted_nums
+
+    print(heap_sort([4, 1, 7, 3, 8, 5]))
+  ```
+  ```python
+  [1, 3, 4, 5, 7, 8]
+  ```
+<br><br>
+
+### 파이썬. PriorityQueue vs heapq
+
+
+
+
+
+
+
+
+# 출처
+* [heapq 모듈](#heapq-모듈)<br>
+  https://www.daleseo.com/python-heapq/
 
 
 
