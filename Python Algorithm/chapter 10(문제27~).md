@@ -1,4 +1,17 @@
 # 목차
+* [chapter 10. 데크, 우선순위 큐](#10장-데크-우선순위-큐)
+  + [우선순위 큐](#우선순위-큐)
+* [리트코드](#리트코드)
+  + [문제 27 k개 정렬 리스트 병합](#문제-27-k개-정렬-리스트-병합)
+  + [문제 27 k개 정렬 리스트 병합 풀이](#문제-27-k개-정렬-리스트-병합-풀이)
+    - [풀이1. 우선순위 큐를 이용한 리스트 병합](#풀이1-우선순위-큐를-이용한-리스트-병합)
+    - [heapq 모듈](#heapq-모듈)
+    - [PriorityQueue vs heapq](#priorityqueue-vs-heapq)
+    - [파이썬 전역 인터프리터 락(GIL)](#파이썬-전역-인터프리터-락gil)
+* [출처](#출처)
+
+<br><br>
+
 
 
 # 10장 데크, 우선순위 큐
@@ -84,6 +97,55 @@ def mergeKLists(self, lists: List[ListNode]) -> ListNode:
             heapq.heappush(heap, (result.next.val, idx, result.next))
             
     return root.next
+```
+실제 돌려볼 수 있는 코드↓
+```python
+import heapq
+
+class ListNode(object):
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+class Merge(object):
+    def mergeKLists(self, lists):
+        root = result = ListNode(None)
+        heap = []
+        
+        # 각 연결 리스트의 루트를 힙에 저장
+        for i in range(len(lists)):
+            if lists[i]:
+                heapq.heappush(heap, (lists[i].val, i, lists[i]))
+                
+        # 힙 추출 이후 다음 노드는 다시 저장
+        while heap:
+            node = heapq.heappop(heap)
+            idx = node[1]
+            result.next = node[2]
+            
+            result = result.next
+            if result.next:
+                heapq.heappush(heap, (result.next.val, idx, result.next))
+                
+        return root.next
+        
+q = Merge()
+Lists = []
+n1 = ListNode(5)
+n2 = ListNode(4,n1)
+n3 = ListNode(1,n2)
+Lists.append(n3)
+
+N1 = ListNode(4)
+N2 = ListNode(3,N1)
+N3 = ListNode(1,N2)
+Lists.append(N3)
+
+m1 = ListNode(6)
+m2 = ListNode(2,m1)
+Lists.append(m2)
+
+result = q.mergeKLists(Lists)
 ```
 우선순위 큐 문제는 힙 문제와 사실상 중복되므로, 다른 우선순위 큐 문제들은 15장에서 다시 풀이해본다.
 <br><br>
@@ -195,19 +257,54 @@ min heap을 사용하면 원소들이 항상 정렬된 상태로 추가되고 �
   ```
 <br><br>
 
-### 파이썬. PriorityQueue vs heapq
+### PriorityQueue vs heapq
+파이썬에서 우선순위 큐는 queue 모듈의 PriorityQueue 클래스를 이용해 사용할 수 있다.<br>
+그러나 앞서 설명과 같이 우선순위 큐는 힙을 사용해 주로 구현하며, 파이썬의 PriorityQueue조차 내부적으로는 heapq를 사용하도록 구현되어 있다.<br>
+CPython에서 PriorityQueue 클래스는 파이썬 코드로 다음과 같이 선언되어 있다.
+```python
+# cpython/Lib/queue.py
+class PriorityQueue(Queue):
+    ...
+    def _put(self, item):
+        heappush(self.queue, item)
+        
+    def _get(self):
+        return heappop(self.queue)
+```
+이 코드에서 보듯이, PriorityQueue의 _ get()과 _ put()은 모두 heapq 모듈의 heappop()과 heappush()를 그대로 이용하므로 사실상 둘은 동일하다.<br>
+그렇다면 차이점은 무엇일까?<br>
+차이점은 여기에 스레드 세이프(Thread-Safe)(멀티 스레드에도 안전한 프로그래밍 개념. 만약 스레드 세이프하지 않은 경우 1번 스레드의 값이 2번 스레드에서 변경될 수 있어 문제가 발생한다) 클래스라는 점이며, heapq 모듈은 스레드 세이프를 보장하지 않는다.
+
+파이썬은 GIL의 특성상 멀티 스레딩이 거의 의미가 없기 때문에 대부분 멀티 프로세싱으로 활용한다는 점을 생각해보면, PriorityQueue 모듈의 멀티 스레딩 지원은 사실 큰 의미는 없다.<br>
+또한 스레드 세이프를 보장한다는 얘기는 내부적으로 락킹(Locking)을 제공한다는 의미이므로 락킹 오버헤드(Locking Overhead)가 발생해 성능에 영향을 끼친다.<br>
+따라서 굳이 멀티 스레드로 구현할 게 아니라면 PriorityQueue 모듈은 사용할 필요가 없다.
+
+실무에서도 우선순위 큐는 대부분 heapq로 구현하고 있으며, 이 책에 등장하는 모든 우선순위 큐를 사용하는 문제 풀이 또한 heapq를 사용해 풀이한다.
+<br><br>
+
+### 파이썬 전역 인터프리터 락(GIL)
+아마도 '파이썬은 왜 느린가?'를 얘기할 때 가장 자주 듣게 되는 얘기가 전역 인터프리터 락(Global Interpreter Lock, 이하 GIL)이 아닐까 싶다.<br>
+파이썬 최초의 공식 구현체인 CPython은 개발 초기에 번거로운 동시성 관리를 편리하게 하고 스레드 세이프하지 않은 CPython의 메모리 관리를 쉽게 하기 위해, GIL로 파이썬 객체에 대한 접근을 제한하는 형태로 설계했다.
+
+> 그림 10-3
+
+GIL은 전역 인터프리터 락(Global Interpreter Lock)의 약어로서, 하나의 스레드가 자원을 독점하는 형태로 실행된다.<br>
+CPython 개발이 시작된 것이 1994년이었으니, CPU가 하나던 당시에는 충분히 그런 선태을 할 만했고, GIL 디자인에는 아무런 문제가 없었다.<br>
+하지만 지금처럼 멀티 코어가 당연한 세상에서, 하나의 스레드가 자원을 독점하는 형태로 실행되는 제약은 매우 치명적이다.
+
+최근 들어 PriorityQueue 모듈을 비롯해, 한계를 극복하기 위한 다양한 시도를 하고 있지만 이미 과거부터 GIL에 의존하는 형태로 구현된 기능들이 대부분을 차지하고 있어, 이러한 제약을 극복하기가 쉽지 않다.<br>
+여러 차례 GIL을 걷어내려는 시도가 있어 왔지만 지금까지도 GIL은 파이썬의 주요 특징으로 남아 있다.
+<br><br>
 
 
 
 
-
-
-
+---
 
 # 출처
 * [heapq 모듈](#heapq-모듈)<br>
   https://www.daleseo.com/python-heapq/
-
+<br><br>
 
 
 
