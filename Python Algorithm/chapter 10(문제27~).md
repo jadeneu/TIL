@@ -34,7 +34,7 @@ for lst in list:
 ```
 lists는 3개의 연결 리스트인 [[1, 4, 5], [1, 3, 4], [2, 6]]로 구성된 입력값이며, 이 코드는 각 연결 리스트의 루트를 힙에 저장하게 된다.<br>
 다시 설명하겠지만 파이썬의 heapq 모듈은 최소 힙(Min Heap)을 지원하며, 따라서 lst.val이 작은 순서대로 pop()할 수 있다.<br>
-그런데 이렇게 저장하면 TypeError: '<' not supported between instances of 'ListNode' and 'ListNode'라는 에러가 발생한다. 이 에러 메시지는 '중복된 값을 넣을 수 없다'라는 뜻이다.
+그런데 이렇게 저장하면 **TypeError: '<' not supported between instances of 'ListNode' and 'ListNode'** 라는 에러가 발생한다. 이 에러 메시지는 '중복된 값을 넣을 수 없다'라는 뜻이다.
 
 이 문제의 예제로 제시한 입력값은 3개의 연결 리스트 중 첫 번째와 두 번째의 루트가 각각 1로 동일하다.<br>
 이렇게 동일한 값은 heappush() 함수에서 에러를 발생하기 때문에 중복된 값을 구분할 수 있는 추가 인자가 필요하다.<br>
