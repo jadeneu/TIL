@@ -10,6 +10,8 @@
 # 6장 문자열 조작
 > 문자열 조작(String Manipulation)이란 문자열을 변경하거나 분리하는 등의 여러 과정을 말한다.
 
+<br><br>
+
 ## 리트코드
 
 ### 문제 01 유효한 팰린드롬
@@ -198,6 +200,24 @@ def isPalindrome(self, s: str) -> bool:
   뒤집는다
 * **S[::2] == 안하요**<br>
   2칸씩 앞으로 이동한다.
+<br><br>
+
+### 문제 2 문자열 뒤집기
+* **내가 짠 코드**<br>
+```python
+def reverse_list(s) -> list:
+  s.reverse()
+ 
+  return s
+
+s = input()
+new_list = list(s)
+print(reverse_list(new_list))
+```
+<br><br>
+
+### 문제 2 문자열 뒤집기 풀이
+#### 풀이1. 투 포인터를 이용한 스왑
 
 
 
