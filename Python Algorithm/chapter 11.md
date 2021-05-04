@@ -157,6 +157,35 @@ usigned hash(char *s) {
     return hashval % HASHSIZE;
 }
 ```
+
+* **예시(파이썬)**
+  ```python
+  def polynomialRollingHash(str):
+     
+    # P and M
+    p = 31
+    m = 1e9 + 9
+    power_of_p = 1
+    hash_val = 0
+ 
+    # Loop to calculate the hash value
+    # by iterating over the elements of string
+    for i in range(len(str)):
+        hash_val = ((hash_val + (ord(str[i])-ord('a') + 1) * power_of_p) % m)
+ 
+        power_of_p = (power_of_p * p) % m
+ 
+    return int(hash_val)
+ 
+  # Driver Code
+  if __name__ == '__main__':
+ 
+    # Given string
+    str1 = "geeksforgeeks"
+ 
+    print("Hash of '{}' = {}".format(
+          str1, polynomialRollingHash(str1)))
+  ```
 이 값은 1997년 당시 RISC(CPU 명령어의 개수를 줄여 하드웨어 구조를 좀 더 간단하게 만든 과거 CPU의 한 형태로, 현재는 거의 모든 스마트폰에 답재되는 ARM CPU의 기본 구조로 다시 전성기를 맞이하고 있다) 머신에서 가장 저렴한 계산 비용이 들었다고 하며, 비슷한 성능을 지닌 P(33)과 고민 끝에 소수인 31을 매직 넘버(Magic Number)로 택했다고 한다.<br>
 물론 더욱 복잡한 함수를 적용할 수도 있었겠지만 이 정도로 간단한 형태가 성능과 충돌의 적절한 합의점이었으며 실제로 31은 메르센 소수(Mersenne Prime)(2^5-1, 2의 거듭제곱에서 1이 모자란 수 중 소수로 매우 신비한 성질을 지닌다)로 수학적으로 나쁘지 않은 선택이기도 하다.
 
@@ -299,3 +328,6 @@ CPython 구현에는 다음과 같은 주석이 적혀 있다.
 
 * **해싱, 충돌** [[해싱](#해싱)] [[충돌](#충돌)]<br>
   https://mattlee.tistory.com/62 [waca's field]
+  
+* **해시 함수** [[해시 함수](#해시-함수)]<br>
+  https://www.geeksforgeeks.org/string-hashing-using-polynomial-rolling-hash-function/
