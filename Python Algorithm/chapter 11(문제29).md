@@ -116,7 +116,7 @@ def numJewelsInStones(self, J: str, S: str) -> int:
 아울러 Counter는 존재하지 않는 키의 경우 KeyError를 발생하는 게 아니라 0을 출력해주기 때문에, defaultdict와 마찬가지로 에러에 대한 예외 처리를 할 필요가 없다. 단순히 J에 포함된 문자의 개수를 계산하기만 하면 된다. 실행 속도 또한 동일하다.
 <br><br>
 
-#### 파이썬다운 방식
+#### 풀이4. 파이썬다운 방식
 해시 테이블과는 관련이 없지만, 이 문제는 파이썬다운 방식으로 단 한 줄로 계산할 수 있다.
 ```python
 def numJewelsInStones(self, J: str, S: str) -> int:
