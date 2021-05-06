@@ -200,9 +200,18 @@ for index, char in enumerate(s):
 그런데 이미 등장했다고 무작정 옮겨 버리면 곤란하다. 현재 슬라이딩 윈도우의 바깥에 있는 문자는 예전에 등장한 적이 있더라도 지금은 무시해야 하기 때문이다.<br>
 따라서 비교 구문에 다음과 같이 and 이후에 조건 start <= used[char]를 추가한다.
 ```python
+for index, char in enumerate(s):
+    if char in used and start <= used[char]:
+        ...
+    else:
+        ...
+```
+이렇게 하면 슬라이딩 윈도우 안쪽에 있는 중복 문자에 대해서만 True 처리가 될 것이다.
+
+이제 전체 코드는 다음과 같다.
+```python
 
 ```
-
 
 
 
