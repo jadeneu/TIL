@@ -103,7 +103,7 @@ def topKFrequent(self, nums: List[int], k: int) -> List[int]:
 이 작업을 자동으로 할 수는 없을까?<br>
 분명 파이썬에는 이런 기능을 지원하는 함수가 있을 것 같다.<br>
 좀 더 고민해보면 이 문제도 파이썬다운 방식으로 풀이할 수 있다.<br>
-Counter에는 most_commun()이라는 빈도 수가 높은 순서대로 아이템을 추출하는 기능을 제공한다.
+Counter에는 most_commn()이라는 빈도 수가 높은 순서대로 아이템을 추출하는 기능을 제공한다.
 
 다음과 같이 사용할 수 있다.
 ```python
