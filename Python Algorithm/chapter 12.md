@@ -169,6 +169,117 @@ def recursive_dfs(v, discovered=[]):
 
 그림 12-8(325p)에서 막다른 곳에 도달할 때까지 연속으로 진행되는 탐색이 총 3번에 걸쳐 진행됐는데 1->2->5->6까지 진행하고 그다음 되돌아갔다가 다음번 탐색은 7->3, 다시 되돌아 나가 마지막으로 루트까지 거슬러 올라가서 4를 탐색하고 종료하게 된다.<br>
 최종 결과는 1->2->5->6->7->3->4로 손으로 탐색한 결과가 코드의 실행 결과 [1, 2, 5, 6, 7, 3, 4]와 완전히 동일함을 확인할 수 있다.
+<br><br>
+
+### 스택을 이용한 반복 구조로 구현
+이번에는 스택을 이용한 반복 결과로 DFS를 구현해보자.<br>
+수도코드는 다음과 같다.
+
+> 리스트 12-2 반복을 이용한 DFS 구현 수도코드
+
+```
+DFS-iterative(G, v)
+    let S be a stack
+    S.push(v)
+    while S is not empty do
+        v = S.pop()
+        if v is not labeled as discovered then
+            label v as discovered
+            for all edges from v to w in G.adjacentEdges(v) do
+                S.push(w)
+```
+리스트 12-2의 수도코드는 스택을 이용해 모든 인접 간선을 추출하고 다시 도착점인 정점을 스택에 삽입하는 구조로 구현되어 있다.<br>
+파이썬 코드로 구현하면 다음과 같다.
+```python
+def iterative_dfs(start_v):
+    discovered = []
+    stack = [start_v]
+    while stack:
+        v = stack.pop()
+        if v not in discovered:
+            discovered.append(v)
+            for w in graph[v]:
+                stack.append(w)
+    return discovered
+```
+이와 같은 반복 구현은, 앞서 코드가 길고 빈틈없어 보이는 재귀 구현에 비해 우아함은 떨어지지만, 좀 더 직관적이라 이해하기는 훨씬 더 쉽다.<br>
+실행 속도 또한 더 빠른 편이다.<br>
+대부분의 경우 재귀 구현은 반복으로, 반복 구현은 재귀로 서로 바꿔서 알고리즘을 구현할 수 있으므로 자유롭게 바꿔가며 익숙해질 때까지 꾸준히 연습해보자.<br>
+이제 그림 12-7(323p) 그래프를 입력값으로 한 탐색 결과는 다음과 같다.
+```python
+>>> f'iterative dfs: {iterative_dfs(1)}'
+'iterative dfs: [1, 4, 3, 5, 7, 6, 2]'
+```
+똑같은 DFS인데 순서가 다르다. 어떤 차이가 있을까?
+
+앞서 재귀 DFS는 사전식 순서로 방문한 데 반해 반복 DFS는 역순으로 방문했다.<br>
+스택으로 구현하다 보니 가장 마지막에 십입된 노드부터 꺼내서 반복하게 되고 이 경우 인접 노드에서 가장 최근에 담긴 노드, 즉 가장 마지막부터 방문하기 때문이다.<br>
+인접 노드를 한꺼번에 추가하는 형태이기 때문에, 자칫 BFS가 아닌가 하고 헷갈릴 수 있지만 깊이 우선으로 탐색한다는 점에서 DFS가 맞다.<br>
+만약 BFS라면 [..., 4, 3, 5, ...] 순서가 아니라 []..., 4, 3, 2, ...] 순서가 되어야 할 것이다.<br>
+마찬가지로 손으로 DFS를 그려가며 역순으로 방문해보면 이 순서가 맞음을 확인할 수 있을 것이다.<br>
+앞서 재귀 DFS와는 약간의 순서 차이가 있지만 이번에도 반복을 이용해 DFS를 잘 구현해봤다.
+<br><br>
+
+## BFS(너비 우선 탐색)
+다음은 BFS를 구현해보자. BFS는 DFS보다 쓰임새는 적지만, 최단 경로를 찾는 다익스트라 알고리즘 등에 매우 유용하게 쓰인다.<br>
+먼저 BFS를 반복 구조로 구현해보자.
+<br><br>
+
+### 큐를 이용한 반복 구조로 구현
+스택을 이용하는 DFS와 달리, BFS를 반복 구조로 구현할 때는 큐를 이용한다.<br>
+수도코드는 다음과 같다.
+
+> 리스트 12-3 큐를 이용한 BFS 수도코드
+
+```
+BFS(G, start_v)
+    let Q be a queue
+    label start_v as discovered
+    Q.enqueue(start_v)
+    while Q is not empty do
+        v := Q.dequeue()
+        if v is the goal then
+            return v
+        for all edges from v to w in G.adjacentEdges(v) do
+            if w is not labeled as discovered then
+                label w as discovered
+                w.parent := v
+                Q.enqueue(w)
+```
+리스트 12-3은 모든 인접 간선을 추출하고 도착점인 정점을 큐에 삽입하는 수도코드다.<br>
+이를 파이썬 코드로 구현하면 다음과 같다.
+```python
+def iterative_bfs(start_v):
+    discovered = [start_v]
+    queue = [start_v]
+    while queue:
+        v = queue.pop(0)
+        for w in graph[v]:
+            if w not in discovered:
+                discovered.append(w)
+                queue.append(w)
+    return discovered
+```
+리스트 자료형을 사용했지만 pop(0)과 같은 큐의 연산만을 사용했다.<br>
+따라서 큐를 사용하는 것과 사실상 동일하다.<br>
+좀 더 최적화를 위해서는 데크 같은 자료형을 사용해 보는 것을 고민해볼 수 있다.<br>
+그렇다면 과연 너비 우선으로도 잘 실행될까?<br>
+마찬가지로 그림 12-7(323p) 그래프를 입력값으로 한 탐색 결과는 다음과 같다.
+```python
+>>> f'iterative bfs: {iterative_bfs(1)}'
+'iterative bfs: [1, 2, 3, 4, 5, 6, 7]'
+```
+BFS의 경우 그림 12-7(323p)의 단계별 차례인 숫자 순으로 실행됐으며, 1부터 순서대로 각각의 인접노드를 우선으로 방문하는 너비 우선 탐색이 잘 실행됐음을 확인할 수 있다.
+<br><br>
+
+### 재귀 구현 불가
+
+
+
+
+
+
+
 
 
 
