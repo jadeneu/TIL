@@ -118,7 +118,7 @@ class Solution:
     def dfs(self, grid: List[List[str]], i: int, j: int):
          # 더 이상 땅이 아닌 경우 종료
          if i < 0 or i >= len(grid) or \
-              j < 0 or j >] len(grid[0]) or \
+              j < 0 or j >= len(grid[0]) or \
               grid[i][j] != '1':
                   return
 
@@ -143,10 +143,117 @@ class Solution:
                     count += 1
         return count
 ```
+코드를 자세히 살펴보면 '# 동서남북 탐색'에서 dfs() 함수를 호출할 때마다 self.dfs(grid, i+1, j)와 같은 형태로 grid 변수를 매번 넘기는 것을 확인할 수 있다.<br>
+그렇다면 이 부분을 좀 더 개선해볼 수 있을까?<br>
+원래 리트코드의 풀이는 클래스로 선언되어 있으므로 먼저 다음과 같이 grid를 클래스의 멤버 변수로 처리해보자.
+```python
+class Solution:
+    grid: List[List[str]]  # 클래스 멤버 변수로 선언
+    
+    def dfs(self, i: int, j: int):
+        if i < 0 or i >= len(self.grid) or \
+              j < 0 or j >= len(self.grid[0]) or \
+              self.grid[i][j] != '1':
+                  return
+                  
+                  
+         ...
+         
+     def numIslands(self, grid: List[List[str]]) -> int:
+         self.grid = grid
+         ...
+                     self.dfs(i, j)
+         ...
+         return count
+```
+이렇게 grid를 클래스 멤버 변수로 선언하여 클래스 내에서 모두 공유하게 되면 더 이상 grid를 매번 넘기지 않아도 되어 편리해지지만, 여전히 함수 호출 시 매번 self.가 따라 붙는 등 보기가 좋지 않다.<br>
+당연히 불필요한 코드도 늘어난다. 그렇다면 좀 더 깔끔하게 정리할 수 있는 방법이 있을까?<br>
+이번에는 파이썬의 중첩함수(Nested Function) 기능을 활용해 전체 코드를 다시 한번 작성해보자.
+```python
+def numIslands(self, grid: List[List[str]]) -> int:
+    def dfs(i, j):
+        # 더 이상 땅이 아닌 경우 종료
+         if i < 0 or i >= len(grid) or \
+              j < 0 or j >= len(grid[0]) or \
+              grid[i][j] != '1':
+                  return
 
+          grid[i][j] = '0'
+          # 동서남북 탐색
+          dfs(i + 1, j)
+          dfs(i - 1, j)
+          dfs(i, j + 1)
+          dfs(i, j - 1)
+          
+    count = 0
+    for i in range(len(grid)):
+        for j in range(len(grid[0])):
+            if grid[i][j] == '1':
+                dfs(i, j)
+                # 모든 육지 탐색 후 카운트 1 증가
+                count += 1
+    return count
+```
+numIslands() 함수 내에 dfs() 함수 전체가 중첩 함수로 들어갔다.<br>
+물론 이렇게 하면 numIslands() 함수에서만 dfs() 함수 호출이 가능한 제약이 생긴다.<br>
+하지만 중첩 함수는 부모 함수에서 선언한 변수도 유효한 범위 내에서 사용할 수 있다.<br>
+원래 다른 함수에서 변수를 사용하려면 globals()로 선언하는 등이 필요하지만 여기서 dfs() 함수는 numIslands() 함수에서 선언된 변수를 자유롭게 사용 가능하다.<br>
+덕분에 grid 변수뿐만 아니라 지저분하게 매번 따라다니던 self. 구문 또한 제거할 수 있어 dfs() 함수가 깔끔해졌고, 전반적으로 코드 전체가 훨씬 더 깔끔해졌다.
+<br><br>
 
+#### 파이썬. 중첩 함수
+중첩 함수(Nested Function)란 함수 내에 위치한 또 다른 함수로, 바깥에 위치한 함수들과 달리 부모 함수의 변수를 자유롭게 읽을 수 있다는 장점이 있다.<br>
+실무에서 자주 쓰이는 편은 아니지만 단일 함수로 해결해야 하는 경우가 잦은 코딩 테스트에서는 매우 자주 쓰이는 기능이다.<br>
+이 책에서도 대부분의 문제 풀이는 중첩 함수를 적극적으로 활용해 풀이한다.<br>
+중첩 함수가 부모 함수의 변수를 공유하는 예제는 다음과 같다.
+```python
+def outer_function(t: str):
+    text: str = t
+    
+    def inner_function():
+        print(text)
+        
+    inner_function()
+    
+outer_function('Hello!')
+-------
+Hello!
+```
+여기서 outer_function()은 inner_function()을 호출했고, 아무런 차라미터도 넘기지 않았지만 부모 함수의 text 변수를 자유롭게 읽어들여 그 값인 Hello!를 출력했다.<br>
+이처럼 매번 파라미터를 전달하지 않아도 되기 때문에 구현이 깔끔해진다는 장점이 있다.<br>
+아울러 가변 객체인 경우 append(), pop()등 여러 가지 연산으로 조작도 가능하다.<br>
+그러나 재할당(=)이 일어날 경우 참조 ID가 변경되어 별도의 로컬 변수로 선언되므로 이 부분은 주의가 필요하다.
 
+* **연산자 조작**<br>
+  중첩 함수에서 부모 함수에서 선언한 변수를 연산자로 조작하는 경우를 살펴보자.
+  ```python
+  def outer_function(a: List[int]):
+      b: List[int] = a
+      print(id(b), b)
+      
+      def inner_function1():
+          b.append(4)
+          print(id(b), b)
+          
+      def inner_function2():
+          print(id(b), b)
+          
+      inner_function1()
+      inner_function2()
+      
+  outer_function([1,2,3])
+  -----------------------
+  4598336160 [1, 2, 3]
+  4598336160 [1, 2, 3, 4]
+  4598336160 [1, 2, 3, 4]
+  ```
+  리스트는 가변 객체이며, 이처럼 중첩 함수내에서 b.append(4)와 같은 형태로 append() 메소드를 사용해 변수를 조작할 수 있다.<br>
+  이렇게 조작된 값은 부모 함수에서도 그대로 동일하게 적용된다.
+<br><br>
 
+* **재할당**<br>
+  이번에는 재할당으로 참조 ID가 변경되는 경우를 살펴보자.
+  
 
 
 
