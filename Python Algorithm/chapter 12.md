@@ -115,12 +115,53 @@ DFS는 주로 스택으로 구현하거나 재귀로 구현하며, 이후에 살
 도착 노드는 여러 개가 될 수 있으므로 리스트 형태가 된다.<br>
 파이썬의 딕셔너리 자료형으로 다음과 같이 나타낼 수 있다.
 ```python
+graph = {
+    1: [2, 3, 4],
+    2: [5],
+    3: [5],
+    4: [],
+    5: [6, 7],
+    6: [],
+    7: [3],
+}
+```
+이제 이 딕셔너리를 입력값으로 해서 각각 DFS, BFS를 구현해보고 어떤 결과가 나오는지 살펴보자.
+<br><br>
+
+## DFS(깊이 우선 탐색)
+먼저, DFS부터 구현해보자.<br>
+일반적으로 DFS는 스택으로 구현하며, 재귀를 이용하면 좀 더 간단하게 구현할 수 있다.<br>
+코딩 테스트 시에도 재귀 구현이 더 선호되는 편이다.
+<br><br>
+
+### 재귀 구조로 구현
+재귀를 이용한 DFS를 구현해보자.<br>
+먼저, 위키피디아에 제시된 수도코드는 리스트 12-1(324p)과 같다.
+
+> 리스트 12-1 재귀를 이용한 DFS 구현 수도코드
 
 ```
+DFS(G, v)
+    label v as discovered
+    for all directed edges from v to w that are in G.adjacentEdges(v) do
+        if vertex w is not labeled as discovered then
+            recursively call DFS(G, w)
+```
+이 수도코드에는 정점 v의 모든 인접 유향(Directed) 간선들을 반복하라고 표기되어 있다.<br>
+이 수도코드의 알고리즘을 동일하게 파이썬 코드로 구현해보면 다음과 같다.
+```python
+def recursive_dfs(v, discovered=[]):
+    discovered.append(v)
+    for w in graph[v]:
+        if w not in discovered:
+            discovered = recursive_dfs(w, discovered)
+    return discovered
+```
+방문했던 정점, 즉 discovered를 계속 누적된 결과로 만들기 위해 리턴하는 형태만 받아오도록 처리했을 뿐 다른 부분들은, 예를 들어 변수명까지 동일하게 수도코드와 맞춰서 작성해봤다.<br>
+이제 그림 12-7(323p) 그래프를 입력값으로 한 탐색 결과는 다음과 같다.
+```python
 
-
-
-
+```
 
 
 
