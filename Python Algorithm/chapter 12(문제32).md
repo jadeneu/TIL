@@ -253,6 +253,41 @@ Hello!
 
 * **재할당**<br>
   이번에는 재할당으로 참조 ID가 변경되는 경우를 살펴보자.
+  ```python
+  def outer_function(t: str):
+      text: str = t
+      print(id(text), text)
+      
+      def inner_function1():
+          text = 'World!'
+          print(id(text), text)
+          
+      def inner_function2():
+          print(id(text), text)
+          
+      inner_function1()
+      inner_function2()
+      
+  outer_function('Hello!')
+  -----------------
+  4599124144 Hello!
+  4599130588 World!
+  4599124144 Hello!
+  ```
+  여기서는 불변 객체인 문자형을 예로 들었다.<br>
+  문자열은 불변 객체이기 때문에 조작할 수 없다. 값을 변경하려면 text = 'World!'와 같은 형태로 새롭게 재할당할 수밖에 없다.<br>
+  = 연산자로 변수를 새롭게 할당하는 경우, 기존에 4599124144이었던 ID 값이 4599130288로 변경됨을 확인할 수 있다.<br>
+  즉 참조 ID가 변경되어 서로 다른 변수가 된다.<br>
+  중첩 함수인 경우에는 함수 내에서만 사용 가능한 새로운 로컬 변수로 선언되며, 여기서 수정된 값, 즉 **재할당된 값은 부모 함수에서는 반영되지 않으므로 주의가 필요하다.**
+<br><br>
+  
+### 문제 33 전화 번호 문자 조합
+> 338p
+ 
+* **내가 짠 코드**<br>
+```python
+
+```
   
 
 
