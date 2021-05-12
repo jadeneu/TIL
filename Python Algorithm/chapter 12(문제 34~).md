@@ -191,11 +191,80 @@ def permute(self, nums: List[int]) -> List[List[int]]:
 > 346p
 
 * **내가 짠 코드**<br>
+예전에 짠 코드 보고 품
 ```python
+def combination(n, k):
+  result = []
 
+  def dfs(chosen,cnt):
+    if len(chosen) == k:
+      result.append(chosen[:])
+      return
+
+    for i in range(cnt,n+1):
+      chosen.append(i)
+      dfs(chosen, i+1)
+      chosen.pop()
+
+  dfs([],1)
+  return result
+
+n = 4
+k = 2
+print(combination(n,k))
 ```
+<br><br>
 
+### 문제 35 조합 풀이
+#### 풀이1. DFS로 k개 조합 생성
+조합의 수를 구하는 수식은 n!/k!(n-k)! 이며, 이 문제 예제 입력값 n=4, k=2의 경우 4!/2!(4-2)! = 6 으로, 이 문제의 출력 또한 6개의 결과가 있으므로 일치한다.<br>
+그러나 순열 문제와 마찬가지로 개수뿐만이 아닌 모든 결과를 출력하는 일은 다소 까다로운 편이다.
 
+n=5, k=3일 때 5!/3!(5-3)! = 10 이며 10가지 경우를 모두 나열해보면 그림 12-13(347p)과 같다.
+
+> 그림 12-13 조합을 나열한 결과
+
+<br>
+
+순열의 경우 자기 자신을 제외하고 모든 요소를 next_elements로 처리했으나, 이와 달리 조합의 경우 자기 자신뿐만 아니라 앞의 모든 요소를 배제하고 next_elements를 구성한다.<br>
+따라서 여기서는 그냥 elements라는 이름으로 다음과 같이 처리한다.
+```python
+def dfs(elements, start: int, k: int):
+    if k == 0:
+        results.append(elements[:])
+        return
+        
+    for i in range(start, n + 1):
+        elements.append(i)
+        dfs(elements, i + 1, k - 1)
+        elements.pop()
+```
+여기서는 1부터 순서대로 for 문으로 반복하되, 재귀 호출할 때 넘겨주는 값은 자기 자신 이전의 모든 값을 고정하여 넘긴다.<br>
+따라서 남아 있는 값끼리 나머지 조합을 수행하게 되며, k=0이 되면 결과에 삽입한다.<br>
+마찬가지로 참조로 처리되지 않도록, 결과는 [:] 연산자로 값 자체를 복사해 추가한다.
+
+전체 코드는 다음과 같다.
+```python
+def combine(self, n: int, k: int) -> List[List[int]]:
+    results = []
+    
+    def dfs(elements, start: int, k: int):
+        if k == 0:
+            results.append(elements[:])
+            return
+        
+        # 자신 이전의 모든 값을 고정하여 재귀 호출
+        for i in range(start, n + 1):
+            elements.append(i)
+            dfs(elements, i + 1, k - 1)
+            elements.pop()
+            
+    dfs([], 1, k)
+    return results
+```
+34번 순열 문제와 이 문제는 서로 비슷한 면이 있지만, 순열과 조합이 다르듯 구현 방식에도 차이가 있다.<br>
+무엇보다 이 문제는 모든 순열을 생성하는 34번 문제와 달리 k개의 조합만을 생성해야 한다는 제약 조건이 추가된 문제다.<br>
+따라서 dfs() 함수에서 k 값을 별도로 전달받아 1씩 줄여나가며 재귀 호출하는 구조로, k가 0이 되면 바로 빠져나가는 로직이 추가되어 있다.<br>
 
 
 
