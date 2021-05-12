@@ -286,9 +286,98 @@ Hello!
  
 * **내가 짠 코드**<br>
 ```python
+from itertools import combinations
 
-```
+def combination(num):
+  # nums = []
+  new = []
+  alpha = {
+      2: ['a','b','c'],
+      3: ['d','e','f'],
+      4: 'ghi',
+      5: 'jkl',
+      6: 'mno',
+      7: 'pqrs',
+      8: 'tuv',
+      9: 'wxyz'
+  }
+
   
+  for i in num:
+    for al in alpha[int(i)]:
+      new.append(al)
+
+  return list(combinations(new,2))
+
+
+num = "23"
+print(combination(num))
+```
+-> 실패. 같은 숫자 안에서도 알파벳으로 조합을 하는 결과가 나타났다
+<br><br>
+
+### 문제 33 전화 번호 문자 조합 풀이
+#### 풀이1. 모든 조합 탐색
+이 문제는 전체를 탐색하여 풀이할 수 있다.<br>
+항상 전체를 탐색해야 하고 가지치기 등으로 최적화할 수 있는 문제는 아니기 때문에 어떻게 풀이하든 결과는 비슷하다.<br>
+가능한 경우의 수를 다음 그림 12-11(339p)과 같이 모두 조합하는 형태로 전체를 탐색한 후 백트래킹하면서 결과를 조합할 수 있다.<br>
+
+> 그림 12-11
+
+이 그림에서 digits는 입력값이며, 각 자릿수에 해당하는 키판 배열을 DFS로 탐색하면 결과가 완성된다.
+
+이를 코드로 구현하면 다음과 같다.
+```python
+digits = "23"
+path = ""
+dic = {"2": "abc", "3": "def", "4": "ghi", "5": "jkl", 
+       "6": "mno", "7": "pqrs", "8": "tuv", "9": "wxyz"}
+       
+# 입력값 자릿수 단위 반복
+for i in range(index, len(digits)):
+    # 숫자에 해당하는 모든 문자열 반복
+    for j in dic[digits[i]]:
+        dfs(i + 1, path + j)
+```
+마찬가지로 digits는 입력값이며, dic는 키판 배열이다.<br>
+입력값을 자릿수로 쪼개어 반복하고, 숫자에 해당하는 모든 문자열을 반복하면서 마찬가지로 문자 단위로 재귀 탐색한다.
+```python
+def dfs(index, path):
+    # 끝까지 탐색하면 백트래킹
+    if len(path) == len(digits):
+        result.append(path)
+        return
+    ...
+```
+dfs() 함수는 자릿수가 동일할 때까지 재귀 호출을 반복하다 끝까지 탐색하면 결과를 추가하고 리턴한다.<br>
+이렇게 하면 모든 경우의 수를 DFS로 탐색하고 백트래킹으로 결과를 조합하면서 리턴하게 된다.
+
+전체 코드는 다음과 같다.
+```python
+def letterCombinations(self, digits: str) -> List[str]:
+    def dfs(index, path):
+        # 끝까지 탐색하면 백트래킹
+        if len(path) == len(digits):
+            result.append(path)
+            return
+            
+        # 입력값 자릿수 단위 반복
+        for i in range(index, len(digits)):
+            # 숫자에 해당하는 모든 문자열 반복
+            for j in dic[digits[i]]:
+                dfs(i + 1, path + j)
+                
+    # 예외 처리
+    if not digits:
+        return []
+        
+    dic = {"2": "abc", "3": "def", "4": "ghi", "5": "jkl", 
+           "6": "mno", "7": "pqrs", "8": "tuv", "9": "wxyz"}
+    result = []
+    dfs(0, "")
+    
+    return result
+```
 
 
 
