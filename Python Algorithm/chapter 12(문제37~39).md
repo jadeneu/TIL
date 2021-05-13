@@ -1,4 +1,20 @@
 # 목차
+* [chapter 12. 그래프](#12장-그래프)
+* [리트코드](#리트코드)
+  + [문제 37 부분 집합](#문제-37-부분-집합)
+  + [문제 37 부분 집합 풀이](#문제-37-부분-집합-풀이)
+    - [풀이1. 트리의 모든 DFS 결과](#풀이1-트리의-모든-dfs-결과)
+  + [문제 38 일정 재구성](#문제-38-일정-재구성)
+  + [문제 38 일정 재구성 풀이](#문제-38-일정-재구성-풀이)
+    - [풀이1. DFS로 일정 그래프 구성](#풀이1-dfs로-일정-그래프-구성)
+    - [풀이2. 스택 연산으로 큐 연산 최적화 시도](#풀이2-스택-연산으로-큐-연산-최적화-시도)
+    - [풀이3. 일정 그래프 반복](#풀이3-일정-그래프-반복)
+  + [문제 39 코스 스케줄](#문제-39-코스-스케줄)
+  + [문제 39 코스 스케줄 풀이](#문제-39-코스-스케줄-풀이)
+    - [풀이1. DFS로 순환 구조 판별](#풀이1-dfs로-순환-구조-판별)
+    - [풀이2. 가지치기를 이용한 최적화](#풀이2-가지치기를-이용한-최적화)
+    - [파이썬. defaultdict 순회 문제](#파이썬-defaultdict-순회-문제)
+<br><br><br>
 
 # 12장 그래프
 ## 리트코드
@@ -374,7 +390,122 @@ def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
 <br><br>
 
 #### 풀이2. 가지치기를 이용한 최적화
+좀 더 효율적으로 풀이할 수 있는 방법은 없을까?<br>
+앞서 DFS 풀이는 순환이 발견될 때까지 모든 자식 노드를 탐색하는 구조로 되어 있다.<br>
+만약 순환이 아니더라도 복잡하게 서로 호출하는 구조로 그래프가 구성되어 있다면, 불필요하게 동일한 그래프를 여러 번 탐색하게 될 수도 있다.<br>
+따라서 한 번 방문했던 그래프는 두 번 이상 방문하지 않도록 무조건 True로 리턴하는 구조로 개선한다면, 탐색 시간을 획기적으로 줄일 수 있을 것이다.<br>
+그리고 원래 DFS는 이런 식으로 가지치기하도록 구현하는 게 올바른 구현 방법이다.<br>
+풀이1은 지나치게 곧이곧대로 구현한 면이 있다.
+```python
+visited = set()
 
+def dfs(i):
+    if i in traced:
+        return False
+    if i in visited:
+        return True
+        
+    ...
+    
+    return True
+```
+이처럼 한 번 방문했던 노드를 저장하기 위한 visited라는 별도의 set() 집합 변수를 만든다.<br>
+이미 방문했던 노드라면 다음과 같이 더 이상 진행하지 않고 True를 리턴한다.
+```python
+if i in visited:
+    return True
+```
+여기서 visited는 모든 탐색이 끝난 후에 노드를 추가하는 형태로 구현한다.<br>
+만약 탐색 도중 순환 구조가 발견된다면 False를 리턴하면서 visited 추가는 하지 않음은 물론, 모든 함수를 빠져나가며 종료하게 될 것이다.<br>
+이렇게 한 번 방문한 노드를 더 이상 탐색하지 않는 형태, 즉 가지치기로 최적화한 풍이의 전체 코드는 다음과 같다.
+```python
+def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+    graph = collections.defaultdict(list)
+    # 그래프 구성
+    for x, y in prerequisites:
+        graph[x].append(y)
+        
+    traced = set()
+    visited = set()
+    
+    def dfs(i):
+        # 순환 구조이면 False
+        if i in traced:
+            return False
+        # 이미 방문했던 노드이면 True
+        if i in visited:
+            return True
+            
+        traced.add(i)
+        for y in graph[i]:
+            if not dfs(y):
+                return False
+        # 탐색 종료 후 순환 노드 삭제
+        traced.remove(i)
+        # 탐색 종료 후 방문 노드 추가
+        visited.add(i)
+
+        return True
+        
+    # 순환 구조 판별
+    for x in list(graph):
+        if not dfs(x):
+            return False
+
+    return True
+```
+그렇다면 이렇게 가지치기로 최적화한 풀이의 실행 속도는 얼마나 될까?<br>
+96밀리초로, 풀이1에 비해 거의 10배 더 빠른 속도로 풀이됐다.<br>
+이처럼 간단한 최적화로도 매우 좋은 성능을 낼 수 있다.
+<br><br>
+
+#### 파이썬. defaultdict 순회 문제
+앞서 이 39번 문제의 풀이1에서 맨 처음에 다음과 같이 그래프를 순회하면 된다고 설명한 바 있다.
+```python
+for x in graph:
+    ...
+```
+그러나 전체 코드에서는. DFS 호출을 위한 for 문 코드가 조금 다른 형태로 구현되어 있다.
+```python
+for x in list(graph):
+    ...
+```
+graph 변수 앞을 list()로 감쌌는데, 이는 RuntimeError: dictionary changed size during iteration 에러가 발생했기 때문이다.<br>
+에러 메시지에서는, graph 딕셔너리가 순회 중에 변경됐다고 지적한다.<br>
+for 구문에서 반복하는 graph 딕셔너리 변수는 최초 생성 후 변경된 적이 없는데 왜 이런 에러가 발생할까?<br>
+그런데 곰곰이 살펴보면 graph를 다은과 같은 형태로 생성한 적이 있다.
+```python
+graph = collections.defaultdict(list)
+```
+collections 모듈의 defaultdict를 사용해 키가 없는 딕셔너리에 대해서 빈 값 조회시 널(NULL) 오류가 발생하지 않도록 처리한 바 있는데, 문제는 여기에 있다.<br>
+여기서 사용한 defaultdict가 존재하지 않는 키를 조회할 때 오류를 내지 않기 위해 항상 디폴트를 생성하는 구조로 되어 있다는 점이다.<br>
+따라서 다음과 같은 반복문에서 graph 값이 변경된다는 오류가 발생한다.
+```python
+for x in graph:
+    ...
+------------------------------------------------------------------
+RuntimeError: dictionary changed size during iteration
+```
+해당 반복문이 제대로 실행되려면 graph 변수를 defaultdict()에서 분리해서 고정시킬 필요가 있다.<br>
+이 부분은 파이썬 2와 3의 해결 방법이 다른데, 이 책의 기준인 파이썬 3.7+의 해결 방식을 보면 list()로 묶어서 해결하라는 답변을 스택오버플로에서 찾을 수 있다.<br>
+즉 새로운 복사본을 만들라는 얘기다.<br>
+새로운 복사본의 여부는 다음과 같이 간단히 ID 조회로 확인할 수 있다.
+```python
+>>> id(graph)
+4511667296
+>>> id(list(graph))
+4511666816
+```
+원래 graph의 ID는 4511667296이지만 list()로 묶을 경우 새로운 복사본이 생성되면서 다른 ID를 갖게 된다.<br>
+따라서 for 문에서도 다음과 같이 반복문을 수정해주면 에러 없이 정상적으로 실행된다.
+```python
+for x in list(graph):
+    ...
+```
+이런 문제는 좀처럼 해결책을 찾기가 쉽지 않다.<br>
+그러나 온라인 코딩 테스트에 임하기 전에는 풀이하고자 하는 언어와 컴파일러에 대해 충분히 숙지하여 이런 문제를 최소화해야 한다.<br>
+적어도 파이썬으로 풀이하기로 마음먹었다면 파이썬의 버전별 특징과 파이썬의 공식 인터프리터인 CPython의 동작 원리에 대해 충분히 익혀둬야 한다.
+<br><br>
 
 
 
