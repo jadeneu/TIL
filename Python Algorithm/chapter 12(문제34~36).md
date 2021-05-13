@@ -408,7 +408,7 @@ dfs(csum - candidates[i], 0, path + [candidates[i]])
 ```
 <br><br>
 
-* **번외(또다른 코드)**<br>
+* **번외 | 가지치기(또다른 코드)**<br>
 ```python
 
 def whichone(candidates, target):
