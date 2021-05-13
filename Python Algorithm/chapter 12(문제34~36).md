@@ -138,7 +138,7 @@ def permute(self, nums: List[int]) -> List[List[int]]:
 ```
 <br><br>
 
-* **참고 | 원소 삭제 후(remove) 남은 원소들 append하는 다른 방식
+* **참고 | 원소 삭제 후(remove) 남은 원소들 append하는 다른 방식**
   ```python
   m = lst[i]
   remain = lst[:i] + lst[i+1:]
