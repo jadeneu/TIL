@@ -288,6 +288,92 @@ def findItinerary(self, tickets: List[List[str]]) -> List[str]:
 ```python
 
 ```
+<br><br>
+
+### 문제 39 코스 스케줄 풀이
+#### 풀이1. DFS로 순환 구조 판별
+이 문제는 그래프가 순환(Cycle) 구조인지를 판별하는 문제로 풀이할 수 있다.<br>
+순환 구조라면 계속 뱅글뱅글 맴돌게 될 것이고, 해당 코스는 처리할 수 없기 때문이다.<br>
+따라서 순환 판별 알고리즘을 차례대로 구현해보자.
+```python
+graph = collections.defaultdict(list)
+for x, y in prerequisites:
+    graph[x].append(y)
+```
+먼저 여기서는 페어들의 목록인 prerequisites 변수를 풀어서 그래프로 표현한다.<br>
+페어의 첫 번째 값을 x, 두 번째 값을 y로 하되 y는 복수 개로 구성할 수 있게 한다.<br>
+이렇게 하면 'x': ['y1', 'y2'] 같은 구조가 될 것이다.
+```python
+traced = set()
+...
+for x in graph:
+    if not dfs(x):
+        return False
+        
+return True
+```
+순환 구조를 판별하기 위해 앞서 이미 방문했던 노드를 traced 변수에 저장한다.<br>
+이미 방문했던 곳을 중복 방문하게 된다면 순환 구조로 간주할 수 있고, 이 경우 False를 리턴하고 종료할 수 있다.<br>
+traced는 중복 값을 갖지 않으므로 set() 집합 자료형으로 정한다.<br>
+아울러 순환 구조를 찾기 위한 탐색은 다음과 같이 DFS로 진행한다.
+```python
+def dfs(i):
+    if i in traced:
+        return False
+        
+    traced.add(i)
+    for y in graph[i]:
+        if not dfs(y):
+            return False
+    traced.remove(i)
+    
+    return True
+```
+여기서 DFS 함수인 dfs()에서는 현재 노드가 이미 방문했던 노드 집합인 traced에 존재한다면 순환 구조이므로 False를 리턴한다.<br>
+False는 계속 상위로 리턴되어 최종 결과도 False를 리턴하게 될 것이다.<br>
+탐색은 재귀로 진행하되, 해당 노드를 이용한 모든 탐색이 끝나게 된다면 traced.remove(i)로 방문했던 내역을 반드시 삭제해야 한다.<br>
+그렇지 않으면 형제 노드가 방문한 노드까지 남게 되어, 자식 노드 입장에서는 그림 12-18(366p)과 같이 순환이 아닌데 순환이라고 잘못 판단할 수 있기 때문이다.
+
+> 그림 12-18
+
+이런 그림이 바로 잘못 판단하는 경우인데, 여기서는 입력값이 [[0,1], [0,2], [1,2]]일 때 이 그래프는 순환이 존재하지 않으므로 결과는 True가 되어야 한다.<br>
+그러나 만약 이미 방문한 노드를 삭제하지 않고 그대로 둔다면 1)번 경로로 탐색할 때 방문했던 노드들이 그대로 남게 될 것이고(즉 [0, 1, 2]) 2)번 경로로 탐색할 때 2 노드가 이미 방문했던 노드라고 잘못 판단할 것이다.<br>
+1)번 경로와 2)번 경로는 형제 노드 간의 탐색이기 때문에 서로 관련성이 없어야 하므로 1)번 경로로 탐색이 끝난 이후에는 traced.remove(i)로 1, 2 노드가 모두 삭제되어야 한다.
+
+이제 전체 코드는 다음과 같다. 920밀리초에 풀린다.
+```python
+def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+    graph = collections.defaultdict(list)
+    # 그래프 구성
+    for x, y in prerequisites:
+        graph[x].append(y)
+        
+    traced = set()
+    
+    def dfs(i):
+        # 순환 구조이면 False
+        if i in traced:
+            return False
+
+        traced.add(i)
+        for y in graph[i]:
+            if not dfs(y):
+                return False
+        # 탐색 종료 후 순환 노드 삭제
+        traced.remove(i)
+
+        return True
+        
+    # 순환 구조 판별
+    for x in list(graph):
+        if not dfs(x):
+            return False
+
+    return True
+```
+<br><br>
+
+#### 풀이2. 가지치기를 이용한 최적화
 
 
 
