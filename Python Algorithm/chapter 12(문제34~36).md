@@ -138,6 +138,14 @@ def permute(self, nums: List[int]) -> List[List[int]]:
 ```
 <br><br>
 
+* **참고 | 원소 삭제 후(remove) 남은 원소들 append하는 다른 방식
+  ```python
+  m = lst[i]
+  remain = lst[:i] + lst[i+1:]
+  ```
+
+<br><br>
+
 #### 풀이2. itertools 모듈 사용
 파이썬에는 itertools라는 모듈이 있다.<br>
 itertools 모듈은 반복자 생성에 최적화된 효율적인 기능들을 제공하므로, 실무에서는 알고리즘으로 직접 구현하기보다는 가능하다면 itertools 모듈을 사용하는 편이 낫다.<br>
