@@ -405,6 +405,45 @@ dfs(csum - candidates[i], 0, path + [candidates[i]])
 ```
 <br><br>
 
+* **번외(또다른 코드)**<br>
+```python
+
+def whichone(candidates, target):
+    result = []
+    
+    # target이 그대로 candidates에 있는 경우
+    if target in candidates:
+        result.append([target])
+        candidates.remove(target)
+    
+    def dfs(tmp):
+        
+        # target이 되기 위해 더해야 할 값(정답코드에서는 csum)이 
+        # candidate의 min값 보다 작을 경우 return
+        if target - sum(tmp) < min(candidates):
+            tmp = [c]
+            return 
+        
+        # csum이 candidate에 있으면 바로 append
+        if target - sum(tmp) in candidates:
+            tmp.append(target - sum(tmp))
+            if set(tmp) not in list(map(set, result)):
+                result.append(tmp[:])
+       
+        # 아닌 경우, 또 candidates들을 더하기!
+        else:
+            for other in candidates:
+                tmp.append(other)
+                dfs(tmp)
+                tmp.pop()
+
+                
+    for c in candidates:
+        dfs([c])
+            
+    return result
+```
+
 
 
 
