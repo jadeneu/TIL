@@ -265,9 +265,124 @@ def combine(self, n: int, k: int) -> List[List[int]]:
 34번 순열 문제와 이 문제는 서로 비슷한 면이 있지만, 순열과 조합이 다르듯 구현 방식에도 차이가 있다.<br>
 무엇보다 이 문제는 모든 순열을 생성하는 34번 문제와 달리 k개의 조합만을 생성해야 한다는 제약 조건이 추가된 문제다.<br>
 따라서 dfs() 함수에서 k 값을 별도로 전달받아 1씩 줄여나가며 재귀 호출하는 구조로, k가 0이 되면 바로 빠져나가는 로직이 추가되어 있다.<br>
+그러므로 조금 다른 유형의 문제라는 점을 염두에 두고 유심히 코드를 살펴본다면 어럽지 않게 특징과 차이점을 파악할 수 있을 것이다.
+<br><br>
 
+#### 풀이2. itertools 모듈 사용
+이 문제도 itertools를 이용해 한 줄 풀이가 가능하다.<br>
+34번 순열 문제에서 itertools.permutations()가 있었던 것처럼 itertools.combination() 도 당연히 지원한다.
+<br><br>
 
+```python
+def combine(self, n: int, k: int) -> List[List[int]]:
+    return list(itertools.combinations(range(1, n + 1), k))
+```
+<br>
 
+풀이1은 536밀리초, 풀이2는 76밀리초가 걸린다.
+<br><br>
+
+### 문제 36 조합의 합
+> 351p
+
+* **내가 짠 코드**<br>
+```python
+# 중복조합 만들어야 함
+
+def combination(candi, tar):
+  result = []
+
+  def dfs(chosen,cnt):
+    if sum(chosen) == 7:
+      result.append(chosen[:])
+
+    for i in range(cnt, len(candi)+1):
+      chosen.append(candi[i-1])
+      dfs(chosen,i+1)
+      chosen.pop()
+
+  dfs([],1)
+  return result
+
+candidates = [2,3,6,7]
+target = 7
+print(combination(candidates, target))
+```
+중복조합을 만들려다가 조합까지만 만들었다. -> 구현 못함
+<br><br>
+
+### 문제 36 조합의 합 풀이
+#### 풀이1. DFS로 중복 조합 그래프 탐색
+이제 조합을 응용한 문제를 풀어볼 차례다.<br>
+합 target을 만들 수 있는 모든 번호 조합을 찾는 문제인데, 앞서 순열 문제와 유사하게 DFS(깊이 우선 탐색)와 백트래킹으로 풀이할 수 있다.<br>
+간단히 구조를 그려보면 다음 그림 12-15(352p)과 같은 입력값의 중복 조합 그래프를 풀이하는 문제로 도식화 할 수 있다.
+
+> 그림 12-15
+
+모든 중복 조합에서 찾아야 하기 때문에, 이 그림과 같이 항상 부모의 값부터 시작하는 그래프로 구성할 수 있다.<br>
+만약 조합이 아니라 순열을 찾는 문제하면 자식 노드는 항상 처음부터 시작해야 해서 훨씬 더 많은 계산이 필요할 것이다.<br>
+그러나 **조합은 각각의 노드가 자기 자신부터 하위 원소까지의 나열로만 정리할 수 있다.**<br>
+이제 이 중복 조합 그래프를 DFS로 다음과 같이 탐색할 수 있다.
+```python
+def dfs(csum, index, path):
+    ...
+    for i in range(index, len(candidates)):
+        dfs(csum - candidates[i], i, path + [candidates[i]])
+```
+DFS로 재귀 호출하되, dfs() 함수의 첫 번째 파라미터는 합을 갱신해나갈 csum(candidates_sum이라는 의미로 정한 변수명이다), 두 번째 파라미터는 순서(자기 자신을 포함하는), 세 번째 파라미터는 지금까지의 탐색 경로로 정한다.<br>
+그런데 이 탐색 코드는 종료 조선이 없으며, 자기 자신을 포함하기 때문에 무한히 탐색하게 될 것이다.<br>
+따라서 종료 조건이 필요하다. 종료 조건은 다음 2가지 경우로 정한다.
+```
+1. csum < 0(마이너스인 경우): 목표값을 초과한 경우로 탐색을 종료한다.
+2. csum = 0(0인 경우): csum의 초기값은 target이며, 따라서 csum의 0은 target과 일치하는 정답이므로 결과 리스트에 추가하고 탐색을 종료한다.
+```
+이런 경우에 다음과 같이 종료하게 되면 가지치기가 되어 더 이상 불필요한 탐색은 하지 않게 될 것이다.
+```python
+def dfs(csum, index, path):
+    if csum < 0:
+        return
+    if csum == 0:
+        result.append(path)
+        return
+```
+<br>
+
+나머지 경우는 계속해서 탐색을 시도한다.<br>
+그림 12-15(352p)에서 ...으로 표현한 것처럼 종료 조건을 만족하지 못할 경우에는 계속해서 DFS(깊이 우선 탐색)를 시도한다.<br>
+이제 두 파트를 합쳐서 전체 코드를 정리해보면 다음과 같다.
+```python
+def combinationSum(self, candidates: List[int], target: int) \ 
+        -> List[List[int]]:
+    result = []
+    
+    def dfs(csum, index, path):
+        # 종료 조건
+        if csum < 0:
+            return
+        if csum == 0:
+            result.append(path)
+            return
+            
+        # 자신 부터 하위 원소 까지의 나열 재귀 호출
+        for i in range(index, len(candidates)):
+            dfs(csum - candidates[i], i, path + [candidates[i]])  # 1
+            
+    dfs(target, 0, [])
+    return result
+```
+그런데 만약 입력값에 0이 포함되어 있다면 어떻게 될까?<br>
+종료 조건을 만족할 수 없기 때문에 무한히 깊이 탐색을 시도하게 된다.<br>
+따라서 실제로는 입력값 0에 대한 예외 처리도 필요하다.<br>
+만약 이 문제를 조합이 아닌 순열 문제로 풀이해본다면 어떻게 될까?
+
+앞서 문제 설명을 시작할 때 잠깐 언급했지만 완성된 전체 코드에서 dfs()를 호출하는 '# 1'에서 다음과 같이 i가 아닌 0을 기업하면 된다.<br>
+그렇게 하면 항상 첫 번째 값부터 탐색을 시도하기 때문에 순열로 풀이할 수 있을 것이다.
+```python
+dfs(csum - candidates[i], 0, path + [candidates[i]])
+```
+<br><br>
+
+### 문제 37 부분 집합
 
 
 
