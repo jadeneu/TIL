@@ -52,9 +52,58 @@ DFS(깊이 우선 탐색)는 한 사람이 미로를 찾아 헤매는 과정과 
 > 373p
 
 * **내가 짠 코드**<br>
+예전에 배운 내용과 구현한 코드를 참고해서 코드를 짰다.
 ```python
-def
+import collections, math
+
+def delay(times,n,k):
+  dic = collections.defaultdict(list)
+  dist = [math.inf for _ in range(n)]
+  parent = [math.inf for _ in range(n)]
+
+  def solution():
+    start = k
+    queue = collections.deque()
+    dist[k-1] = 0  # 시작 노드의 dist값은 0
+    queue.append(start)  # 큐에 시작 정점 삽입
+
+    while queue:
+      cur = queue.popleft()
+      for w in dic[cur]:
+        next = w[0]
+        weight = w[1]
+
+        queue.append(next)
+        
+        if dist[next-1] > dist[cur-1] + weight:
+          dist[next-1] = dist[cur-1] + weight
+
+
+  def compare(max):
+    for d in dist:
+      if max < d:
+        max = d
+    return max
+
+
+  # 그래프 형성(출발지, 도착지, 소요 시간)
+  for u,v,w in times:
+    dic[u] += [[v,w]]  # {2: [[1, 1], [3, 1]], 3: [[4, 1]]}
+
+  solution()
+  max = 0  # 최대 거리
+  return compare(max)
+
+
+times = [[2,1,1],[2,3,1],[3,4,1]]
+N = 4  # 노드 개수
+K = 2  # 출발 노드
+print(delay(times,N,K))
 ```
+<br><br>
+
+### 문제 40 네트워크 딜레이 타임 풀이
+#### 풀이1. 다익스트라 알고리즘 구현
 
 
 
