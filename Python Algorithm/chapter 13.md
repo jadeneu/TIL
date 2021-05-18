@@ -254,8 +254,168 @@ def networkDelayTime(self, times: List[List[int]], N: int, K: int) -> int:
 
 * **내가 짠 코드**<br>
 ```python
+import collections, math
 
+def flights(n, edges, start, last, k):
+  dist = [math.inf for _ in range(n)]
+  dic = collections.defaultdict(list)
+
+  def solution():
+    dist[start] = 0  # 시작노드의 dist값은 0
+    cnt = -1  # 거치는 경유지 개수를 셈
+    queue = collections.deque()
+    queue.append(start)
+
+    while queue:
+        cur = queue.popleft()
+        cnt += 1
+        for v in dic[cur]:
+            next = v[0]
+            weight = v[1]
+            queue.append(next)
+            
+            if dist[next] > dist[cur] + weight and cnt <= k:
+                dist[next] = dist[cur] + weight
+
+
+  def compare():
+    for d in dist:
+      if d == math.inf:
+        return -1
+    return max(dist)
+
+
+  # 그래프 구현하기
+  for u,v,w in edges:
+    dic[u].append([v,w])  # {0: [[1, 100], [2, 500]], 1: [[2, 100]]}
+
+  solution()
+  return compare()
+
+
+n = 3  # 노드 개수
+edges = [[0,1,100],[1,2,100],[0,2,500]]
+src = 0  # 시작 노드
+dst = 2  # 종료 노드
+k = 0  # 거칠 수 있는 경유지 수
+print(flights(n, edges, src, dst, k))
 ```
+<br><br>
+
+### 문제 41 K 경유지 내 가장 저렴한 항공권 풀이
+#### 풀이1. 다익스트라 알고리즘 응용
+이 문제 또한 다익스트라 알고리즘을 응용한 풀이를 연습할 수 있는 좋은 문제다.<br>
+가격을 시간이라고 가정한다면 최단 시간을 계산하는 경로는 앞서 다익스트라 알고리즘으로 동일하게 구현할 수 있다.<br>
+다만, 여기에는 한 가지 제약사항이 추가되었는데 K개의 경유지 이내에 도착해야 한다는 점이다.<br>
+따라서 다익스트라 알고리즘의 구현을 위해 우선순위 큐에 추가할 때 K 이내일 때만 경로를 추가하여 K를 넘어서는 경로는 더 이상 탐색되지 않게 하면 될 것 같다.<br>
+앞서 풀이했던 다익스트라 알고리즘 코드를 그래도 가져와보자.
+```python
+def networkDelayTime(self, times: List[List[int]], N: int, K: int) -> int:
+    graph = collections.defaultdict(list)
+    for u, v, w in times:
+        graph[u].append((v, w))
+        
+    Q = [(0, K)]
+    dist = collections.defaultdict(int)
+    
+    while Q:
+        time, node = heapq.heappop(Q)
+        if node not in dist:
+            dist[node] = time
+            for v, w in graph[node]:
+                alt = time + w
+                heapq.heappush(Q, (alt, v))
+                
+    if len(dist) == N:
+        return max(dist.values())
+    return -1
+```
+이 문제 또한 다익스트라 알고리즘으로 풀이할 것이므로, 앞서 구현했던 다익스트라 알고리즘 풀이에서 문제도 맞도록 살짝 변형해서 풀이를 시도해볼 것이다.
+```python
+def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, K: int) -> int:
+    graph = collections.defaultdict(list)
+    for u, v, w in flights:
+        graph[u].append((v, w))
+        
+    Q = [(0, K)]
+    
+    while Q:
+        price, node = heapq.heappop(Q)
+        ...
+        for v, w in graph[node]:
+                alt = price + w
+                heapq.heappush(Q, (alt, v))
+```
+우선 networkDelayTime()이라는 함수 명부터 이 문제에 맞게 findCheapestPrice()로 교체하고, time이라는 변수 명도 문제에 맞게 price로 변경했다.<br>
+기존에는 시간을 구하므로 time이었다면 여기서는 최저가를 계산해야 하므로 price가 된다.<br>
+또한 더 이상 전체 거리를 보관할 필요가 없기 때문에, dist 딕셔너리는 삭제했다.<br>
+도착점까지의 최단 경로만 계산하면 된다.<br>
+마지막으로, 전체 경로의 개수도 체크할 필요가 없기 때문에 여기서는 모두 삭제했다.<br>
+이제 남은 코드에서 문제 풀이를 위한 몇몇 알고리즘을 추가해보면 다음과 같다.
+```python
+def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, K: int) -> int:
+    graph = collections.defaultdict(list)
+    for u, v, w in flights:
+        graph[u].append((v, w))
+    
+    k = 0
+    Q = [(0, K)]
+    
+    while Q:
+        price, node, k = heapq.heappop(Q)
+        if node == dst:
+            return price
+        if k <= K:
+            k += 1
+            for v, w in graph[node]:
+                alt = price + w
+                heapq.heappush(Q, (alt, v))
+    return -1
+```
+우선순위 큐에는 경유 횟수를 k로 설정하여 0부터 함께 기입한다.<br>
+이전 문제에서는 dist에 노드가 존재하는지 여부로 판별했으나 여기서는 K 이내일 때만(k <= K) 우선순위 큐에 경로를 추가하고 K를 넘어서는 경로는 더 이상 탐색되지 않도록 'if k <= K:' 부분을 추가했다.<br>
+계속 탐색하다가 현재 노드가 도착지라면, 결과를 리턴하고 종료한다.<br>
+그러나 큐를 끝까지 순회해도 찾지 못한다면 도착지까지 K 이내에 도달하는 경로는 존재하지 않는다는 얘기이므로 이 경우에는 -1을 리턴한다.
+
+k가 K를 넘어서게 된다면 더 이상 큐에 추가하는 일도 없다.<br>
+따라서 K 값이 작을수록 빠르게 실행되고 탐색 또한 금방 종료할 것이다.<br>
+그런데 여기서 한 가지, 변수명을 k와 K로 너무 비슷하게 설정해서 다소 혼동이 된다.<br>
+if k <= K: 라는 비교 구문도 혼란스럽다.<br>
+이 부분을 혼동이 덜 되도록 좀 더 직관적으로, 다음과 같이 개선해보자.
+```python
+Q = [(0, src, K)]
+...
+if k <= 0:
+    for v, w in graph[node]:
+        alt = price + w
+        heapq.heappush(Q, (alt, v, k - 1))
+```
+처음부터 입력값의 최대 경우지 값인 K를 우선순위 큐에 추가하고 경유지가 하나씩 늘 때마다 k - 1 하는 형태로 변경해봤다.<br>
+이렇게 하면 비교 구문도 if k >= 0: 와 같이 훨씬 더 직관적으로 처리할 수 있으며, K를 미리 선언할 필요도 없기 때문에 훨씬 더 알아보기 쉬운 간결한 코드가 됐다.<br>
+이제 전체 코드는 다음과 같다.
+```python
+def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, K: int) -> int:
+    graph = collections.defaultdict(list)
+    # 그래프 인접 리스트 구성
+    for u, v, w in flights:
+        graph[u].append((v, w))
+    
+    # 큐 변수: [(가격, 정점, 남은 가능 경유지 수)]
+    Q = [(0, src, K)]
+    
+    # 우선순위 큐 최솟값 기준으로 도착점까지 최소 비용 판별
+    while Q:
+        price, node, k = heapq.heappop(Q)
+        if node == dst:
+            return price
+        if k >= 0:
+            for v, w in graph[node]:
+                alt = price + w
+                heapq.heappush(Q, (alt, v, k - 1))
+    return -1
+```
+<br><br>
+
 
 
 
