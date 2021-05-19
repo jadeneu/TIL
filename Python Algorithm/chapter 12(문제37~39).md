@@ -389,7 +389,20 @@ def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
 
     return True
 ```
-<br><br>
+<br>
+
+#### list(graph)로 for문을 도는 이유
+순환구조를 판별할 때 list(graph)로 for문을 돈다.
+```python
+for x in list(graph):
+    if not dfs(x):
+        return False
+```
+딕셔너리 자체인 graph로 for문을 돌지 않는 이유는 중간에 딕셔너리의 크기가 달라지면서 제대로 for문이 동작하지 않기 때문이다.
+
+오류 내용 ↓<br>
+**RuntimeError: dictionary changed size during iteration**
+<br><br><br>
 
 #### 풀이2. 가지치기를 이용한 최적화
 좀 더 효율적으로 풀이할 수 있는 방법은 없을까?<br>
