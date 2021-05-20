@@ -399,7 +399,8 @@ for x in list(graph):
     if not dfs(x):
         return False
 ```
-딕셔너리 자체인 graph로 for문을 돌지 않는 이유는 중간에 딕셔너리의 크기가 달라지면서 제대로 for문이 동작하지 않기 때문이다.
+딕셔너리 자체인 graph로 for문을 돌지 않는 이유는 중간에 딕셔너리의 크기가 달라지면서 제대로 for문이 동작하지 않기 때문이다.<br>
+그래서 graph를 list로 묶어서 새로운 객체를 만들어 for문을 돌린다.
 
 오류 내용 ↓<br>
 **RuntimeError: dictionary changed size during iteration**
@@ -489,7 +490,7 @@ for x in list(graph):
 graph 변수 앞을 list()로 감쌌는데, 이는 RuntimeError: dictionary changed size during iteration 에러가 발생했기 때문이다.<br>
 에러 메시지에서는, graph 딕셔너리가 순회 중에 변경됐다고 지적한다.<br>
 for 구문에서 반복하는 graph 딕셔너리 변수는 최초 생성 후 변경된 적이 없는데 왜 이런 에러가 발생할까?<br>
-그런데 곰곰이 살펴보면 graph를 다은과 같은 형태로 생성한 적이 있다.
+그런데 곰곰이 살펴보면 graph를 다음과 같은 형태로 생성한 적이 있다.
 ```python
 graph = collections.defaultdict(list)
 ```
