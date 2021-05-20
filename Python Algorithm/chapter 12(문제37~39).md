@@ -433,7 +433,7 @@ if i in visited:
 ```
 여기서 visited는 모든 탐색이 끝난 후에 노드를 추가하는 형태로 구현한다.<br>
 만약 탐색 도중 순환 구조가 발견된다면 False를 리턴하면서 visited 추가는 하지 않음은 물론, 모든 함수를 빠져나가며 종료하게 될 것이다.<br>
-이렇게 한 번 방문한 노드를 더 이상 탐색하지 않는 형태, 즉 가지치기로 최적화한 풍이의 전체 코드는 다음과 같다.
+이렇게 한 번 방문한 노드를 더 이상 탐색하지 않는 형태, 즉 가지치기로 최적화한 풀이의 전체 코드는 다음과 같다.
 ```python
 def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
     graph = collections.defaultdict(list)
