@@ -10,7 +10,6 @@
   + [문제 35 조합 풀이](#문제-35-조합-풀이)
     - [풀이1. DFS로 k개 조합 생성](#풀이1-dfs로-k개-조합-생성)
     - [풀이2. itertools 모듈 사용](#풀이2-itertools-모듈-사용)
-    - [다른 풀이](#다른-풀이)
   + [문제 36 조합의 합](#문제-36-조합의-합)
   + [문제 36 조합의 합 풀이](#문제-36-조합의-합-풀이)
     - [풀이1. DFS로 중복 조합 그래프 탐색](#풀이1-dfs로-중복-조합-그래프-탐색)
@@ -307,37 +306,6 @@ def combine(self, n: int, k: int) -> List[List[int]]:
 <br>
 
 풀이1은 536밀리초, 풀이2는 76밀리초가 걸린다.
-<br><br>
-#### 다른 풀이
-```python
-def letterCombinations(digits: str) -> List[str]:
-    num2letter = {'2':['a','b','c'],
-                  '3':['d','e','f'],
-                  '4':['g','h','i'],
-                  '5':['j','k','l'],
-                  '6':['m','n','o'],
-                  '7':['p','q','r','s'],
-                  '8':['t','u','v'],
-                  '9':['w','x','y','z']}
-    answer = []
-    graph = list(digits)
-    length = len(graph)
-    
-    # 예외처리
-    if length == 0:
-        return answer
-    
-    # 그래프 서칭
-    while graph:
-        num = graph.pop(0)
-        if len(answer) == 0:
-            answer = num2letter[num]
-        else:
-            answer =\
-                [[cum_ch+ch for cum_ch in answer] for ch in num2letter[num]]
-            answer = sum(answer,[])
-    return answer
-```
 <br><br>
 
 ### 문제 36 조합의 합
