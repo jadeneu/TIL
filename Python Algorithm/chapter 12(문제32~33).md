@@ -295,7 +295,7 @@ Hello!
   
 ### 문제 33 전화 번호 문자 조합
 > 338p
- 
+* 2에서 9까지 숫자가 주어졌을 때 전화 번호로 조합 가능한 모든 문자를 출력하라.<br><br>
 * **내가 짠 코드**<br>
 ```python
 from itertools import combinations
