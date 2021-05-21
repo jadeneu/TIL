@@ -214,6 +214,7 @@ def permute(self, nums: List[int]) -> List[List[int]]:
 ### 문제 35 조합
 > 346p
 
+* 전체 수 n을 입력받아 k개의 조합을 리턴하라.<
 * **내가 짠 코드**<br>
 예전에 짠 코드 보고 품
 ```python
