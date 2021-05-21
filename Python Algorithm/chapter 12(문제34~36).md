@@ -13,6 +13,8 @@
   + [문제 36 조합의 합](#문제-36-조합의-합)
   + [문제 36 조합의 합 풀이](#문제-36-조합의-합-풀이)
     - [풀이1. DFS로 중복 조합 그래프 탐색](#풀이1-dfs로-중복-조합-그래프-탐색)
+    - [다른 풀이(가지치기)](#다른-풀이가지치기)
+    - [다른 풀이(가지치기)에서 좋은 점만 갖고 온 완성 코드(feat. 예외처리)](#다른-풀이가지치기에서-좋은-점만-갖고-온-완성-코드feat-예외처리)
 <br><br><br>
 
 # 12장 그래프
@@ -411,7 +413,7 @@ dfs(csum - candidates[i], 0, path + [candidates[i]])
 ```
 <br><br>
 
-* **번외 | 가지치기(또다른 코드)**<br>
+#### 다른 풀이(가지치기)
 ```python
 
 def whichone(candidates, target):
@@ -449,7 +451,42 @@ def whichone(candidates, target):
             
     return result
 ```
+<br><br>
 
+#### 다른 풀이(가지치기)에서 좋은 점만 갖고 온 완성 코드(feat. 예외처리)
+```python
+from typing import List
+
+def solution(candi: List[int],target: int) -> List[List[int]]:
+    def dfs(csum, idx, path):
+        ### csum과 min(candi)을 비교하는게 먼저 나오면 result에 path가 append될 수 없다.
+        if csum == 0:
+            result.append(path)
+            return
+        if csum < min(candi):
+            return
+        
+        for i in range(idx, len(candi)):
+            dfs(csum - candi[i], i, path + [candi[i]])
+    
+    
+    # 입력값 0에 대한 예외 처리
+    if min(candi) == 0:
+        candi.remove(0)
+        
+    result = []
+    if target in candi:
+        result.append([target])
+        candi.remove(target)
+        
+    dfs(target, 0, [])
+    return result
+
+candidates = [2,3,6,7]
+target = 7
+print(solution(candidates,target))
+```
+<br><br>
 
 
 
