@@ -313,6 +313,7 @@ def combine(self, n: int, k: int) -> List[List[int]]:
 ### 문제 36 조합의 합
 > 351p
 
+* 숫자 집합 candidates를 조합하여 합이 target이 되는 원소를 나열하라. 각 원소는 중복으로 나열 가능하다.<br><br>
 * **내가 짠 코드**<br>
 ```python
 # 중복조합 만들어야 함
