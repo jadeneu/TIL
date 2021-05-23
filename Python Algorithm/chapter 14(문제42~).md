@@ -179,9 +179,57 @@ def maxDepth(self, root: TreeNode) -> int:
     # BFS 반복 횟수 == 깊이
     return depth
 ```
+<br><br>
 
+실제 입출력하는 풀이1 코드
+```python
+import collections
 
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+        
+class Solution:
+    def maxDepth(self, root: TreeNode) -> int:
+        if root is None:
+            return 0
+        queue = collections.deque([root])
+        depth = 0
 
+        while queue:
+          depth += 1
+          for _ in range(len(queue)):
+              cur_root = queue.popleft()
+              if cur_root.left:
+                  queue.append(cur_root.left)
+              if cur_root.right:
+                  queue.append(cur_root.right)
+        # BFS 반복 횟수 == 깊이
+        return depth
+        
+root = [3,9,20,None,None,15,7]
+solution = Solution()
+n1 = TreeNode(7)
+n2 = TreeNode(15)
+n3 = TreeNode(None)
+n4 = TreeNode(None)
+n5 = TreeNode(20,n2,n1)
+n6 = TreeNode(9,n3,n4)
+n7 = TreeNode(3,n6,n5)
+print(solution.maxDepth(n7))
+```
+<br><br>
+
+### 문제 43 이진 트리의 직경
+> 390p
+
+* 이진 트리에서 두 노드 간 가장 긴 경로의 길이를 출력하라.<br>
+* **내가 짠 코드**<br>
+```python
+
+```
 
 
 
