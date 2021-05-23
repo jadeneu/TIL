@@ -81,8 +81,32 @@
 * 이진 트리의 최대 깊이를 구하라.<br>
 * **내가 짠 코드**<br>
 ```python
+def solution(nodes):
+  root = 0
+  depth = 1
 
+  # 예외처리
+  if not nodes:
+    return 0
+
+  while nodes:
+    lchild = (root*2) + 1
+    if lchild < len(nodes):
+      depth += 1
+      root = lchild
+    else:
+      break
+  return depth
+
+
+nodes = [3,9,20,None,None,15,7]
+print(solution(nodes))
 ```
+노드처리 하지 않고 주어진 리스트대로 풀었다.
+<br><br>
+
+### 문제 42 이진 트리의 최대 깊이 풀이
+#### 풀이1. 반복 구조로 BFS 풀이
 
 
 
