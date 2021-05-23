@@ -107,8 +107,78 @@ print(solution(nodes))
 
 ### 문제 42 이진 트리의 최대 깊이 풀이
 #### 풀이1. 반복 구조로 BFS 풀이
+깊이(Depth)는 어떻게 측정할 수 있을까?<br>
+여러 가지 방법이 있겠지만 여기서는 BFS(너비 우선 탐색)로 풀이해보자.<br>
+다시 한번 복기하자면, DFS는 스택, BFS는 큐를 사용하여 구현한다.<br>
+여기서는 BFS로 풀이할 것이므로, 다음과 같이 큐를 선언하고 풀이할 준비를 해보자.
+```python
+def maxDepth(self, root: TreeNode) -> int:
+    ...
+    queue = collections.deque([root])
+    depth = 0
+    
+    while queue:
+        ...
+        
+    return depth
+```
+큐를 선언하고 반복 구조도 구성하여, BFS 반복을 이용해 풀이할 구조를 잡았다.<br>
+파이썬에서 큐는 일반적인 리스트로도 모든 연산이 가능하지만, 데크 자료형을 사용하면 이중 연결 리스트로 구성되어 있기 때문에 큐와 스택 연산을 모두 자유롭게 활용 가능할 뿐만 아니라 양방향 모두 O(1)에 추출할 수 있어 좋은 성능을 보인다는 점을 이미 여러 번 언급한 바 있다.(자세한 내용은 10장 참고)
 
+실제로도 양방향 추출이 빈번할 경우, 리트코드의 실행 속도 또한 데크가 리스트에 비해 훨씬 더 빠르다.
+```python
+while queue:
+    depth += 1
+    for _ in range(len(queue)):
+        cur_root = queue.popleft()
+        ...
+        if cur_root.has_child():
+            queue.append(cur_root.child)
+```
+큐 변수에는 현재 깊이 depth에 해당하는 모든 노드가 들어 있고, queue.popleft()로 하나씩 끄집어 내면서 cur_root.has_child()로 자식 노드가 있는지 여부를 판별한 후 자식 노드를 다시 큐에 삽입한다.<br>
+참고로 여기서 .has_child()와 .child는 모두 이해를 돕기 위한 수도코드다.<br>
+실제 동작하는 코드는 바로 이어서 다시 살펴본다.
 
+그렇다면 동일한 큐에 삽입하다 보니 행여나 자식 노드가 부모 노드와 섞이진 않을까?<br>
+아마 섞일 것이다. 그러나 이 for 반복문에서는 자식 노드가 추출되는 일은 없을 것이다.<br>
+왜냐면 처음 for 문 진입 시 부모 노드의 길이 len(queue)만큼만 반복하도록 선언했기 때문이다.
+
+따라서 부모 노드가 모두 추출된 이후에는 for 문을 빠져 나가게 되고, 다시 한 바퀴 돌아 while queue 구문에서 이번에는 다음 번 깊이의 노드 반복이 진행될 것이다.
+
+이해를 돕기 위해 queue.append(cur_root.child)으로 깊이별 큐에 삽입되는 자식 노드를 도식화해보면 그림 14-4(389p)와 같다.
+
+> 그림 14-4
+
+이 그림처럼 깊이별로 노드가 추가되는 BFS 구조를 나타낼 수 있다.<br>
+이 문제 예제의 입력값이 [3,9,20,null,null,15,7]일 때, depth가 1이면 queue에는 [3], 2이면 [9,20], 3이면 [15,7]이 삽입되어 처리된다.
+
+깊이 depth는 while 구문의 반복 횟수이므로 BFS에서 반복 횟수는 곧 높이가 된다.<br>
+이제 반복 횟수를 리턴하면 최종 결과를 구할 수 있다.<br>
+수도코드를 실제로 동작하는 코드로 바꾸고, 전체 코드를 정리해보면 다음과 같다.
+```python
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+def maxDepth(self, root: TreeNode) -> int:
+    if root is None:
+        return 0
+    queue = collections.deque([root])
+    depth = 0
+    
+    while queue:
+      depth += 1
+      for _ in range(len(queue)):
+          cur_root = queue.popleft()
+          if cur_root.left:
+              queue.append(cur_root.left)
+          if cur_root.right:
+              queue.append(cur_root.right)
+    # BFS 반복 횟수 == 깊이
+    return depth
+```
 
 
 
