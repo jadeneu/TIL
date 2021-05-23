@@ -213,10 +213,10 @@ root = [3,9,20,None,None,15,7]
 solution = Solution()
 n1 = TreeNode(7)
 n2 = TreeNode(15)
-n3 = TreeNode(None)
-n4 = TreeNode(None)
+# n3 = TreeNode(None)
+# n4 = TreeNode(None)
 n5 = TreeNode(20,n2,n1)
-n6 = TreeNode(9,n3,n4)
+n6 = TreeNode(9)
 n7 = TreeNode(3,n6,n5)
 print(solution.maxDepth(n7))
 ```
