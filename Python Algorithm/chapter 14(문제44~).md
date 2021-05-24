@@ -34,6 +34,7 @@ def dfs(node: TreeNode):
 if node is None:
     return 0
 ```
+존재하지 않는 노드까지 내려가게 되면 거리 0을 리턴한다.
 
 
 
