@@ -225,7 +225,14 @@ def invertTree(self, root: TreeNode) -> TreeNode:
     return root
 ```
 <br><br>
+### 문제 46 두 이진 트리 병합
+> 404p
 
+* 두 이진 트리를 병합하라. 중복되는 노드는 값을 합산한다.<br><br>
+* **내가 짠 코드**<br>
+```python
+
+```
 
 
 
