@@ -324,7 +324,7 @@ print(solution.merge(n4,m5))
 ```
 <br>
 
-* **NOTE: ^ 연산자는 비트 연산자로, XOR 연산을 한다.
+* **NOTE: ^ 연산자는 비트 연산자로, XOR 연산을 한다.**
 <br><br>
 
 ### 자료형의 참과 거짓
