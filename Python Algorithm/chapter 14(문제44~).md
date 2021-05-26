@@ -231,9 +231,140 @@ def invertTree(self, root: TreeNode) -> TreeNode:
 * 두 이진 트리를 병합하라. 중복되는 노드는 값을 합산한다.<br><br>
 * **내가 짠 코드**<br>
 ```python
+import collections
 
+class TreeNode(object):
+  def __init__(self, val, left=None, right=None):
+    self.val = val
+    self.left = left
+    self.right = right
+
+class Solution(object):
+  def merge(self, tree1, tree2):
+    queue1 = collections.deque([tree1])
+    queue2 = collections.deque([tree2])
+
+    while queue1 and queue2:
+      node1 = queue1.popleft()
+      node2 = queue2.popleft()
+
+      # 이 부분 해결못함
+      if node1 is None or node2 is None:
+        node1 = node2
+        
+      elif node1 and node2:
+        node1.val += node2.val
+        queue1.append(node1.left)
+        queue1.append(node1.right)
+        queue2.append(node2.left)
+        queue2.append(node2.right)
+
+    return tree1
+
+
+solution = Solution()
+n1 = TreeNode(5)
+n2 = TreeNode(2)
+n3 = TreeNode(3,n1)
+n4 = TreeNode(1,n3,n2)
+m1 = TreeNode(7)
+m2 = TreeNode(4)
+m3 = TreeNode(3,None,m1)
+m4 = TreeNode(1,None,m2)
+m5 = TreeNode(2,m4,m3)
+print(solution.merge(n4,m5))
 ```
-<br><br
+해결 못 함
+<br><br>
+
+좋은 풀이를 발견해서 그 풀이대로 코드 구현함
+```python
+import collections
+
+class TreeNode(object):
+  def __init__(self, val, left=None, right=None):
+    self.val = val
+    self.left = left
+    self.right = right
+
+class Solution(object):
+  def merge(self, tree1, tree2):
+    if not tree1 and not tree2:
+      return None
+    if bool(tree1) ^ bool(tree2):
+      return tree1 if tree1 else tree2
+    queue = collections.deque([(tree1,tree2)])
+
+    while queue:
+      node1, node2 = queue.popleft()
+      node1.val += node2.val
+      if not node1.left and node2.left:
+        node1.left = node2.left
+      elif node1.left and node2.left:
+        queue.append((node1.left, node2.left))
+      if not node1.right and node2.right:
+        node1.right = node2.right
+      elif node1.right and node2.right:
+        queue.append((node1.right, node2.right))
+
+    return tree1
+
+
+solution = Solution()
+n1 = TreeNode(5)
+n2 = TreeNode(2)
+n3 = TreeNode(3,n1)
+n4 = TreeNode(1,n3,n2)
+m1 = TreeNode(7)
+m2 = TreeNode(4)
+m3 = TreeNode(3,None,m1)
+m4 = TreeNode(1,None,m2)
+m5 = TreeNode(2,m4,m3)
+print(solution.merge(n4,m5))
+```
+<br>
+
+* **NOTE: ^ 연산자는 비트 연산자로, XOR 연산을 한다.
+<br><br>
+
+### 자료형의 참과 거짓
+자료형에 참과 거짓이 있다? 조금 이상하게 들리겠지만 참과 거짓은 분명히 있다. 이는 매우 중요한 특징이며 실제로도 자주 쓰인다.
+
+자료형의 참과 거짓을 구분하는 기준은 다음과 같다.
+
+<img src="https://user-images.githubusercontent.com/55045377/119604462-0c591280-be2a-11eb-80d2-0799a1999078.png">
+
+문자열, 리스트, 튜플, 딕셔너리 등의 값이 비어 있으면(" ", [ ], ( ), { }) 거짓이 된다. 당연히 비어있지 않으면 참이 된다.<br>
+숫자에서는 그 값이 0일 때 거짓이 된다.
+<br><br>
+
+### 불 연산(bool)
+bool 내장 함수를 사용하면 자료형의 참과 거짓을 식별할 수 있다.
+<br><br>
+```python
+>>> bool('python')
+True
+```
+'python' 문자열은 빈 문자열이 아니므로 bool 연산의 결과로 불 자료형인 True를 돌려준다.
+```python
+>>> bool('')
+False
+```
+'' 문자열은 빈 문자열이므로 bool 연산의 결과로 불 자료형인 False를 돌려준다.
+
+위에서 알아본 몇 가지 예제를 더 수행해 보자.
+```python
+>>> bool([1,2,3])
+True
+>>> bool([])
+False
+>>> bool(0)
+False
+>>> bool(3)
+True
+```
+위에서 알아본 것과 동일한 참과 거짓에 대한 결과를 돌려주는 것을 확인할 수 있다.
+<br><br><br>
 
 ### 문제 46 두 이진 트리 병합 풀이
 #### 풀이1. 재귀 탐색
@@ -291,4 +422,9 @@ def mergeTrees(self, t1: TreeNode, t2: TreeNode) -> TreeNode:
 
 
 
+---
 
+# 출처
+* **자료형의 참과 거짓[[자료형의 참과 거짓](#자료형의-참과-거짓)], 불 연산(bool)[[불 연산(bool)](#불-연산bool)]**<br>
+  https://wikidocs.net/17
+<br><br>
