@@ -233,6 +233,37 @@ def invertTree(self, root: TreeNode) -> TreeNode:
 ```python
 
 ```
+<br><br
+
+### 문제 46 두 이진 트리 병합 풀이
+#### 풀이1. 재귀 탐색
+이번에는 두 이진 트리를 합쳐보는 문제다.<br>
+마찬가지로 다양한 방식으로 풀이가 가능하다.<br>
+간단한 재귀 풀이만 살펴보자. 전체 코드는 다음과 같다.
+```python
+def mergeTrees(self, t1: TreeNode, t2: TreeNode) -> TreeNode:
+    if t1 and t2:
+        node = TreeNode(t1.val + t2.val)
+        node.left = self.mergeTrees(t1.left, t2.left)
+        node.right = self.mergeTrees(t1.right, t2.right)
+        
+        return node
+    else:
+        return t1 or t2  # 이 부분에서 존재하는 노드가 자동으로 return 된다는 게 신기했다
+```
+각각 이진 트리의 루트부터 시작해 합쳐 나가면서 좌, 우 자식 노드 또한 병합될 수 있도록 각 트리 자식 노드를 재귀 호출한다.<br>
+만약 어느 한쪽에 노드가 존재하지 않는다면(not (t1 and t2)) 존재하는 노드만 리턴하고 더 이상 재귀 호출을 진행하지 않는다.<br>
+만약 양쪽 노드가 모두 존재하지 않는다면 None이 리턴될 것이다.<br>
+그 구조를 표현한 그림 14-10(405p)을 살펴보자.
+
+> 그림 14-10
+
+이 그림에서는 양쪽 노드가 모두 존재하지 않아 None이 리턴되는 경우를 비롯한 모든 탐색의 경우를 볼 수 있다.<br>
+탐색 순서는 파란 글씨로 숫자를 붙였다.<br>
+여기서 순서는 리턴으로 백트래킹되는 순서를 기준으로 했다.<br>
+가장 말단인 1번부터 리턴 값을 차례대로 받아 오며, 9)번에서 모든 리턴이 마무리되고 병합된 최종 결과가 남게 되면서 탐색이 종료된다.<br>
+리턴 순서만 놓고 본다면 탐색 순서는 후위 순회(Post-Order)임을 확인할 수 있다.
+<br><br>
 
 
 
