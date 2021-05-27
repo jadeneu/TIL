@@ -49,7 +49,7 @@ class Solution(object):
         for _ in range(len(result)-1):
           next = result.popleft()
           result.append(next)
-    return result
+    return list(result)
 
 
 solution = Solution()
@@ -61,7 +61,7 @@ n5 = TreeNode(1,n4,n3)
 print(solution.serialize(n5))
 print(solution.deserialize(n5))
 ```
-결과가 [1, 2, 3, None, None, 4, 5, None, None, None, None], deque([None, None, None, None, 5, 4, None, None, 3, 2, 1]) 으로 나오는 걸로 마무리 지었다.
+결과가 [1, 2, 3, None, None, 4, 5, None, None, None, None], [None, None, None, None, 5, 4, None, None, 3, 2, 1] 으로 나오는 걸로 마무리 지었다.
 <br><br>
 
 ### 문제 47 이진 트리 직렬화 & 역직렬화 풀이
@@ -191,6 +191,91 @@ return ' '.join(result)
 <br><br>
 
 #### 역직렬화
+동일하게 큐를 이용해 역직렬화를 진행해본다.<br>
+먼저 문자열 형태인 입력값을 다음과 같이 처리할 수 있도록 준비한다.
+```python
+def deserailize(self, data: str) -> TreeNode:
+    nodes = data.split()
+    
+    root = TreeNode(int(nodes[1]))
+    queue = collections.deque([root])
+    ...
+```
+split()으로 공백 단위로 문자열을 끊어서 nodes라는 리스트 변수로 만든다.<br>
+그다음, 트리로 만들어줄 노드 변수 root부터 셋팅하고 큐 변수도 만들어준다.<br>
+이제 큐를 순회하면서 처리하면 되는데, 왼쪽 자식과 오른쪽 자식은 각각 별도의 인덱스를 부여받아 다음과 같이 nodes를 먼저 탐색해 나간다.<br>
+마치 런너 기법에서 빠른 런너가 먼저 노드를 탐색해 나가는 것과 유사하다.
+```python
+def deserailize(self, data: str) -> TreeNode:
+    ...
+    index = 2
+    while queue:
+        node = queue.popleft()
+        if nodes[index] is not '#':
+            node.left = TreeNode(int(nodes[index]))
+            queue.append(node.left)
+        index += 1
+        
+        if nodes[index] is not '#':
+            node.right = TreeNode(int(nodes[index]))
+            queue.append(node.right)
+        index += 1
+    ...
+```
+#인 경우에는 큐에 삽입하지 않고, 아무런 처리도 하지 않는다.<br>
+예를 들어 앞서 직렬화 되었던 입력값 # A B C # # D E # # # #은 E 이후에 더 이상 큐에 삽입되지 않으며, 빠른 런너처럼 훨씬 더 앞의 #은 읽어들이긴 하지만 노드의 값이 #이므로 아무런 처리도 하지 않을 것이다.<br>
+이렇게 끝까지 순회하고 나면 원래의 트리 구조로 복원된다.<br>
+예외 처리를 포함해 모두 정리하면 전체 코드는 다음과 같다.
+```python
+class Codec:
+    # 직렬화
+    def serialize(self, root: TreeNode) -> str:
+        queue = collections.deque([root])
+        result = ['#']
+        # 트리 BFS 직렬화
+        while queue:
+            node = queue.popleft()
+            if node:
+                queue.append(node.left)
+                queue.append(node.right)
+
+                result.append(str(node.val))
+            else:
+                result.append('#')
+        return ' '.join(result)
+        
+    # 역직렬화
+    def deserailize(self, data: str) -> TreeNode:
+        # 예외 처리
+        if data == '# #':
+            return None
+            
+        nodes = data.split()
+
+        root = TreeNode(int(nodes[1]))
+        queue = collections.deque([root])
+        index = 2
+        # 빠른 런너처럼 자식 노드 결과를 먼저 확인 후 큐 삽입
+        while queue:
+            node = queue.popleft()
+            if nodes[index] is not '#':
+                node.left = TreeNode(int(nodes[index]))
+                queue.append(node.left)
+            index += 1
+
+            if nodes[index] is not '#':
+                node.right = TreeNode(int(nodes[index]))
+                queue.append(node.right)
+            index += 1
+        return root
+```
+<br><br>
+
+### 문제 48 균형 이진 트리
+> 413p
+
+
+
 
 
 
