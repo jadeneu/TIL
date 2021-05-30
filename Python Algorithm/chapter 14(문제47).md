@@ -44,24 +44,23 @@ class Solution(object):
     return result
 
   def deserialize(self, tree):
-    queue = collections.deque([tree])
-    result = collections.deque()
+    root = TreeNode(tree[0])
+    queue = collections.deque([root])
+    index = 1
 
     while queue:
       node = queue.popleft()
-      if node:
-        result.append(node.val)
-        for _ in range(len(result)-1):
-          next = result.popleft()
-          result.append(next)
+      if tree[index] != None:
+        node.left = TreeNode(tree[index])
         queue.append(node.left)
+      index += 1
+
+      if tree[index] != None:
+        node.right = TreeNode(tree[index])
         queue.append(node.right)
-      else:
-        result.append(None)
-        for _ in range(len(result)-1):
-          next = result.popleft()
-          result.append(next)
-    return list(result)
+      index += 1
+
+    return root
 
 
 solution = Solution()
@@ -70,10 +69,13 @@ n2 = TreeNode(4)
 n3 = TreeNode(3,n2,n1)
 n4 = TreeNode(2)
 n5 = TreeNode(1,n4,n3)
-print(solution.serialize(n5))
-print(solution.deserialize(n5))
+result1 = solution.serialize(n5)
+result2 = solution.deserialize(result1)
+print(result1)
+print(result2)
 ```
-결과가 [1, 2, 3, None, None, 4, 5, None, None, None, None], [None, None, None, None, 5, 4, None, None, 3, 2, 1] 으로 나오는 걸로 마무리 지었다.
+serialize()의 결과가 [1, 2, 3, None, None, 4, 5, None, None, None, None]으로 나오는 걸로 마무리 지었다.<br>
+deserialize()는 풀이를 보고 따라서 구현했다.
 <br><br>
 
 ### 문제 47 이진 트리 직렬화 & 역직렬화 풀이
