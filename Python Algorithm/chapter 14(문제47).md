@@ -13,7 +13,11 @@
 ### 문제 47 이진 트리 직렬화 & 역직렬화
 > 406p
 
-* 이진 트리를 배열로 직렬화하고, 반대로 역직렬화하는 기능을 구현하라. 즉 다음과 같은 트리는 [1,2,3,null,null,4,5] 형태로 직렬화할 수 있을 것이다.<br><br>
+* 이진 트리를 배열로 직렬화하고, 반대로 역직렬화하는 기능을 구현하라. 즉 다음과 같은 트리는 [1,2,3,null,null,4,5] 형태로 직렬화할 수 있을 것이다.
+
+<img src="https://user-images.githubusercontent.com/55045377/120095130-231ba400-c15f-11eb-9192-dc4b51df00e0.png" width=40% height=40%>
+
+<br><br>
 * **내가 짠 코드**<br>
 ```python
 import collections
@@ -84,7 +88,7 @@ print(solution.deserialize(n5))
 먼저, 그림 14-11(407p)과 같이 이진 힙을 배열로 표현하는 경우를 살펴보자.<br>
 그림에서 파란 글씨는 인덱스를 의미한다.
 
-> 그림 14-11
+<img src="https://user-images.githubusercontent.com/55045377/120095195-8e657600-c15f-11eb-9bbb-4ae19eb2d39e.png" width=60% height=60%>
 
 이 그림의 1) 이진 힙은 완전 이진 트리(Complete Binary Tree)로서, 배열로 표현하기 매우 좋은 구조다.<br>
 높이 순서대로 순회하면 모든 노드를 배열에 낭비 없이 배치할 수 있기 때문이다.<br>
@@ -103,7 +107,7 @@ print(solution.deserialize(n5))
 하지만 가능하면 그림 14-12(408p)와 같이 BFS 탐색 결과로 표현해서, 배열만 봐도 트리의 형태를 직관적으로 떠올릴 수 있도록 이해하기 쉽게 구현해보자.<br>
 간편한 계산을 위해, 배열은 1번 인덱스부터 시작되는 형태로 표현했다.
 
-> 그림 14-12
+<img src="https://user-images.githubusercontent.com/55045377/120095244-d4bad500-c15f-11eb-88a7-292a3c15281b.png" width=60% height=60%>
 
 이진 트리를 BFS로 표현하면 순서대로 배치되기 때문에, DFS에 비해 매우 직관적으로 알아볼 수 있다.<br>
 바로 우측 2)번 그림에 제시한 배열과 동일한 형태가 된다.<br>
