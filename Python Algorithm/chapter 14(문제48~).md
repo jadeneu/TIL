@@ -153,7 +153,7 @@ def isBalanced(self, root: TreeNode) -> bool:
     n = 4, edges = [[1, 0], [1, 2], [1, 3]]
     ```
     
-    <img src="https://user-images.githubusercontent.com/55045377/120138207-017af500-c211-11eb-9a53-4295b8f49487.png" width=20% height=20%>
+    <img src="https://user-images.githubusercontent.com/55045377/120139148-d2fe1980-c212-11eb-90d9-52f821ce9f33.png" width=50% height=50%>
     
   * 출력
     ```
@@ -165,14 +165,15 @@ def isBalanced(self, root: TreeNode) -> bool:
     n = 6, edges = [[0, 3], [1, 3], [2, 3], [4, 3], [5, 4]]
     ```
     
-    <img src="https://user-images.githubusercontent.com/55045377/120138426-6f272100-c211-11eb-8418-e8e682ed37e1.png" width=20% height=20%>
+    <img src="https://user-images.githubusercontent.com/55045377/120139231-ffb23100-c212-11eb-857f-cd9581c400ea.png" width=50% height=50%>
     
   * 출력
     ```
     [3, 4]
     ```
-  * 설명
-    3 또는 4가 루트가 되는 트리가 될 경우 최대 높이 2인 트리가 된다.
+<br><br>
+그림 참고<br>
+https://leetcode.com/problems/minimum-height-trees/
 <br><br>
 
 * **내가 짠 코드**<br>
@@ -205,3 +206,6 @@ def isBalanced(self, root: TreeNode) -> bool:
 
 
 
+---
+# 출처
+* 
