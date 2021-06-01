@@ -178,8 +178,64 @@ https://leetcode.com/problems/minimum-height-trees/
 
 * **내가 짠 코드**<br>
 ```python
+import collections
+from math import inf
 
+def solution(n, edges):
+  dic = collections.defaultdict(list)
+  # 그래프 형성
+  for pair in edges:
+    dic[pair[0]] += [pair[1]]
+    dic[pair[1]] += [pair[0]]
+
+  def search(root):
+    queue = collections.deque()
+    queue.append(root)
+    visited = [0 for _ in range(len(dic))]
+    dist = [inf for _ in range(len(dic))]
+    visited[root] = 1
+    dist[root] = 0
+    
+    while queue:
+      digit = queue.popleft()
+      # 인접한 숫자를 큐에 삽입
+      for i in dic[digit]:
+        if visited[i] == 0:
+          queue.append(i)
+          visited[i] = 1  # 방문 표시
+
+          if dist[i] > dist[digit]:
+            dist[i] = dist[digit] + 1
+          
+    return dist
+ 
+  result = []
+  for key in sorted(dic):
+    result.append(max(search(key)))  # 인덱스는 루트, 값은 높이
+
+  answer = []
+  for i in range(len(result)):
+    if result[i] == min(result):
+      answer.append(i)
+
+  return answer
+
+n = 6
+edges = [[0, 3], [1, 3], [2, 3], [4, 3], [5, 4]]
+print(solution(n,edges))
 ```
+시간복잡도가 어마어마한 풀이인 것 같다. 정답을 알 순 있지만 개선이 필요하다.
+<br><br>
+
+### 문제 49 최소 높이 트리 풀이
+#### 풀이1. 단계별 리프 노드 제거
+최소 높이를 구성하려면 가장 가운데에 있는 값이 루트여야 한다.<br>
+이 말은 리프 노드를 하나씩 제거해 나가면서 남아 있는 값을 찾으면 이 값이 가장 가운데에 있는 값이 될 것이고， 이 값을 루트로 했을 때 최소 높이를 구성할 수있다는 뜻이기도 하다.<br>
+문제에 제시된 입력값은 너무 단순하므로 [[1, 3], [2, 3], [3, 4], [3, 5], [4, 6], [6, 10], [5, 7], [5, 8], [8, 9]] 정도로해서 좀 더 복잡한 그래프를 다음과 같이 구성해보자.
+
+<img src="https://user-images.githubusercontent.com/55045377/120268099-3013d100-c2e0-11eb-9a21-20e35328829b.png" width=25% height=25%>
+
+
 
 
 
