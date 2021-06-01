@@ -357,7 +357,7 @@ def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
             if len(graph[neighbor]) == 1:
                 new_leaves.append(neighbor)
 
-        leaves = new _leaves
+        leaves = new_leaves
         
     return leaves
 ```
