@@ -315,7 +315,7 @@ while n > 2:
         if len(graph[neighbor]) == 1:
             new_leaves.append(neighbor)
             
-    leaves = new leaves
+    leaves = new_leaves
 ```
 n은 전체 노드의 개수이므로 여기서 leaves, 즉 리프 노드의 개수만큼 계속 빼나가면서 최종 2개 이하가 남을 때까지 반복한다.<br>
 마지막에 남은 값이 홀수 개일 때는 루트가 최종 1개가 되지만, 짝수 개일 때는 2개가 될 수 있다.<br>
@@ -357,7 +357,7 @@ def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
             if len(graph[neighbor]) == 1:
                 new_leaves.append(neighbor)
 
-        leaves = new leaves
+        leaves = new _leaves
         
     return leaves
 ```
