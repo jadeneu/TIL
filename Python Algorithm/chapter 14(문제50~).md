@@ -79,13 +79,87 @@ BST는 이처럼 랜덤하게 생성해도 대부분의 경우 균형이 잘 맞
 <br><br>
 
 * **내가 짠 코드**<br>
+
+<br><br>
+
+### 문제 50 정렬된 배열의 이진 탐색 트리 변환 풀이
+#### 풀이1. 이진 검색 결과로 트리 구성
+이 문제를 제대로 풀이하기 위해서는 먼저 이진 탐색 트리, 그러니까 BST의 특징에 대해 정확하게 파악하고 있어야 한다.<br>
+앞서 BST를 설명할 때 이미 이야기했지만, BST는 이진 검색의 마법을 적용한 이진 트리고, 따라서 BST를 만들기 위해서는 정렬된 배열을 이진 검색으로 계속 쪼개 나가기만 하면 된다.<br>
+당연한 얘기지만 정렬되어 있지 않으면 사용할 수 없다.<br>
+이진 검색 자체가 정렬된 배열에서는 어떤 값이든지 간에 log(n)에 찾아낼 수 있고, 동일한 이름의 BST 또한 당연히 정렬된 배열을 기준으로 한다.
+
+예제에서 제시된 입력값 외에 완전 이진 트리(Complete Binary Tree)형태가 될 수 있도록 -7,7 두 값을 추가해 좀 더 이해가 쉽도록 그림 14-22와 같이 구성해봤다.
+
+<img src="https://user-images.githubusercontent.com/55045377/120422499-5babbf80-c3a3-11eb-9893-9eaaffd8acc7.png" width=40% height=40%>
+
+이 그림에서는 정확히 한 번의 이진 검색 결과가 각각의 노드로 구성된다.<br>
+즉 0이 가장 먼저, 그다음은 -7, 7... 이런 식으로 구성되면서 내려간다.<br>
+이진 검색을 할 때마다 그 값이 노드로 구성됨을 알 수 있다.
+
+이제 이 알고리즘을 코드로 구현해보자.
 ```python
-
+def sortedArrayToBST(self, nums: List[int]) -> TreeNode:
+    ...
+    mid = len(nums) // 2
+    
+    node = TreeNode(nums[mid])
+    node.left = self.sortedArrayToBST(nums[:mid])
+    node.right = self.sortedArrayToBST(nums[mid + 1:])
+    ...
 ```
+정확히 중앙값을 갖도록 내림값을 리턴하는 // 연산자를 사용했다.<br>
+즉 len(nums)가 3 이라면, 2를 나눈 결과인 1.5에서 내림하여 1이 된다.<br>
+인텍스는 0부터 시작하기 때문에 1은 [0, 1, 2]에서 정확히 중앙값이 된다.<br>
+왼쪽 자식은 남은 절반을 재귀 호출로 계속 처리하고, 오른쪽 자식 또한 마찬가지로 처리한다.
 
+파이씬의 슬라이스 기능을 이용하면 매우 간단하게 코드로 구현할 수 있으며, 절반씩 분할해 처리되는 분할 정복 구조(22장 참조)로 처리된다.<br>
+끝까지 처리되면 배열은 정확히 높이 균형 BST가 될 것이다.<br>
+전체 코드는 다음과 같다.
+```python
+def sortedArrayToBST(self, nums: List[int]) -> TreeNode:
+    if not nums:
+        return None
+        
+    mid = len(nums) // 2
+    
+    # 분할 정복으로 이진 검색 결과 트리 구성
+    node = TreeNode(nums[mid])
+    node.left = self.sortedArrayToBST(nums[:mid])
+    node.right = self.sortedArrayToBST(nums[mid + 1:])
+    
+    return node
+```
+<br><br>
 
+실제 실행 코드
+```python
+from typing import List
 
-
+class TreeNode:
+    def __init__(self, val, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+        
+class Solution(object):
+    def sortedArrayToBST(self, nums: List[int]) -> TreeNode:
+        if not nums:
+            return None
+            
+        mid = len(nums) // 2
+        
+        # 분할 정복으로 이진 검색 결과 트리 구성
+        node = TreeNode(nums[mid])
+        node.left = self.sortedArrayToBST(nums[:mid])
+        node.right = self.sortedArrayToBST(nums[mid + 1:])
+        
+        return node
+    
+solution = Solution()
+lists = [-10,-3,0,5,9]
+print(solution.sortedArrayToBST(lists))
+```
 
 
 
