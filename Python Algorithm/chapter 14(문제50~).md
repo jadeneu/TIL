@@ -160,6 +160,31 @@ solution = Solution()
 lists = [-10,-3,0,5,9]
 print(solution.sortedArrayToBST(lists))
 ```
+<br><br>
+
+### 문제 51 이진 탐색 트리(BST)를 더 큰 수 합계 트리로
+> 428p
+
+* BST의 각 노드를 현재값보다 더 큰 값을 가진 모든 노드의 합으로 만들어라.
+
+<img src="https://user-images.githubusercontent.com/55045377/120584660-59ad3380-c46b-11eb-8978-a5dc19d3c48a.png" width=30% height=30%>
+
+* 입력
+  ```
+  [4,1,6,0,2,5,7,null,null,null,3,null,null,null,8]
+  ```
+* 출력
+  ```
+  [30,36,21,36,35,26,15,null,null,null,33,null,null,null,8]
+  ```
+* 설명<br>
+  자신보다 더 큰 값을 가진 모든 노드의 합이 출력이 된다. 6의 경우 더 큰 값을 지닌 노드는 7,8 이며 이 값을 모두 합한 6+7+8=21 이 출력 노드가 된다.
+<br><br>
+
+* **내가 짠 코드**<br>
+```python
+
+```
 
 
 
