@@ -182,9 +182,65 @@ print(solution.sortedArrayToBST(lists))
 <br><br>
 
 * **내가 짠 코드**<br>
-```python
+풀 수 있을 것 같아서 주어진 입력값 그대로 리스트로 풀어보려고 하고, 연결 리스트로 풀어보려고도 했지만 잘 풀리지 않았다. 풀이를 보고 감을 잡은 후에 다시 풀어야 할 것 같다.
+<br><br>
 
+### 문제 51 이진 탐색 트리(BST)를 더 큰 수 합계 트리로 풀이
+#### 풀이1. 중위 순회로 노드 값 누적
+자신보다 같거나 큰 값을 구하려면 자기 자신을 포함한 우측 자식 노드의 합을 구하면 된다.<br>
+앞서 BST 구조에 대해서 충분히 설명했듯이, BST의 우측 자식 노드는 항상 부모 노드보다 큰 값이기 때문이다.
+
+예제 입력값을 그림 14-23과 같이 파란색은 출력 노드, 화살표는 계산 순서로 나타냈다.
+
+<img src="https://user-images.githubusercontent.com/55045377/120588822-d263be00-c472-11eb-8eea-904c56a0f72f.png" width=40% height=40%>
+
+root를 입력받았을 때 먼저 맨 오른쪽까지 내려가고, 그다음 부모 노드, 다시 왼쪽 노드 순으로 이동하면서 자신의 값을 포함해 누적한다.<br>
+'오른쪽-부모-왼쪽' 순으로 이어지며, 오른쪽 자식부터 운행하는 중위 순회(In-Order)에 해당됨을 알 수 있다.<br>
+중위 순회에 대해서는 440페이지 ‘트리 순회’에서 다시 자세히 소개하겠다.
+<br><br>
+
+```python
+def bstToGst(self, root: TreeNode) -> TreeNode:
+    ...
+    self.bstToGst(root.rtght)
+    self.val += root.val
+    root.val = self.val
+    self.bstToGst(root.left)
+    ...
 ```
+self.val은 지금까지 누적된 값이고, root.val은 현재 노드의 값이다.<br>
+즉 중위 순회를 하면서 현재 노드의 값을 자기 자신을 포함한 지금까지의 누적된 값과 합한다.<br>
+전체 코드는 다음과 같다.
+```python
+class Solution:
+    val: int = 0
+    
+    def bstToGst(self, root: TreeNode) -> TreeNode:
+        # 중위 순회 노드 값 누적
+        if root:
+            self.bstToGst(root.right)
+            self.val += root.val
+            root.val = self.val
+            self.bstToGst(root.left)
+            
+        return root
+```
+최초 self.val은 클래스 멤버 변수로 선언하고 0이 되도록 직관적으로 선언했다.<br>
+아울러 root가 있을 때만 처리되게 했으며, root.val을 조작한 이후에는 다시 root를 리턴한다.<br>
+사실 리턴을 하지 않아도 관계 없다.<br>
+이 코드에서 보듯이, 재귀 호출 시 리턴 값은 사용하지 않기 때문이다.
+
+또한 파이썬은 모든 변수가 참조이기 때문에, 객체 내부의 값을 변경하면 해당 객체를 가리키는 모든 변수는 자연스럽게 따라서 값이 변한다.<br>
+그러나 이 문제는 리트코드의 동작 방식으로 추측컨대, 리트코드에서는 아마 최초 호출 시 root = solution.bstToGst(root)와 같은 형태로 리턴 값을 받아오도록 구현되어 있을 것이다.<br>
+이때 리턴 값을 돌려주지 않으면 root는 None이 되어 버린다.<br>
+리트코드에서 리턴 값을 주지 않으면 정답이 출력되지 않는 것도 그 때문일 것이다.<br>
+따라서 반드시 return root를 명시한다.
+<br><br>
+
+### 문제 52 이진 탐색 트리(BST) 합의 범위
+> 431p
+
+
 
 
 
