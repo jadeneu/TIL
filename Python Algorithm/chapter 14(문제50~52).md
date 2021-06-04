@@ -409,7 +409,7 @@ BFS로 탐색해도 동일하다.<br>
 전체 코드는 다음과 같다.
 ```python
 def rangeSumBST(self , root: TreeNode , L: int, R: int) -> int:
-    stack, sum = [root] , 0
+    stack, sum = [root], 0
     # 큐 연산을 이용해 반복 구조 BFS로 필요한 노드 탐색
     while stack:
         node = stack.pop(0)
