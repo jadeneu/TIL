@@ -255,7 +255,23 @@ class Solution:
   
 * **내가 짠 코드**<br>
 ```python
-  
+####### 리스트로 풀기 #######
+def solution(root, L, R):
+  answer = 0
+  for num in root:
+    if num and (num >= L and num <= 15):
+      answer += num
+
+  return answer
+
+
+root = [10,5,15,3,7,None,18]
+L = 7
+R = 15
+print(solution(root,L,R))
+```
+```python
+
 ```
 
 
