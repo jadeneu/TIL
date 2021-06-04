@@ -1,4 +1,21 @@
 # 목차
+* [chapter 14. 트리](#14장-트리)
+  + [이진 탐색 트리(BST)](#이진-탐색-트리bst)
+  + [자가 균형 이진 탐색 트리](#자가-균형-이진-탐색-트리)
+* [리트코드](#리트코드)
+  + [문제 50 정렬된 배열의 이진 탐색 트리 변환](#문제-50-정렬된-배열의-이진-탐색-트리-변환)
+  + [문제 50 정렬된 배열의 이진 탐색 트리 변환 풀이](#문제-50-정렬된-배열의-이진-탐색-트리-변환-풀이)
+    - [풀이1. 이진 검색 결과로 트리 구성](#풀이1-이진-검색-결과로-트리-구성)
+  + [문제 51 이진 탐색 트리(BST)를 더 큰 수 합계 트리로](#문제-51-이진-탐색-트리bst를-더-큰-수-합계-트리로)
+  + [문제 51 이진 탐색 트리(BST)를 더 큰 수 합계 트리로 풀이](#문제-51-이진-탐색-트리bst를-더-큰-수-합계-트리로-풀이)
+    - [풀이1. 중위 순회로 노드 값 누적](#풀이1-중위-순회로-노드-값-누적)
+  + [문제 52 이진 탐색 트리(BST) 합의 범위](#문제-52-이진-탐색-트리bst-합의-범위)
+  + [문제 52 이진 탐색 트리(BST) 합의 범위 풀이](#문제-52-이진-탐색-트리bst-합의-범위-풀이)
+    - [풀이1. 재귀 구조 DFS로 브루트 포스 탐색](#풀이1-재귀-구조-dfs로-브루트-포스-탐색)
+    - [풀이2. DFS 가지치기로 필요한 노드 탐색](#풀이2-dfs-가지치기로-필요한-노드-탐색)
+    - [풀이3. 반복 구조 DFS로 필요한 노드 탐색](#풀이3-반복-구조-dfs로-필요한-노드-탐색)
+    - [풀이4. 반복 구조 BFS로 필요한 노드 탐색](#풀이4-반복-구조-bfs로-필요한-노드-탐색)
+<br><br><br>
 
 # 14장 트리
 ## 이진 탐색 트리(BST)
@@ -271,9 +288,143 @@ R = 15
 print(solution(root,L,R))
 ```
 ```python
+####### 연결리스트로 풀기 #######
+class TreeNode(object):
+  def __init__(self, val, left=None, right=None):
+    self.val = val
+    self.left = left
+    self.right = right
 
+class Solution(object):
+  cnt: int = 0
+
+  def bst(self, root, L, R):
+    if root:
+      if root.val >= L and root.val <= R:
+        self.cnt += root.val
+      self.bst(root.left,L,R)
+      self.bst(root.right,L,R)
+
+    return self.cnt
+
+
+solution = Solution()
+n1 = TreeNode(18)
+n2 = TreeNode(7)
+n3 = TreeNode(3)
+n4 = TreeNode(15,None,n1)
+n5 = TreeNode(5,n3,n2)
+n6 = TreeNode(10,n5,n4)
+L = 7
+R = 15
+print(solution.bst(n6,L,R))
 ```
+<br><br>
 
+### 문제 52 이진 탐색 트리(BST) 합의 범위 풀이
+#### 풀이1. 재귀 구조 DFS로 브루트 포스 탐색
+이 문제의 예제 입력값을 그림 14-24에 나타냈다.
+
+<img src="https://user-images.githubusercontent.com/55045377/120742823-a60f7680-c532-11eb-88f4-103f61fe532d.png" width=40% height=40%>
+
+이 그림을 보면, L = 7, R = 15일 때 L 이상, R 이하인 노드는 자기 자신을 포함해 7, 10, 15이며, 이들의 합 sum()은 32이다.<br>
+어떻게 하면 이 노드들을 쉽게 찾아내 합을 계산할 수 있을까?<br>
+이 문제는 DFS로 전체를 탐색한 다음, 노드의 값이 L과 R 사이일 때만 값을 부여하고, 아닐 경우에는 0을 취해 계속 더해 나가면 쉽게 구할 수 있다.
+
+전체 코드는 다음과 같다.
+```python
+def rangeSumBST(self, root: TreeNode, L: int, R: int) -> int:
+    if not root:
+        return 0
+        
+    return (root.val if L <= root.val <= R else 0) + \
+            self.rangeSumBST(root.left, L, R) + \
+            self.rangeSumBST(root.right, L, R)
+```
+그러나 이 방식은 모든 노드를 탐색하는 브루트 포스 풀이다. 좀 더 최적화를 진행해보자.
+<br><br>
+
+#### 풀이2. DFS 가지치기로 필요한 노드 탐색
+이번에는 DFS로 불필요한 노드는 가지치기를 통해 최적화를 진행해보자.<br>
+DFS로 탐색하되 L, R의 조건에 해당되지 않는 가지(Branch)를 쳐내는(Pruning) 형태로 탐색에서 배제하도록 다음과 같이 구현해보자.
+```python
+def dfs(node: TreeNode) -> int:
+    ...
+    if node.val < L:
+        return dfs(node.right)
+    elif node.val > R:
+        return dfs(node.left)
+```
+이진 탐색 트리는 왼쪽이 항상 작고, 오른쪽이 항상 크다.<br>
+즉 현재 노드 node가 L보다 작을 경우, 더 이상 왼쪽 가지는 탐색할 필요가 없기 때문에 오른쪽만 탐색하도록 재귀 호출을 리턴한다.<br>
+마찬가지로 R보다 클 경우, 오른쪽은 더 이상 탐색할 필요가 없으므로 왼쪽만 탐색하도록 재귀 호출을 리턴한다.<br>
+이렇게 불필요한 탐색을 줄여 최적화할 수 있다.<br>
+전체 코드는 다음과 같다.
+```python
+def rangeSumBST(self , root: TreeNode, L: int, R: int) -> int:
+    def dfs(node: TreeNode):
+        if not node:
+            return 0
+            
+        if node.val < L:
+            return dfs(node.right)
+        elif node.val > R:
+            return dfs(node.left)
+        return node.val + dfs(node.left) + dfs(node.right)
+        
+    return dfs(root)
+```
+이 경우 불필요한 탐색은 배제하게 되므로 탐색 효율이 매우 높다.<br>
+필요한 노드만 탐색하여 해당 노드의 값들을 더해 나가게 된다.
+<br><br>
+
+#### 풀이3. 반복 구조 DFS로 필요한 노드 탐색
+대부분의 재귀 풀이는 반복으로 변경할 수 있다.<br>
+이 문제 또한 다음과 같이 반복으로 풀이할 수 있다.<br>
+일반적으로 반복 풀이가 재귀 풀이에 비해 좀 더 직관적으로 이해가 쉽다.<br>
+바로 전체 코드를 살펴보자.
+```python
+def rangeSumBST(self, root: TreeNode, L: int, R: int) -> int:
+    stack, sum = [root] , 0
+    # 스택 이용 필요한 노드 DFS 반복
+    while stack:
+        node = stack.pop()
+        if node:
+            if node.val > L:
+                stack.append(node.left)
+            if node.val < R:
+                stack.append(node.right)
+            if L <= node.val <= R:
+                sum += node.val
+    return sum
+```
+마찬가지로 유효한 노드만 스택에 계속 집어 넣으면서, L과 R사이의 값인 경우 값을 더해나간다.<br>
+유효한 노드만 삽입하기 때문에 앞서 풀이인 가지치기와 탐색 범위가 유사하며, 스택이므로 DFS와 동일한 탐색 구조를 띤다.
+<br><br>
+
+#### 풀이4. 반복 구조 BFS로 필요한 노드 탐색
+BFS로 탐색해도 동일하다.<br>
+여기서는 스택을 단순히 큐 형태로 바꾸기만 하면, BFS를 구현할 수 있다.<br>
+원래는 파이썬의 데크를 사용해야 성능을 높일 수 있지만, 여기서는 편의상 간단히 리스트를 그냥 pop(0) 로 처리하는 정도로 다음과 같이 BFS를 구현하고, 마찬가지로 동일하게 정답을 풀이할 수 있다.<br>
+전체 코드는 다음과 같다.
+```python
+def rangeSumBST(self , root: TreeNode , L: int, R: int) -> int:
+    stack, sum = [root] , 0
+    # 큐 연산을 이용해 반복 구조 BFS로 필요한 노드 탐색
+    while stack:
+        node = stack.pop(0)
+        if node:
+            if node.val > L:
+                stack.append(node.left)
+            if node.val < R:
+                stack.append(node.right)
+            if L <= node.val <= R:
+                sum += node.val
+    return sum
+```
+<br><br>
+
+ 
 
 
 
