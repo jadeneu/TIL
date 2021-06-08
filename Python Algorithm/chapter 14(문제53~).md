@@ -36,7 +36,32 @@
   <img src="https://user-images.githubusercontent.com/55045377/120962337-7d89b580-c79a-11eb-8659-eb05f48e055e.png" width=30% height=30%>
   
   이 경우 노드 간 값의 차이가 가장 작은 노드는 8과 10이다. 1과 4는 거리가 차이가 3이고, 4와 8은 차이가 4이지만 8과 10의 차이는 2로 최솟값이다.
+<br><br>
 
+* **내가 짠 코드**<br>
+```python
+####### 리스트로 풀기 #######
+def solution(root):
+  result = root[0]
+
+  for i in range(len(root)):
+    if root[i] == None:
+      continue
+    for j in range(i+1,len(root)):
+      if root[j] == None:
+        continue
+      sub = abs(root[i]-root[j])
+      if sub == 1:
+        return 1
+      elif result > sub:
+        result = sub
+
+  return result
+          
+
+root = [10,4,15,1,8,None,None]
+print(solution(root))
+```
 
 
 
