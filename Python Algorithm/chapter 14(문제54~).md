@@ -106,8 +106,36 @@ def inorder(node):
     print(node.val)
     inorder(node.right)
 ```
+어떤 차이인지 금방 알아차릴 수 있을 것이다.<br>
+마찬가지로 실행 결과는 다음과 같다.
+```python
+>>> inorder(root)
+A, B, C, D, E, F, G, H, I
+```
+<br><br>
 
+### 후위 순회
+```python
+def postorder(node):
+    if node is None:
+        return
+    postorder(node.left)
+    postorder(node.right)
+    print(node.val)
+```
+실행 결과는 다음과 같다.
+```python
+>>> postorder(root)
+A, C, E, D, B, H, I, G, F
+```
+여기까지 트리의 순회 방식을 각각 살펴봤다.<br>
+재귀로 구현하면 매우 직관적이므로 각각의 순회가 어떤 구조로 구현되는지 어렵지 않게 이해할 수 있을 것이다.<br>
+이제 순회의 특징을 이용한 문제를 한번 풀이해보자.
+<br><br>
 
+## 리트코드
+### 문제 54 전위, 중위 순회 결과로 이진 트리 구축
+> 444p
 
 
 
