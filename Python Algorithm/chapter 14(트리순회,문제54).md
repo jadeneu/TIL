@@ -150,9 +150,63 @@ A, C, E, D, B, H, I, G, F
 ```python
 
 ```
+<br><br>
+
+### 문제 54 전위, 중위 순회 결과로 이진 트리 구축 풀이
+#### 풀이1. 전위 순회 결과로 중위 순회 분할 정복
+순회에는 크게 전위, 중위, 후위 순회가 있으며 이 셋 중 2가지만 있어도 이진 트리를 복원할 수 있다.<br>
+이 문제는 바로 여기서 2가지 결과인 전위와 중위 결과를 받아 이진 트리를 만들어보는 문제다.<br>
+그럼 전위와 중위는 과연 어떤 관계가 있을까.<br>
+마찬가지로 그림 14-27에서 관계를 파악해보자.
+
+<img src="https://user-images.githubusercontent.com/55045377/121464117-3b58b200-c9ee-11eb-9e2b-429bd1108c3b.png" width=40% height=40%>
 
 
+예제의 입력값이 너무 단순하므로, 트리 그림을 1 부터 9까지 좀 더 복잡한 형태로 새로 구성해봤다.<br>
+이 그림에서 전위, 중위 순회 결과를 유심히 살펴보자.<br>
+전위의 첫 번째 값은 부모 노드다.<br>
+즉 전위 순회의 첫 번째 결과는 정확히 중위 순회 결과를 왼쪽과 오른쪽으로 분할시키는 역할을 한다.<br>
+중위 순회의 분할 정복(Divide and Conquer)(22장 참조) 문제로 바꾸는 것이다.<br>
+두 번째로 왼쪽 노드의 2는 중위 순회 결과를 정확히 반으로 가르고, 각각 왼쪽 자식은 4, 오른쪽 자식은 5로 마무리한다.
 
+오른쪽의 경우 3이 첫 번째 값인데, 마침 중위 순회에서는 맨 오른쪽에 위치해 있다.<br>
+이 말은 3의 오른쪽 자식 노드는 존재하지 않는다는 얘기다.<br>
+실제로 그림 14-27의 트리를 살펴보면, 3의 오른쪽 노드가 존재하지 않는 것을 확인할 수 있다. <br>
+이제 남아 있는 노드들을 이후에도 계속 분할을 시도하면, 이 그림처럼 트리 형태로 최종적으로 구성할 수 있다.
+
+이제 코드로 구현해보자.
+```python
+index = inorder.index(preorder.pop(0))
+```
+먼저, 전위 순회 첫 번째 결과를 가져와 중위 순회를 분할하는 인덱스로 한다.<br><br>
+
+```python
+node = TreeNode(inorder[index])
+node.left = self.buildTree(preorder, inorder[0:index])
+node.right = self.buildTree(preorder, inorder[index + 1:])
+```
+이 값을 현재 노드로 구성하고, 이를 기준으로 중위 순회 결과를 쪼개서 왼쪽, 오른쪽으로 각각 마무리될 때 분할 정복 구조로 재귀 호출하면, 트리를 구성할 수 있다.
+
+전체 코드는 다음과 같다.
+```python
+def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
+    if inorder:
+        # 전위 순회 결과는 중위 순회 분할 인덱스
+        index = inorder.index(preorder.pop(0))
+        
+        # 중위 순회 결과 분할 정복
+        node = TreeNode(inorder[index])
+        node.left = self.buildTree(preorder, inorder[0:index])
+        node.right = self.buildTree(preorder, inorder[index + 1:])
+        
+        return node
+```
+여기서 전위 순회 결과는 pop(0)으로 값을 꺼내온다.<br>
+즉 큐 연산이며, 파이썬에서는 데크(Deque)로 구현할 수 있다.<br>
+여기서는 입력값 리스트를 특별히 다른 자료형으로 변환하지 않고 그대로 사용한다.<br>
+파이썬의 리스트는 pop()에도 인텍스를 별도로 지정할 수 있어서, 사실상 스택과 큐의 모든 역할을 수행할 수 있다.<br>
+하지만 파이썬의 리스트에서 pop(0)은 시간 복잡도가 O(n)이므로 주의가 필요하다.
+<br><br>
 
 
 
