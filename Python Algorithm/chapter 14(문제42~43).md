@@ -161,7 +161,7 @@ while queue:
 
 이해를 돕기 위해 queue.append(cur_root.child)으로 깊이별 큐에 삽입되는 자식 노드를 도식화해보면 그림 14-4(389p)와 같다.
 
-> 그림 14-4
+<img src="https://user-images.githubusercontent.com/55045377/122328977-90a33f00-cf6b-11eb-8bba-4efa0185a359.png" width=55% height=55%>
 
 이 그림처럼 깊이별로 노드가 추가되는 BFS 구조를 나타낼 수 있다.<br>
 이 문제 예제의 입력값이 [3,9,20,null,null,15,7]일 때, depth가 1이면 queue에는 [3], 2이면 [9,20], 3이면 [15,7]이 삽입되어 처리된다.
