@@ -314,6 +314,45 @@ print(Solution.solution(nodes))
 연결 리스트로 풀려고 했던 건 완성하지 못했다. 
 <br><br>
 
+```python
+####### 연결 리스트로 풀기 #######
+
+import collections
+
+class Node(object):
+  def __init__(self, val=0, left=None, right=None):
+    self.val = val
+    self.left = left
+    self.right = right
+
+class Solution(object):
+  cnt: int = 0
+  def diameter(self, tree: Node) -> int:
+    def dfs(tree: Node):
+      # 예외처리
+      if not tree:
+        return -1
+
+      left = dfs(tree.left)
+      right = dfs(tree.right)
+      self.cnt = max(self.cnt, left+right+2)
+      return max(left, right) + 1
+
+    dfs(tree)
+    return self.cnt
+    
+
+solution = Solution()
+n1 = Node(5)
+n2 = Node(4)
+n3 = Node(3)
+n4 = Node(2,n2,n1)
+n5 = Node(1,n4,n3)
+print(solution.diameter(n5))
+```
+풀이를 보고 연결 리스트로 풀어봤다.
+<br><br>
+
 ### 문제 43 이진 트리의 직경 풀이
 #### 풀이1. 상태값 누적 트리 DFS
 가장 긴 경로를 찾는 방법은 먼저 가장 말단, 즉 리프 노드까지 탐색한 다음 부모로 거슬러 올라가면서 각각의 거리를 계산해 상태값을 업데이트 하면서 다음과 같이 누적해 나가면 될 것 같다.
