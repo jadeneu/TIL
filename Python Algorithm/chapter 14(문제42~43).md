@@ -37,7 +37,7 @@
 
 트리는 그 자식도 트리인 서브트리(Subtree) 구성을 띤다고 앞서 언급한 바 있다.
 
-> 그림 14-1
+<img src="https://user-images.githubusercontent.com/55045377/122329995-533fb100-cf6d-11eb-9178-473ebc2e8550.png" width=60% height=60%>
 
 레벨(Level)은 0에서부터 시작한다.<br>
 논문에 따라 1에서부터 시작하는 경우도 있으니 현재 대부분의 문서에서는 0에서부터 시작하는 것이 좀 더 일반적이며 여기서도 0부터 시작한다.<br>
@@ -61,7 +61,7 @@
 
 그렇다면 그림 14-2(385p)에서 트리가 아닌 예를 한번 살펴보자.
 
-> 그림 14-2 트리가 아닌 예
+<img src="https://user-images.githubusercontent.com/55045377/122330148-98fc7980-cf6d-11eb-9884-76de0ca5db1f.png" width=65% height=65%>
 
 이 그림에서 1)은 순환 구조이기 때문에, 앞서 그래프와 트리의 차이점에서 첫 번째로 언급한, 트리는 순환 구조를 갖지 않아야 한다는 정의에 부합하지 않는다.<br>
 2)는 C 노드의 부모가 A, D 이렇게 둘이다. 부모 노드는 단 하나여야 한다.<br>
@@ -78,7 +78,7 @@
 여기서는 되도록 널리 쓰이는 형태로 언급하되, 위키피디아를 기준으로 정리해본다.<br>
 먼저, 이진 트리에서는 대표적으로 그림 14-3(386p)과 같은 3가지 유형을 들 수 있다.
 
-> 그림 14-3 이진 트리의 유형
+<img src="https://user-images.githubusercontent.com/55045377/122330251-cc3f0880-cf6d-11eb-974a-593d36048282.png" width=75% height=75%>
 
 * 정 이진 트리(Full Binary Tree): 모든 노드가 0개 또는 2개의 자식 노드를 갖는다.
 * 완전 이진 트리(Complete Binary Tree): 마지막 레벨을 제외하고 모든 레벨이 완전히 채워져 있으며, 마지막 레벨의 모든 노드는 가장 왼쪽부터 채워져 있다.
@@ -117,6 +117,45 @@ nodes = [3,9,20,None,None,15,7]
 print(solution(nodes))
 ```
 노드처리 하지 않고 주어진 리스트대로 풀었다.
+<br><br>
+
+```python
+import collections
+
+class TreeNode(object):
+  def __init__(self, val, left=None, right=None):
+    self.val = val
+    self.left = left
+    self.right = right
+
+class Solution(object):
+  def binary(self, tree):
+    if tree is None:
+      return 0
+    queue = collections.deque([tree])
+    cnt = 0
+
+    while queue:
+      cnt += 1
+      for _ in range(len(queue)):
+        node = queue.popleft()
+        if node.left:
+          queue.append(node.left)
+        if node.right:
+          queue.append(node.right)
+
+    return cnt
+
+
+solution = Solution()
+n1 = TreeNode(7)
+n2 = TreeNode(15)
+n3 = TreeNode(20,n2,n1)
+n4 = TreeNode(9)
+n5 = TreeNode(3,n4,n3)
+print(solution.binary(n5))
+```
+풀이를 보고 다시 풀어 보았다.
 <br><br>
 
 ### 문제 42 이진 트리의 최대 깊이 풀이
