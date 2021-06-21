@@ -166,7 +166,7 @@ def invertTree(self, root: TreeNode) -> TreeNode:
 ```
 그림 14-8(398p)을 보면 좀 더 이해가 쉬울 것 같다.
 
-> 그림 14-8 재귀를 이용한 이진 트리 반전
+<img src="https://user-images.githubusercontent.com/55045377/122710494-51425e80-d29b-11eb-9c19-acbdd401682b.png" width=40% height=40%>
 
 이 그림에서 루트 노드인 4에서 시작하되, 지금까지와는 달리 여기서는 오른쪽부터 재귀 탐색을 진행한다.<br>
 앞에서 보인 전체 코드에서, self.invertTree의 파라미터로 root.right를 먼저 넘겼기 때문이다.<br>
@@ -176,7 +176,7 @@ def invertTree(self, root: TreeNode) -> TreeNode:
 
 마지막 7)번, 그러니까 루트 노드 4의 자식 노드 간 최종 스왑이 이뤄지기 직전의 상태는 그림 14-9(399p)와 같다.
 
-> 그림 14-9 마지막 스왑이 이뤄지기 직전의 상태
+<img src="https://user-images.githubusercontent.com/55045377/122710585-9070af80-d29b-11eb-8054-615f048c5ac1.png" width=35% height=35%>
 
 이 그림에서 루트 노드 4의 자식 노드 2와 7이 마지막으로 스왑되면서 전체 트리가 반전된다.<br>
 이제 스왑된 이후의 값들을 꼼꼼이 살펴보면 이 문제에서 제시된 예제와 모두 동일함을 확인할 수 있다.
