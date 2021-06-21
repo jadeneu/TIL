@@ -151,6 +151,41 @@ class Solution:
 <br><br>
 * **내가 짠 코드**<br>
 풀이를 보고 로직을 익혔다.
+```python
+import collections
+
+class TreeNode(object):
+  def __init__(self, val, left=None, right=None):
+    self.val = val
+    self.left = left
+    self.right = right
+
+class Solution(object):
+  def invert(self, tree):
+    queue = collections.deque([tree])
+
+    while queue:
+      node = queue.popleft()
+      
+      if node.left and node.right:
+        node.left, node.right = node.right, node.left
+        queue.append(node.left)
+        queue.append(node.right)
+
+    return tree
+
+
+solution = Solution()
+n1 = TreeNode(9)
+n2 = TreeNode(6)
+n3 = TreeNode(3)
+n4 = TreeNode(1)
+n5 = TreeNode(7,n2,n1)
+n6 = TreeNode(2,n4,n3)
+n7 = TreeNode(4,n6,n5)
+print(solution.invert(n7))
+```
+트리가 포화이진트리가 아닐수도 있기 때문에 *if node.left and node.right:* 보다는 *if node:* 라고 조건식을 붙이는 게 더 정답에 가까운 것 같다.
 <br><br>
 
 ### 문제 45 이진 트리 반전 풀이
