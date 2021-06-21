@@ -142,6 +142,13 @@ class Solution:
 > 397p
 
 * 중앙을 기준으로 이진 트리를 반전시키는 문제다.<br><br>
+* 입력<br>
+<img src="https://user-images.githubusercontent.com/55045377/122700459-49c48a80-d286-11eb-8c11-ba914338a33b.png" width=20% height=20%>
+  
+* 출력<br>
+<img src="https://user-images.githubusercontent.com/55045377/122700545-74aede80-d286-11eb-8a35-8ba8ec3dd69a.png" width=20% height=20%>
+
+<br><br>
 * **내가 짠 코드**<br>
 풀이를 보고 로직을 익혔다.
 <br><br>
