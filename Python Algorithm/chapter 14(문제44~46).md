@@ -310,7 +310,14 @@ def invertTree(self, root: TreeNode) -> TreeNode:
 ### 문제 46 두 이진 트리 병합
 > 404p
 
-* 두 이진 트리를 병합하라. 중복되는 노드는 값을 합산한다.<br><br>
+* 두 이진 트리를 병합하라. 중복되는 노드는 값을 합산한다.
+* 입력<br>
+<img src="https://user-images.githubusercontent.com/55045377/122711268-df6b1480-d29c-11eb-9fb8-2e6517256fa8.png" width=40% height=40%>
+
+* 출력<br>
+<img src="https://user-images.githubusercontent.com/55045377/122711431-150ffd80-d29d-11eb-907b-00cc2b1843bd.png" width=25% height=25%>
+ 
+<br><br>
 * **내가 짠 코드**<br>
 ```python
 import collections
@@ -468,7 +475,7 @@ def mergeTrees(self, t1: TreeNode, t2: TreeNode) -> TreeNode:
 만약 양쪽 노드가 모두 존재하지 않는다면 None이 리턴될 것이다.<br>
 그 구조를 표현한 그림 14-10(405p)을 살펴보자.
 
-> 그림 14-10
+<img src="https://user-images.githubusercontent.com/55045377/122712030-36bdb480-d29e-11eb-8895-018e04ea8731.png" width=40% height=40%>
 
 이 그림에서는 양쪽 노드가 모두 존재하지 않아 None이 리턴되는 경우를 비롯한 모든 탐색의 경우를 볼 수 있다.<br>
 탐색 순서는 파란 글씨로 숫자를 붙였다.<br>
