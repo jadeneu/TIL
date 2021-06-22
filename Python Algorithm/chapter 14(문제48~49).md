@@ -116,7 +116,7 @@ def check(root):
         return -1
     return max(left, right) + 1
 ```
-left와 right가 모두 0이라면, 차이가 1보다 크지 않으므로 max(left , right) + 1로 l을 리턴하게 된다.<br>
+left와 right가 모두 0이라면, 차이가 1보다 크지 않으므로 max(left , right) + 1로 1을 리턴하게 된다.<br>
 이런 식으로 점점 1 씩 증가하는 형태가 리턴된다.<br>
 예제에서 false로 처리된 입력값 [1,2,2,3,3,null,null,4,4]를 대상으로 표현해본 그림 14-13을 살펴보자.
 
