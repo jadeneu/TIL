@@ -311,7 +311,7 @@ def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
         graph[j].append(i)
 ```
 이 문제에서 그래프는 무방향(Undirected)이므로, 트리의 부모와 자식은 양쪽 노드 모두 번갈아 가능하다.<br>
-따라서 양쪽 모두 graph라는 이름의 그래프 덕셔너리 변수에 양방향으로 삽입하여 구성한다.
+따라서 양쪽 모두 graph라는 이름의 그래프 딕셔너리 변수에 양방향으로 삽입하여 구성한다.
 ```python
 leaves = []
 for i in range(n + 1):
