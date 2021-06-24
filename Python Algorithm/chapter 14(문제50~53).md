@@ -231,6 +231,40 @@ print(solution.sortedArrayToBST(lists))
 
 * **내가 짠 코드**<br>
 풀 수 있을 것 같아서 주어진 입력값 그대로 리스트로 풀어보려고 하고, 연결 리스트로 풀어보려고도 했지만 잘 풀리지 않았다. 풀이를 보고 감을 잡은 후에 다시 풀어야 할 것 같다.
+
+풀이를 보고 코드를 짜봤다.
+```python
+class TreeNode(object):
+  def __init__(self, val, left=None, right=None):
+    self.val = val
+    self.left = left
+    self.right = right
+
+class Solution(object):
+  val = 0
+  def binary(self, nodes: TreeNode) -> TreeNode:
+    if nodes:
+      self.binary(nodes.right)
+      self.val += nodes.val
+      nodes.val = self.val
+      self.binary(nodes.left)
+
+    return nodes
+
+
+# nodes = [4,1,6,0,2,5,7,None,None,None,3,None,None,None,8]
+solution = Solution()
+n1 = TreeNode(8)
+n2 = TreeNode(3)
+n3 = TreeNode(7,None,n1)
+n4 = TreeNode(5)
+n5 = TreeNode(2,None,n2)
+n6 = TreeNode(0)
+n7 = TreeNode(6,n4,n3)
+n8 = TreeNode(1,n6,n5)
+n9 = TreeNode(4,n8,n7)
+print(solution.binary(n9))
+```
 <br><br>
 
 ### 문제 51 이진 탐색 트리(BST)를 더 큰 수 합계 트리로 풀이
