@@ -100,6 +100,33 @@ BST는 이처럼 랜덤하게 생성해도 대부분의 경우 균형이 잘 맞
 <br><br>
 
 * **내가 짠 코드**<br>
+풀이를 보고 코드를 짜봤다.
+```python
+from typing import List
+
+class TreeNode(object):
+  def __init__(self, val, left=None, right=None):
+    self.val = val
+    self.left = left
+    self.right = right
+
+class Solution(object):
+  def binary(self, lists: List[int]) -> TreeNode:
+    if not lists:
+      return None
+
+    mid = len(lists) // 2
+
+    node = TreeNode(lists[mid])
+    node.left = self.binary(lists[:mid])
+    node.right = self.binary(lists[mid+1:])
+
+    return node
+
+solution = Solution()
+lists = [-10,-3,0,5,9]
+print(solution.binary(lists))
+```
 
 <br><br>
 
