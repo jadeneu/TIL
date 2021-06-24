@@ -387,8 +387,6 @@ print(solution.bst(n6,L,R))
 <br><br>
 시간복잡도 개선 코드
 ```python
-import collections
-
 ####### 시간복잡도 줄이기 #######
 class TreeNode(object):
   def __init__(self, val, left=None, right=None):
