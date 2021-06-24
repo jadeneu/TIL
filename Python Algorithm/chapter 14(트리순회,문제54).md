@@ -157,8 +157,32 @@ A, C, E, D, B, H, I, G, F
 <br><br>
 
 * **내가 짠 코드**<br>
+풀이를 보고 코드를 짰다.
 ```python
+from typing import List
 
+class TreeNode(object):
+  def __init__(self,val,left=None,right=None):
+    self.val = val
+    self.left = left
+    self.right = right
+
+class Solution(object):
+  def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
+    if inorder:
+      index = inorder.index(preorder.pop(0))
+
+      root = TreeNode(inorder[index])
+      root.left = self.buildTree(preorder,inorder[0:index])
+      root.right = self.buildTree(preorder, inorder[index+1:])
+
+      return root
+
+
+solution = Solution()
+preorder = [3,9,20,15,7]  #NLR
+inorder = [9,3,15,20,7]  #LNR
+print(solution.buildTree(preorder,inorder))
 ```
 <br><br>
 
