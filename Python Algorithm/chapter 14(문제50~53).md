@@ -385,6 +385,48 @@ R = 15
 print(solution.bst(n6,L,R))
 ```
 <br><br>
+시간복잡도 개선 코드
+```python
+import collections
+
+####### 시간복잡도 줄이기 #######
+class TreeNode(object):
+  def __init__(self, val, left=None, right=None):
+    self.val = val
+    self.left = left
+    self.right = right
+
+class Solution(object):
+  def bst(self, root, L, R):
+    stack, cnt = [root], 0
+
+    while stack:
+      node = stack.pop()
+      if node:
+        if L <= node.val <= R:
+          cnt += node.val
+          stack.append(node.left)
+          stack.append(node.right)
+        elif node.val < L:
+          stack.append(node.right)
+        elif node.val > R:
+          stack.append(node.left)
+
+    return cnt
+
+
+solution = Solution()
+n1 = TreeNode(18)
+n2 = TreeNode(7)
+n3 = TreeNode(3)
+n4 = TreeNode(15,None,n1)
+n5 = TreeNode(5,n3,n2)
+n6 = TreeNode(10,n5,n4)
+L = 7
+R = 15
+print(solution.bst(n6,L,R))
+```
+<br><br>
 
 ### 문제 52 이진 탐색 트리(BST) 합의 범위 풀이
 #### 풀이1. 재귀 구조 DFS로 브루트 포스 탐색
