@@ -250,7 +250,7 @@ root를 입력받았을 때 먼저 맨 오른쪽까지 내려가고, 그다음 �
 ```python
 def bstToGst(self, root: TreeNode) -> TreeNode:
     ...
-    self.bstToGst(root.rtght)
+    self.bstToGst(root.right)
     self.val += root.val
     root.val = self.val
     self.bstToGst(root.left)
