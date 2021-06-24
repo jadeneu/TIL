@@ -590,6 +590,47 @@ root = [10,4,15,1,8,None,None]
 print(solution(root))
 ```
 <br><br>
+풀이를 보고 코드를 짰다.
+```python
+import sys
+
+class TreeNode(object):
+  def __init__(self, val, left=None, right=None):
+    self.val = val
+    self.left = left
+    self.right = right
+
+class Solution:
+  def minDiffInBST(self, root: TreeNode) -> int:
+    result = sys.maxsize
+    prev = -sys.maxsize
+
+    stack = []
+    node = root
+
+    while stack or node:
+      while node:
+        stack.append(node)
+        node = node.left
+
+      node = stack.pop()
+
+      result = min(result, node.val - prev)
+      prev = node.val
+
+      node = node.right
+
+    return result
+        
+solution = Solution()
+n1 = TreeNode(3)
+n2 = TreeNode(1)
+n3 = TreeNode(6)
+n4 = TreeNode(2,n2,n1)
+n5 = TreeNode(4,n4,n3)
+print(solution.minDiffInBST(n5))
+```
+<br><br>
 
 ### 문제 53 이진 탐색 트리(BST) 노드 간 최소 거리 풀이
 #### 풀이1. 재귀 구조로 중위 순회
