@@ -97,10 +97,86 @@ percolate_up() 함수명 앞에는 내부 함수라는 의미로 PEP 8 기준과
 <br><br>
 
 ### 추출
+추출 자체는 매우 간단하다.<br>
+루트를 추출하면 된다. 그렇다면 시간 복잡도는 O(1)이라고 생각할 수 있겠지만, 추출 이후에 다시 협의 특성을 유지하는 작업이 필요하기 때문에 시간 복잡도는 O(log n)이다.
 
+<img src="https://user-images.githubusercontent.com/55045377/123505608-18d7c180-d69b-11eb-9928-362a7925b19d.png" width=75% height=75%>
 
+그림 15-4에는 이진 힙에서 요소의 추출 과정을 설명한다.<br>
+추출 이후에 비어 있는 루트에는 가장 마지막 요소가 올라가게 되고, 이번에는 반대로 자식 노드와 값을 비교해서 자식보다 크다면 내려가는 다운힙(Down-Heap) 연산이 수행된다.<br>
+일반적으로 힙 추출에 많이쓰이는 percolate_down()이라는 이름의 함수로 구현해보자.<br>
+이 과정은 리스트 15-1과 같은 위키피디아의 수도코드를 참고하여 알고리즘을 동일하게 파이썬 코드로 구현해보자.
 
+* **리스트 15-1** 이진 힙의 요소 추출 과정 수도코드
+```
+Max-Heapify (A, i):
+    left ← 2xi
+    right ← 2xi + 1
+    largest ← i
+    
+    if left <= heap_length[A] and A[left] > A[largest] then:
+        largest ← left
+        
+    if right <= heap_length[A] and A[right] > A[largest] then:
+        largest ← right
+        
+    if largest != i then:
+        swap A[i] and A[largest]
+        Max-Heapify(A, largest)
+```
+수도코드가 깔끔하게 잘 정리되어 있다.<br>
+여기서는 수도코드 또한 인덱스가 1 이상일 때만 동작하도록 구현되어 있다.<br>
+앞서 그림 15-2에서도 1번 인덱스부터 시작한다고 설명한 바 있고, 이후 코드에서도 0번 인덱스에는 None을 할당하고 1번부터 사용하게 했다.<br>
+로버트 세지윅의 "알고리즘 개정 4판" 2장, ‘정렬’에 나오는 이진 힙의 정의에서도, 첫 번째 항목은 사용하지 않는다고 설명한다.
 
+첫 번째 항목(0번 인덱스)은 항상 비워두고 1번 인덱스부터 사용하는 이유는 인덱스 계산을 편하게 하기 위함이다. <br>
+특히 1번 인덱스부터 사용하게 되면 인덱스 계산이 깔끔하게 떨어진다.<br>
+이런 경우는 머신러닝 분야에서도 종종 볼 수 있다. 경사하강법(Gradient Descent)에서 기울기를 계산할 때 미분이 깔끔하게 떨어지도록 일부러 상수항을 부여하기도 한다.<br>
+대부분은 컴퓨터가 직접 계산해주기 때문에 개발자가 내부 계산을 직접 들여다 볼 필요는 없지만, 이처럼 내부를 들여다 보게 되면 깔끔한 계산을 위해 별도 처리를 해주는 경우를 종종 볼 수 있다.<br>
+대개 논문에서는 이처럼 별도 처리를 통해 계산이 깔끔하게 되도록 수식을 기입해두곤 한다.
+
+그렇다면 이진 힙에서 인덱스를 1부터 시작하는 경우에는 어떻게 계산이 될까?<br>
+다음 리스트 15-2와 같이 부모, 자식 노드의 인덱스를 계산할 수 있다.
+
+* **리스트 15-2** 이진 힙의 인덱스 위치 계산 수도코드
+```
+Parent(i)
+    return ceil((i - 1) / 2)
+Left(i)
+    return 2i
+Right(i)
+    return 2i + 1
+```
+이 수도코드에서 부모 노드를 구하는 코드를 보면 2를 나눈 올림값으로 정리되며, 자식 노드도 왼쪽, 오른쪽 각각이 i * 2, i * 2 + 1로 깔끔하게 계산이 처리된다.<br>
+파이썬 코드에서도 마찬가지로 깔끔하게 인덱스를 계산할 수 있다. <br>
+이처럼 깔끔한 계산을 위해 1번 인덱스부터 사용하며, 0번 인덱스는 비워두는 것이다.<br>
+참고로 여기서 수도코드는 최대 힙이다.<br>
+우리가 구현하려는 것은 최소 힙이므로 이 부분은 수도코드의 알고리즘을 적절히 수정해 다음과 같이 구현할 수 있다.
+
+```python
+def _percolate_down(self, idx):
+    left = idx * 2
+    right = idx * 2 + 1
+    smallest = idx
+    
+    if left <= len(self) and self.items[left] < self.items[smallest]:
+        smallest = left
+        
+    if right <= len(self) and self.items[right] < self.items[smallest]:
+        smallest = right
+        
+    if smallest != idx:
+        self.items[idx], self.items[smallest] = \
+            self.items[smallest], self.items[idx]
+        self._percolate_down(smallest)
+        
+    def extract(self):
+        extracted = self.items[1]
+        self.items[1] = self.items[len(self)]
+        self.items.pop()
+        self._percolate_down(1)
+        return extracted
+```
 
 
 
