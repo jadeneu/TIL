@@ -64,8 +64,50 @@ def findKthLargest(self, nums: List[int], k: int) -> int:
 <br><br>
 
 #### 풀이2. heapq 모듈의 heapify 이용
+모든 값을 꺼내서 푸시(Push)하지 않고도 한 번에 heapify()하여 처리할 수 있다.<br>
+heapify()란 주어진 자료구조가 힙 특성을 만족하도록 바꿔주는 연산이며, 이 경우 파이썬의 일반적인 리스트는 힙 특성을 만족하는 리스트로, 값의 위치가 변경된다.<br>
+물론 하나라도 값을 추가하면 다시 힙 특성이 깨지지만, 추가가 계속 일어나는 형태가 아니기 때문에 heapify()는 한 번만 해도 충분하다.
+```python
+def findKthLargest(self, nums: List[int], k: int) -> int:
+    heapq.heapify(nums)
+    
+    for _ in range(len(nums) - k):
+        heapq.heappop(nums)
+        
+    return heapq.heappop(nums)
+```
+<br><br>
 
+#### 풀이3. heapq 모듈의 nlargest 이용
+heapq 모듈은 강력한 기능을 많이 지원한다.<br>
+그중에는 n번째 큰 값을 추출하는 기능도 있다.<br>
+이 기능을 사용하면, 전체 코드를 다음과 같이 한 줄로 처리할 수 있다.
+```python
+def findKthLargest(self, nums: List[int], k: int) -> int:
+    return heapq.nlargest(k, nums)[-1]
+```
+k번째만큼 큰 값이 가장 큰 값부터 순서대로 리스트로 리턴된다.<br>
+여기서 마지막 인덱스 -1이 k번째 값이 된다.<br>
+힙이 아니라도 내부적으로 heapify() 함수도 호출해 처리해주기 때문에, 별도로 힙 처리를 할 필요가 없어 편리하다.<br>
+참고로 nsmallest()를 사용하면 동일한 방식으로 n번째 작은 값도 추출이 가능하다.
+<br><br>
 
+#### 풀이4. 정렬을 이용한 풀이
+이번에는 정렬부터 한 다음, k번째 값을 추출하는 방식으로 풀이해보자.<br>
+추가, 삭제가 빈번할 때는 heapq를 이용한 힙 정렬이 유용하지만 이처럼 입력값이 고정되어 있을 때는 그저 한 번 정렬하는 것만으로 충분하다.
+```python
+def findKthLargest(self, nums: List[int], k: int) -> int:
+    nums.sort()
+    return nums[-k]
+```
+sorted()로 큰 값부터 역순으로 정렬하면, 다음과 같이 좀 더 직관적인 풀이도 가능하다.
+```python
+def findKthLargest(self, nums: List[int], k: int) -> int:
+    return sorted(nums, reverse=True)[k - 1]
+```
+모든 방식은 실행 속도에 큰 차이가 없으나 ‘정렬’ 방식이 가장 빠르다.<br>
+파이썬의 정렬 함수는 팀소트(Timsort)를 사용하며 C로 매우 정교하게 구현되어 있기 때문에, 대부분의 경우에는 파이썬의 내부 정렬 함수를 사용하는 편이 가장 성능이 좋다.
+<br><br>
 
 
 
