@@ -1,4 +1,13 @@
 # 목차
+* [chapter 15. 힙](#15장-힙)
+* [리트코드](#리트코드)
+  + [문제 55 배열 K번째 큰 요소](#문제-55-배열-k번째-큰-요소)
+  + [문제 55 배열 K번째 큰 요소 풀이](#문제-55-배열-k번째-큰-요소-풀이)
+    - [풀이1. heapq 모듈 이용](#풀이1-heapq-모듈-이용)
+    - [풀이2. heapq 모듈의 heapify 이용](#풀이2-heapq-모듈의-heapify-이용)
+    - [풀이3. heapq 모듈의 nlargest 이용](#풀이3-heapq-모듈의-nlargest-이용)
+    - [풀이4. 정렬을 이용한 풀이](#풀이4-정렬을-이용한-풀이)
+<br><br><br>
 
 # 15장 힙
 ## 리트코드
@@ -30,7 +39,7 @@ print(largest(arr, k))
 
 ### 문제 55 배열 K번째 큰 요소 풀이
 #### 풀이1. heapq 모듈 이용
-11장의 31번 문제 ‘상위 K 빈도 요소’와 비슷한 문제다.<br>
+11장의 31번 문제 '상위 K 빈도 요소'와 비슷한 문제다.<br>
 다른 점이라면 가장 큰(Largest) 값이냐, 가장 빈번한(Most Frequent) 값이냐의 차이 정도라 하겠다.<br>
 비슷한 방식으로 풀이가 가능하므로, 이전의 풀이를 먼저 떠올려보자.<br>
 그때 풀이했던 코드를 다시 가져와본다.
@@ -48,7 +57,7 @@ def topKFrequent(self, nums: List[int], k: int) -> List[int]:
     return topk
 ```
 여기서 함수명은 이 문제에 적합하도록 topKFrequent()에서 findKthLargest로 수정하고, Counter()로 빈도 수를 계산해 삽입했던 예전 풀이 대신 값 자체를 힙에 푸시하고 순서만큼 팝하는 형태로 수정해본다.<br>
-전체 코드는 전보다 훨씬 더 단순해 졌다.
+전체 코드는 전보다 훨씬 더 단순해졌다.
 ```python
 def findKthLargest(self, nums: List[int], k: int) -> int:
     heap = list()
@@ -105,7 +114,9 @@ sorted()로 큰 값부터 역순으로 정렬하면, 다음과 같이 좀 더 �
 def findKthLargest(self, nums: List[int], k: int) -> int:
     return sorted(nums, reverse=True)[k - 1]
 ```
-모든 방식은 실행 속도에 큰 차이가 없으나 ‘정렬’ 방식이 가장 빠르다.<br>
+<br>
+
+모든 방식은 실행 속도에 큰 차이가 없으나 '정렬' 방식이 가장 빠르다.<br>
 파이썬의 정렬 함수는 팀소트(Timsort)를 사용하며 C로 매우 정교하게 구현되어 있기 때문에, 대부분의 경우에는 파이썬의 내부 정렬 함수를 사용하는 편이 가장 성능이 좋다.
 <br><br>
 
