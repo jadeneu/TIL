@@ -1,5 +1,7 @@
 # 목차
-
+* [rjust 함수](#rjust-함수)
+* [ljust 함수](#ljust-함수)
+* [zfill 함수](#zfill-함수)
 <br><br><br>
 
 ## rjust 함수
