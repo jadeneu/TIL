@@ -94,9 +94,95 @@ t.insert('appeal')
 
 <img src="https://user-images.githubusercontent.com/55045377/124861626-ea3cdd80-dfee-11eb-8026-5361a7246dfb.png" width=55% height=55%>
 
-이 그림에서 트라이는, 같은 문자가 같은 자식을 타고 내려가다가, 달라지는 문지부터 서로 다른 노드로 분기된다.<br>
+이 그림에서 트라이는, 같은 문자가 같은 자식을 타고 내려가다가, 달라지는 문자부터 서로 다른 노드로 분기된다.<br>
 마지막에는 appeal과 appear가 완성되는 l과 r 노드가 각각 True로 셋팅된다.<br>
 여기까지가 삽입의 기본 원리다.
+
+그렇다면 이제 이 값이 존재하는지 확인하려면 어떻게 해야 할까?<br>
+문제에 제시된 메소드인 search()와 startsWith() 메소드가 그런 역할을 한다. <br>
+search()는 단어가 존재하는지 여부를 판별하는 것이고 startsWith()는 해당 문자열로 시작하는 단어가 존재하는지 여부를 판별한다.<br>
+즉 둘 다 동일하게 문자 단위로 계속 깊이 탐색을 하고 search()의 경우에만 마지막에 word가 True인지 확인하면 될 것이다.<br>
+먼저 search()의 코드는 다음과 같다.
+
+```python
+def search(self, word: str) -> bool:
+    node = self.root
+    for char in word:
+        if char not in node.children:
+            return False
+        node = node.children[char]
+        
+    return node.word
+```
+문자열에서 문자를 하나씩 for 반복문으로 순회하면서 자식 노드로 계속 타고 내려간다.<br>
+그리고 마지막에 node.word 여부를 리턴한다.<br>
+만약 단어가 완성된 트라이라면 True로 되어 있을 것이고, 이때 True가 결과로 리턴된다.<br>
+startsWith()의 코드는 다음과 같다.
+
+```python
+def startsWith(self, prefix: str) -> bool:
+    node = self.root
+    for char in prefix:
+        if char not in node.children:
+            return False
+        node = node.children[char]
+        
+    return True
+```
+search()와 거의 동일하다.<br>
+차이점은 node.word를 확인하지 않고, 자식 노드가 존재하는지 여부만 판별한다는 점이다.<br>
+자식 노드가 존재한다면 for 반복문을 끝까지 빠져나올 것이고, True를 리턴한다. 
+
+이제 모든 메소드를 정리하면 전체 코드를 만들어 낼 수 있다.
+
+그전에 먼저 코드를 좀 더 줄여보자.<br>
+self.children을 defaultdict()로 선언한다면 insert() 삽입 메소드에서 매번 if로 체크하는 구문은 없앨 수 있을 것 같다.<br>
+이를 반영한 전체 코드는 다음과 같다. 
+
+```python
+# 트라이의 노드
+class TrieNode:
+    def __init__(self):
+        self.word = False
+        self.children = collections.defaultdict(TrieNode)
+        
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+    
+    # 단어 삽입
+    def insert(self, word: str) -> None:
+        node = self.root
+        for char in word:
+            if char not in node.children:
+                node.children[char] = TrieNode()
+            node = node.children[char]
+        node.word = True
+    
+    # 단어 존재 여부 판별
+    def search(self, word: str) -> bool:
+        node = self.root
+        for char in word:
+            if char not in node.children:
+                return False
+            node = node.children[char]
+
+        return node.word
+    
+    # 문자열로 시작 단어 존재 여부 판별
+    def startsWith(self, prefix: str) -> bool:
+        node = self.root
+        for char in prefix:
+            if char not in node.children:
+                return False
+            node = node.children[char]
+
+        return True
+```
+<br><br>
+
+### 문제 57 팰린드롬 페어
+
 
 
 
