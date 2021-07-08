@@ -154,8 +154,6 @@ class Trie:
     def insert(self, word: str) -> None:
         node = self.root
         for char in word:
-            if char not in node.children:
-                node.children[char] = TrieNode()
             node = node.children[char]
         node.word = True
     
@@ -194,10 +192,107 @@ class Trie:
    [[0,1],[1,0],[3,2],[2,4]]
    ```
   * 설명<br>
-    ["dcbaabcd", "abcddcba", "slls", “llssssll"]이 팰린드롬이다.
+    ["dcbaabcd", "abcddcba", "slls", "llssssll"]이 팰린드롬이다.
+    
+* 예제2
+  * 입력
+    ```
+    ["bat","tab","cat"]
+    ```
+  * 출력
+    ```
+    [[0,1], [1,0]]
+    ```
+  * 설명<br>
+    ["battab", "tabbat" ]이 팰린드롬이다.
 
+<br><br>
 
+### 문제 57 팰린드롬 페어 풀이
+#### 풀이1. 팰린드롬을 브루트 포스로 계산
+먼저 브루트 포스 풀이부터 진행해보자.<br>
+각각의 모든 조합을 구성해보고 이 구성이 팰린드롬인지 여부를 판별하면, O(n^2) 시간 복잡도로 브루트 포스 풀이가 가능할 것 같다.<br>
+먼저, 팰린드롬 여부를 체크하는 함수는 6장의 1번 '유효한 팰린드롬' 문제에서 풀어본 풀이 중 가장 간단한 코드를 택해보자.<br>
+슬라이싱 풀이인데, 당시 풀이를 보면 알겠지만 가장 간단할 뿐만 아니라 성능 또한 매우 좋았다.
+```python
+def is_palindrome(word):
+    return word == word[::-1]
+```
+이제 n^2번 반복하면서 모든 조합을 구성하고, 매번 팰린드롬 여부인지 체크한다.<br>
+전체 코드는 다음과 같다.
+```python
+def palindromePairs(self, words: List[str]) -> List[List[int]]:
+    def is_palindrome(word):
+        return word == word[::-1]
+        
+    output = []
+    for i, word1 in enumerate(words):
+        for j, word2 in enumerate(words):
+            if i == j:
+                continue
+            if is_palindrome(word1 + word2):
+                output.append([i, j])
+    return output
+```
+간단하게 구현했고 실행도 잘 된다.<br>
+그러나 리트코드에서는 타임아웃이 발생하며 테스트 케이스를 통과할 수 없다.<br>
+이런 형태의 브루트 포스로는 시간 초과로 풀리지 않는다.<br>
+좀 더 효율적인 풀이가 필요하다.
+<br><br>
 
+#### 풀이2. 트라이 구현
+O(n^2)을 O(n)으로 풀이할 수 있는 방법이 있을까? 앞서 문제에서 구현해본 트라이로 풀이를 진행해보자.<br>
+먼저 이전 문제에서 풀이했던 트라이 구현을 그대로 가져와본다.
+```python
+# 트라이를 저장할 노드
+class TrieNode:
+    def __init__(self):
+        self.word = False
+        self.children = collections.defaultdict(TrieNode)
+        
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+    
+    # 단어 삽입
+    def insert(self, word: str) -> None:
+        node = self.root
+        for char in word:
+            node = node.children[char]
+        node.word = True
+    
+    # 단어 존재 여부 판별
+    def search(self, word: str) -> bool:
+        node = self.root
+        for char in word:
+            if char not in node.children:
+                return False
+            node = node.children[char]
+
+        return node.word
+```
+시작 단어 존재 여부 판별 메소드를 제외한 모든 구현을 가져왔다.<br>
+물론 여기서도 메소드 내용 대부분은 변경할 예정이지만 일단 기본적인 뼈대는 동일하다.<br>
+이 트라이 구현을 그대로 활용할 것이다.
+
+그렇다면 어떻게 풀어야 할까?<br>
+O(n)으로 풀기 위해서는, 모든 입력 값을 트라이로 만들어두고 딱 한 번씩만 탐색하는 문제로 변형할 것이다.<br>
+팰린드롬을 판별해야 하기 때문에, 뒤집어서 트라이로 구성하면 해법을 찾을 수 있을 것 같다.
+
+먼저, 이 예제 입력값은 너무 쉬우므로, ['d', 'cbbcd', 'dcbb', 'dcbc', 'cbbc', 'bbcd'] 정도로 좀 복잡한 값을 입력값으로 해서 뒤집어서 그림 16-4와 같이 트라이로 구현해보자.
+
+<img src="https://user-images.githubusercontent.com/55045377/124883779-a527a400-e00c-11eb-9260-dd99439e99f6.png" width=50% height=50%>
+
+입력값을 뒤집으면 ['d', 'dcbbc', 'bbcd', 'cbcd', 'cbbc', 'dcbb']가 되고 이 값의 트라이를 구축한 결과는 위 그림과 같다.<br>
+이제 트라이로 삽입하는 코드를 작성해보자.
+```python
+def insert(self, index: int, word: str) -> None:
+    node = self.root
+    for i, char in enumerate(reversed(word)):
+        ...
+        node = node.children[char]
+    node.word_id = index
+```
 
 
 
