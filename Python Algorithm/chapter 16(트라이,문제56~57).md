@@ -293,6 +293,142 @@ def insert(self, index: int, word: str) -> None:
         node = node.children[char]
     node.word_id = index
 ```
+뒤집은 다음, 문자 단위로 계속 내려가면서 트라이를 구현하고, 각각의 단어가 끝나는 지점에는 단어 인덱스를 word_id로 부여했다.<br>
+코드에서는 word_id이고, 그림 16-4에서는 w로 줄여서 표시했다.<br>
+이전 문제에서는 True, False 여부만 표기했지만, 여기서는 해당 단어의 인덱스를 찾아야 하기 때문에 word_id로 부여했다.<br>
+이제 단어 존재 여부를 찾는 함수의 핵심 코드는 다음과 같다.
+```python
+results = []
+...
+while word:
+    lf node.word_id >= 0:
+        ...
+        result.append([index, node.word_id])
+```
+단어를 뒤집어서 구축한 트라이이기 때문에 입력값은 순서대로 탐색하다가, 끝나는 지점의 word_id 값이 -1이 아니라면, 현재 인덱스 index와 해당 word_id는 팰린드롬으로 판단할 수 있다.<br>
+예를 들어 그림 16-4에서 입력값 bbcd의 트라이 탐색이 끝나는 지점에는 word_id = 2가 셋팅되어 있고, bbcd 의 인덱스는 5이기 때문에, [5, 2]인 bbcd + dcbb는 팰린드롬이며, 이는 정답 중 하나가 된다.<br>
+이 방법이 첫 번째 판별 로직이다.
+
+두 번째 판별 로직은 트라이 삽입 중에 남아 있는 단어가 팰린드롬이라면 미리 팰린드롬 여부를 세팅해 두는 방법이다.<br>
+즉 입력값 ['d', 'dcbbc', 'bbcd', 'cbcd', 'cbbc', 'dcbb']에서 cbbc는 단어 자체가 팰린드롬이므로 루트에 바로 입력값의 인덱스인 p = 4를 셋팅하고, word[0:len(word) - i] 형태로 단어에서 문자 수를 계속 줄여 나가며 팰린드롬 여부를 체크한다.<br>
+문자가 하나만 남게 될 때는 항상 팰린드롬이므로 마찬가지로 p = 4를 마지막에 셋팅한다.<br>
+당연히 이 마지막 값은 항상 w의 바로 앞 노드가 된다.<br>
+그림 16-4에 이 알고리즘을 추가로 구현하여 트라이에 표현해보자.<br>
+그림 16-5는 이와 같이 팰린드롬 여부인 p를 추가한 트라이다.
+
+<img src="https://user-images.githubusercontent.com/55045377/124906098-ae6f3b80-e021-11eb-9e4d-11ae028db300.png" width=50% height=50%>
+
+이제 이 알고리즘을 추가하여 삽입 함수를 다음과 같이 개선해보자.
+```python
+def insert(self, index: int, word: str) -> None:
+    node = self.root
+    for i, char in enumerate(reversed(word)):
+        if self.is_palindrome(word[0:len(word) - i]):
+            node.palindrome_word_ids.append(index)
+        node = node.children[char]
+    node.word id = index
+```
+참고로 그림 16-5에서 p로 표현한 것을 코드에서는 palindrome_word_ids로 풀어서 표현했다.<br>
+또한 코드에서는 속성의 이름을 복수형으로 정했는데, 그 이유는 이 그림의 루트 경우처럼 p 값이 여러 개가 될 수 있기 때문이다.<br>
+따라서 코드에서 palindrome_word_ids는 리스트이며 복수형이다. <br>
+이제 이 로직들을 반영한 각 트라이 노드가 저장될 TrieNode 클래스를 다음과 같이 수정해보자.
+```python
+class TrieNode:
+    def __init__(self):
+        self.children = collections.defaultdict(TrieNode)
+        self.word_id = -1
+        self.palindrome_word_ids = []
+```
+word_id 외에도 palindrome_word_ids를 트라이 노드의 속성으로 추가하고 TrieNode 클래스로 구현했다.
+
+이제 남아 있는 단어가 팰린드롬인 경우를 좀 더 살펴보자.<br>
+그림 16-5에서 w는 단어의 끝이고 p는 w 이전 노드에 반드시 셋팅이 된다.<br>
+문자가 하나만 남았을 때는 항상 팰린드롬이기 때문이라고 언급한 바 있다.<br>
+다시 한번 입력값 ['d', 'cbbcd', 'dcbb', 'dcbc', 'cbbc', 'bbcd']을 보면 dcbb의 인덱스는 2이고, 트라이에서는 d->c->b->b의 마지막 노드가 p = 1 이다. <br>
+그렇다면 [2, 1]은 정답 중 하나가 된다.<br>
+실제로 인덱스 1의 입력값은 cbbcd이므로 dcbb + cbbcd는 팰린드롬으로, 정답 중 하나다.
+
+또 다른 경우로, 인덱스 0의 d를 살펴보자.<br>
+그림 16-5에서 d 노드는 p = 1이다. <br>
+즉 [0, 1]도 정답이 된다.<br>
+d + cbbcd이며 마찬가지로 팰린드롬이다.<br>
+이 부분을 판별하는 코드는 다음과 같다.
+```python
+for palindrome_word_id in node.palindrome_word_ids:
+    result.append([index, palindrome_word_id])
+```
+
+마지막인 세 번째 판별 로직은 입력값을 문자 단위로 확인해 나가다가 해당 노드의 word_id가 -1이 아닐 때, 나머지 문자가 팰린드롬이라면 팰린드롬으로 판별하는 경우다.<br>
+dcbc + d가 이에 해당하는데, 입력값 dcbc는 먼저 d부터 탐색하다가 d의 word_id가 -1이 아니기 때문에 나머지 문자 cbc에 대한 팰린드롬 여부를 검사한다.<br>
+여기서는 dcbc + d를 팰린드롬으로 판별한다.<br>
+그리고 다음과 같은 판별 로직을 코드에 추가한다.
+```python
+while word:
+    if node.word_id >= 0:
+        if self.is_palindrome(word):
+            result.append([index, node.word_id])
+        ...
+    node = node.children[word[0]]
+    word = word[1:]
+```
+다소 복잡해 보이지만 3가지 판별 로직을 다시 정리하면 다음과 같다.
+
+1. 끝까지 탐색했을 때 word_id가 있는 경우(그림 16-5에서는 w, 전체 풀이 코드에서는 #1)
+2. 끝까지 탐색했을 때 palindrome_word_ids가 있는 경우(그림 16-5에서는 p, 전체 풀이 코드에서는 #2)
+3. 탐색 중간에 word_id가 있고(그림 16-5 에서는 w) 나머지 문자가 팰린드롬인 경우(전체 풀이 코드에서는 #3)
+
+이렇게 3가지 경우를 팰린드롬으로 판별할 수 있으며, 입력값을 각각 한 번씩만 대입하면 되기 때문에 O(n)으로 풀이할 수 있다.<br>
+좀 더 정확히는 단어의 최대 길이를 k로 했을때 O(k^2(n)) 이며, 앞서 브루트 포스 풀이의 경우는 O(k(n^2))이다.
+
+이 문제에서는 k가 훨씬 더 작기 때문에 트라이 풀이가 더 효율적이며, 이 때문에 앞서 브루트 포스가 타임아웃인 데 반해 트라이 풀이는 시간 내에 잘 실행이 된다.<br>
+이제 전체 코드는 다음과 같다.
+```python
+# 트라이를 저장할 노드
+class TrieNode:
+    def __init__(self):
+        self.children = collections.defaultdict(TrieNode)
+        self.word_id = -1
+        self.palindrome_word_ids = []
+        
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+        
+    @staticmethod
+    def is_palindrome(word: str) -> bool:
+        return word[::] == word[::-1]
+        
+    # 단어 삽입
+    def insert(self, index: int, word: str) -> None:
+        node = self.root
+        for i, char in enumerate(reversed(word)):
+            if self.is_palindrome(word[0:len(word) - i]):
+                node.palindrome_word_ids.append(index)
+            node = node.children[char]
+            node.val = char
+        node.word id = index
+        
+    def search(self, index, word) -> List[List[int]]:
+        result = []
+        node = self.root
+        
+        while word:
+            # 판별 로직  # 3
+            if node.word_id >= 0:
+                if self.is_palindrome(word):
+                    result.append([index, node.word_id])
+            if not word[0] in node.children:
+                return result
+            node = node.children[word[0]]
+            word = word[1:]
+            
+        # 판별 로직  # 1
+        if node.word_id >= 0 and node.word_id != index:
+            result.append([index, node.word_id])
+            
+        
+```
+
 
 
 
