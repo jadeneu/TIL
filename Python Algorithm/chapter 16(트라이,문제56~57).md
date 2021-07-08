@@ -1,4 +1,15 @@
 # 목차
+* [chapter 16. 트라이](#16장-트라이)
+* [리트코드](#리트코드)
+  + [문제 56 트라이 구현](#문제-56-트라이-구현)
+  + [문제 56 트라이 구현 풀이](#문제-56-트라이-구현-풀이)
+    - [풀이1. 딕셔너리를 이용해 간결한 트라이 구현](#풀이1-딕셔너리를-이용해-간결한-트라이-구현)
+  + [문제 57 팰린드롬 페어](#문제-57-팰린드롬-페어)
+  + [문제 57 팰린드롬 페어 풀이](#문제-57-팰린드롬-페어-풀이)
+    - [풀이1. 팰린드롬을 브루트 포스로 계산](#풀이1-팰린드롬을-브루트-포스로-계산)
+    - [풀이2. 트라이 구현](#풀이2-트라이-구현)
+    - [문법. @staticmethod 데코레이터](#문법-staticmethod-데코레이터)
+<br><br><br>
 
 # 16장 트라이
 > 트라이(Trie)는 검색 트리의 일종으로 일반적으로 키가 문자열인, 동적 배열 또는 연관 배열을 저장하는 데 사용되는 정렬된 트리 자료구조다.
@@ -29,6 +40,7 @@ apple이므로 그다음은 l 노드를 찾아 내려가면 될 것이고, 만�
 
 ## 리트코드
 ### 문제 56 트라이 구현
+> 461p
 * 트라이의 insert, search, startsWith 메소드를 구현하라.
 
   ```c++
@@ -180,6 +192,7 @@ class Trie:
 <br><br>
 
 ### 문제 57 팰린드롬 페어
+> 466p
 * 단어 리스트에서 words[i] + words[j]가 팰린드롬이 되는 모든 인덱스 조합(i, j)를 구하라(팰린드롬에 대한정의는 138페이지를 참조).
 
 * 예제1
@@ -426,15 +439,64 @@ class Trie:
         if node.word_id >= 0 and node.word_id != index:
             result.append([index, node.word_id])
             
+        # 판별 로직  # 2
+        for palindrome_word_id in node.palindrome_word_ids:
+            result.append([index, palindrome_word_id])
+            
+        return result
         
+class Solution:
+    def palindromePairs(self, words: List[str]) -> List[List[int]]:
+        trie = Trie()
+        
+        for i, word in enumerate(words):
+            trie.insert(i, word)
+            
+        results = []
+        for i, word in enumerate(words):
+            results.extend(trie.search(i, word))
+            
+        return results
 ```
+이 문제는 트라이와 같은 효율적인 자료구조로 접근해야 풀 수 있는 상당히 어려운 문제인 반면, 트라이의 장점을 십분 발휘할 수 있는 매우 좋은 문제이기도 하다.
+<br><br>
 
+#### 문법. @staticmethod 데코레이터
+앞서 풀이4의 전체 코드에서 처음 보는 부분이 눈에 띨 것이다.<br>
+메소드 위에 @staticmethod 라는 표기가 그것인데, 자바에서는 애노테이션(Annotation)이라 부르는 동일한 위치에 있다.<br>
+파이썬에서는 이 부분을 **데코레이터(Decorator)** 라 부른다.<br>
+그중에서 @staticmethod는 자바의 메소드 static 선언과도 비슷한데, **이렇게 정의한 메소드는 클래스와 독립적으로 함수로서의 의미를 강하게 갖는다.**<br>
+실제로 파라미터에도 클래스 메소드에는 항상 따라붙는 self가 빠져 있고, 함수 자체가 별도의 자료형으로 선언되어 있다.
 
+다음과 같이 실험해보자.
+```python
+class CLASS:
+    def a(self):
+        pass
+        
+    @staticmethod
+    def b():
+        pass
+```
+이 같은 클래스가 선언되어 있을 때, 함수 a()와 b()의 타입을 출력해보자.
+```python
+>>> type(CLASS.a), type(CLASS.b)
+(<class 'function'>, <class 'function'>)
+```
+클래스를 생성하지 않고 바깥에서 직접 호출했을 때 타입은 이처럼 둘 다 함수(Function)가 된다.
 
-
-
-
-
+```python
+>>> cls = CLASS()
+>>> type(cls.a), type(cls.b)
+(<class 'method'>, <class 'function'>)
+```
+그러나 클래스를 생성한 후에 함수에 대한 타입을 확인해보면, 클래스 내 함수는 이제 메소드(Method)가 된다.<br>
+그러나 @staticmethod로 선언한 함수는 여전히 함수임을 확인할 수 있다.<br>
+클래스의 메소드가 아니라 여전히 독립된 함수의 의미를 갖는 것이다.<br>
+사실상 클래스 바깥에 함수를 별도로 선언한 것과 같은 의미를 지닌다.<br>
+이렇게 하면 클래스 메소드처럼 자유롭게 클래스 인스턴스에 접근하는 것이 제한된다.<br>
+따라서 **클래스 인스턴스에 접근을 제한하고 분명하게 독립적인 함수로 선언하고자 할 경우 종종 사용된다.**
+<br><br>
 
 
 
