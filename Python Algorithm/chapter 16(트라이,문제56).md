@@ -92,6 +92,14 @@ t.insert('appeal')
 ```
 마찬가지로 트라이를 구성하는 다진 트리는 다음 그림 16-3과 같은 형태가 될 것이다.
 
+<img src="https://user-images.githubusercontent.com/55045377/124861626-ea3cdd80-dfee-11eb-8026-5361a7246dfb.png" width=55% height=55%>
+
+이 그림에서 트라이는, 같은 문자가 같은 자식을 타고 내려가다가, 달라지는 문지부터 서로 다른 노드로 분기된다.<br>
+마지막에는 appeal과 appear가 완성되는 l과 r 노드가 각각 True로 셋팅된다.<br>
+여기까지가 삽입의 기본 원리다.
+
+
+
 
 
 
