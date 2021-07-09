@@ -419,7 +419,7 @@ class Trie:
                 node.palindrome_word_ids.append(index)
             node = node.children[char]
             node.val = char
-        node.word id = index
+        node.word_id = index
         
     def search(self, index, word) -> List[List[int]]:
         result = []
