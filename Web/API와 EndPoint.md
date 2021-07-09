@@ -1,4 +1,10 @@
 # 목차
+* [API](#api)
+* [API의 역할](#api의-역할)
+* [EndPoint](#endpoint)
+---
+* [출처](#출처)
+<br><br><br>
 
 
 # API
@@ -44,9 +50,12 @@ API는 모든 접속을 표준화하기 때문에 기계/ 운영체제 등과 �
 <img src="https://user-images.githubusercontent.com/55045377/125068179-286df600-e0f0-11eb-820b-a35d7764388b.png" width=70% height=70%>
 
 이미지 출처 : https://velog.io/@kho5420/Web-API-%EA%B7%B8%EB%A6%AC%EA%B3%A0-EndPoint
+<br><br>
 
+각각 GET, PUT, DELETE 메소드에 따라 다른 요청을 하는 것을 알 수 있다.
 
-
+결국 Endpoint란 API가 서버에서 자원(resource)에 접근할 수 있도록 하는 URL이다.
+<br><br><br>
 
 
 
