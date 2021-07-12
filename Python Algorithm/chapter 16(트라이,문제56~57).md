@@ -314,7 +314,7 @@ def insert(self, index: int, word: str) -> None:
 results = []
 ...
 while word:
-    lf node.word_id >= 0:
+    if node.word_id >= 0:
         ...
         result.append([index, node.word_id])
 ```
