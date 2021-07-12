@@ -29,7 +29,7 @@
 <img src="https://user-images.githubusercontent.com/55045377/124859754-66352680-dfeb-11eb-9e82-907134a6ea33.png" width=50% height=50%>
 
 이 그림은 apple, appear, appeal 등으로 트라이를 구성한 것이다.<br>
-여기서 만약 apple을찾는다면, a → p → p 순으로 문자별 일치하는 노드를 찾아 내려가면 된다.<br>
+여기서 만약 apple을 찾는다면, a → p → p 순으로 문자별 일치하는 노드를 찾아 내려가면 된다.<br>
 apple이므로 그다음은 l 노드를 찾아 내려가면 될 것이고, 만약 appear를 찾는다면 e 노드를 찾아 내려가면 된다.<br>
 이런 식으로 루트부터 a → p → p → l → e까지 내려가면 단어 apple을 찾을 수 있다.<br>
 이처럼 트라이에서는 각 문자열의 길이만큼만 탐색하면 원하는 결과를 찾을 수 있다.
