@@ -9,6 +9,7 @@
     - [비공개 (private) 클레임](#-3-비공개-private-클레임)
     - [예제 Payload](#예제-payload)
   + [3. 서명(Signature)](#3-서명signature)
+* [JWT Process](#jwt-process)
 ---
 * [출처](#출처)
 <br><br><br>
@@ -232,6 +233,23 @@ console.log('signature: ',signature);
 <img src="https://user-images.githubusercontent.com/55045377/125446155-69feec07-5dd8-4247-a73c-a11cf19713a3.png" width=80% height=80%>
 
 하단의 텍스트가 파란색으로 Signature Verified 라고 뜨면 JWT 토큰이 검증되었다는 것이다.
+<br><br><br>
+
+# JWT Process
+
+<img src="https://user-images.githubusercontent.com/55045377/125468476-2e93cce3-05ff-4d0d-8480-5e9e9ecec68f.png" width=80% height=80%>
+
+1. 사용자가 id와 password를 입력하여 로그인을 시도한다.
+2. 서버는 요청을 확인하고 secret key를 통해 Access token을 발급한다.
+3. JWT 토큰을 클라이언트에 전달한다.
+4. 클라이언트에서 API 을 요청할 때 클라이언트가 Authorization header에 Access token을 담아서 보낸다.
+5. 서버는 JWT Signature를 체크하고 Payload로부터 사용자 정보를 확인해 데이터를 반환한다.
+6. 클라이언트의 로그인 정보를 서버 메모리에 저장하지 않기 때문에 토큰기반 인증 메커니즘을 제공한다.<br>
+인증이 필요한 경로에 접근할 때 서버 측은 Authorization 헤더에 유효한 JWT 또는 존재하는지 확인한다.<br>
+JWT에는 필요한 모든 정보를 토큰에 포함하기 때문에 데이터베이스과 같은 서버와의 커뮤니케이션 오버 헤드를 최소화 할 수 있다.<br>
+Cross-Origin Resource Sharing (CORS)는 쿠키를 사용하지 않기 때문에 JWT를 채용한 인증 메커니즘은 두 도메인에서 API를 제공하더라도 문제가 발생하지 않는다.<br>
+일반적으로 JWT 토큰 기반의 인증 시스템은 위와 같은 프로세스로 이루어진다.<br>
+처음 사용자를 등록할 때 Access token과 Refresh token이 모두 발급되어야 한다.<br>
 
 ---
 이번 포스트에서는 JWT의 구조가 어떻게 되어있는지, 그리고 어떤 과정을 거쳐서 만들어지는지 배울 수 있었다.<br>
@@ -267,7 +285,13 @@ JWT 담당 라이브러리에 설정만 해주면 자동으로 손쉽게 만들�
 # 출처
 * **JWT(JSON Web Token) [[JWT(JSON Web Token)](#jwtjson-web-token)]**
   * https://velopert.com/2389 
-  * https://ko.wikipedia.org/wiki/JSON_%EC%9B%B9_%ED%86%A0%ED%81%B0
+  * https://ko.wikipedia.org/wiki/JSON_%EC%9B%B9_%ED%86%A0%ED%81%B0<br><br>
+* **JWT가 사용되는 경우 [[JWT가 사용되는 경우](#jwt가-사용되는-경우)]**<br>
+  https://velopert.com/2389<br><br>
+* **JWT 토큰 구성 [[JWT 토큰 구성](#jwt-토큰-구성)]**<br>
+  https://velopert.com/2389<br><br>
+* **JWT Process [[JWT Process](#jwt-process)]**<br>
+  http://www.opennaru.com/opennaru-blog/jwt-json-web-token/
 <br><br><br>
 
 # 이어지는 포스트
