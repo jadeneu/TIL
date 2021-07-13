@@ -113,12 +113,87 @@ header: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9
 <br><br>
 
 ### # 2 공개 (public) 클레임
+공개 클레임들은 충돌이 방지된(collision-resistant) 이름을 가지고 있어야 한다.<br>
+충돌을 방지하기 위해서는 클레임 이름을 URI 형식으로 짓는다.
+```js
+{
+    "https://velopert.com/jwt_claims/is_admin": true
+}
+```
+<br><br>
 
+### # 3 비공개 (private) 클레임
+등록된 클레임도 아니고, 공개된 클레임들도 아니다. 양 측간에(보통 클라이언트<->서버) 협의하에 사용되는 클레임 이름들이다.<br>
+공개 클레임과는 달리 이름이 중복되어 충돌이 될 수 있으니 사용할 때에 유의해야한다.
+```js
+{
+    "username": "velopert"
+}
+```
+<br><br>
 
+### 예제 Payload
+```js
+{
+    "iss": "velopert.com",
+    "exp": "1485270000000",
+    "https://velopert.com/jwt_claims/is_admin": true,
+    "userId": "11028373727102",
+    "username": "velopert"
+}
+```
+위 예제 payload는 **2**개의 **등록된 클레임**, **1**개의 **공개 클레임**, **2**개의 **비공개 클레임**으로 이뤄져있다.
 
+위 데이터를 base64 로 인코딩을 해보자!
+* **Node.js 환경에서 인코딩하기**
+```js
+const payload = {
+    "iss": "velopert.com",
+    "exp": "1485270000000",
+    "https://velopert.com/jwt_claims/is_admin": true,
+    "userId": "11028373727102",
+    "username": "velopert"
+};
 
+// encode to base64
+const encodedPayload = new Buffer(JSON.stringify(payload))
+                            .toString('base64')
+                            .replace('=', '');
 
+console.log('payload: ',encodedPayload);
 
+/* result
+payload:  eyJpc3MiOiJ2ZWxvcGVydC5jb20iLCJleHAiOiIxNDg1MjcwMDAwMDAwIiwiaHR0cHM6Ly92ZWxvcGVydC5jb20vand0X2NsYWltcy9pc19hZG1pbiI6dHJ1ZSwidXNlcklkIjoiMTEwMjgzNzM3MjcxMDIiLCJ1c2VybmFtZSI6InZlbG9wZXJ0In0
+*/
+```
+<br>
+JWT 토큰의 두번째 파트가 완성되었다!
+<br><br>
+
+* **주의**<br>
+  **base64**로 인코딩을 할 때 **dA==** 처럼 뒤에 **=** 문자가 한두 개 붙을 때가 있다. 이 문자는 **base64** 인코딩의 **padding** 문자라고 부른다.<br>
+  JWT 토큰은 가끔 URL의 파라미터로 전달 될 때도 있는데, 이 **=** 문자는 **url-safe** 하지 않으므로 제거되어야 한다.<br>
+  패딩이 한 개 생길 때도 있고 두 개 생길 때도 있는데, **전부 지워도**(제거해줘도) 디코딩 할 때 전혀 문제가 되지 않는다.
+<br><br>
+
+## 3. 서명(signature)
+JSON Web Token 의 마지막 부분은 바로 **서명(signature)** 이다.<br>
+이 서명은 헤더의 인코딩값과 정보의 인코딩값을 합친 후 주어진 비밀키로 해쉬를 하여 생성한다.
+
+서명 부분을 만드는 수도코드(pseudocode)의 구조는 다음과 같다.
+```
+HMACSHA256(
+  base64UrlEncode(header) + "." +
+  base64UrlEncode(payload),
+  secret)
+```
+이렇게 만든 해쉬를, **base64** 형태로 나타내면 된다. (문자열을 인코딩 하는게 아닌 **hex → base64** 인코딩을 해야한다)
+
+이 포스트에서 사용된 예제 헤더와 정보를 해싱 해보자!<br>
+먼저, 헤더와 정보의 인코딩 값 사이에 **.** 을 넣어주고 합친다.<br>
+**eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.** eyJpc3MiOiJ2ZWxvcGVydC5jb20iLCJleHAiOiIxNDg1MjcwMDAwMDAwIiwiaHR0cHM6Ly92ZWxvcGVydC5jb20vand0X2NsYWltcy9pc19hZG1pbiI6dHJ1ZSwidXNlcklkIjoiMTEwMjgzNzM3MjcxMDIiLCJ1c2VybmFtZSI6InZlbG9wZXJ0In0
+
+이 값을 비밀키의 값을 **secret** 으로 해싱을 하고 **base64로 인코딩**하면 다음과 같은 값이 나온다.
 
 
 
