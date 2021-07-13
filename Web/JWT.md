@@ -1,4 +1,17 @@
 # 목차
+* [JWT(JSON Web Token)](#jwtjson-web-token)
+* [JWT가 사용되는 경우](#jwt가-사용되는-경우)
+* [JWT 토큰 구성](#jwt-토큰-구성)
+  + [1. 헤더(Header)](#1-헤더header)
+  + [2. 정보(Payload)](#2-정보payload)
+    - [등록된 (registered) 클레임](#-1-등록된-registered-클레임)
+    - [공개 (public) 클레임](#-2-공개-public-클레임)
+    - [비공개 (private) 클레임](#-3-비공개-private-클레임)
+    - [예제 Payload](#예제-payload)
+  + [3. 서명(Signature)](#3-서명signature)
+---
+* [출처](#출처)
+<br><br><br>
 
 # JWT(JSON Web Token)
 > JWT는 다른 JSON 기반 표준에 의존한다: JSON 웹 시그너처 및 JSON 웹 암호화.
@@ -87,7 +100,7 @@ header: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9
   ```
 <br><br>
 
-## 2. 정보(payload)
+## 2. 정보(Payload)
 **Payload** 부분에는 토큰에 담을 정보가 들어있다.<br>
 여기에 담는 정보의 한 ‘조각’ 을 **클레임(claim)** 이라고 부르고, 이는 name / value 의 한 쌍으로 이루어져있다.<br>
 토큰에는 여러 개의 클레임들을 넣을 수 있다.
@@ -176,7 +189,7 @@ JWT 토큰의 두번째 파트가 완성되었다!
   패딩이 한 개 생길 때도 있고 두 개 생길 때도 있는데, **전부 지워도**(제거해줘도) 디코딩 할 때 전혀 문제가 되지 않는다.
 <br><br>
 
-## 3. 서명(signature)
+## 3. 서명(Signature)
 JSON Web Token 의 마지막 부분은 바로 **서명(signature)** 이다.<br>
 이 서명은 헤더의 인코딩값과 정보의 인코딩값을 합친 후 주어진 비밀키로 해쉬를 하여 생성한다.
 
@@ -194,6 +207,39 @@ HMACSHA256(
 **eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.** eyJpc3MiOiJ2ZWxvcGVydC5jb20iLCJleHAiOiIxNDg1MjcwMDAwMDAwIiwiaHR0cHM6Ly92ZWxvcGVydC5jb20vand0X2NsYWltcy9pc19hZG1pbiI6dHJ1ZSwidXNlcklkIjoiMTEwMjgzNzM3MjcxMDIiLCJ1c2VybmFtZSI6InZlbG9wZXJ0In0
 
 이 값을 비밀키의 값을 **secret** 으로 해싱을 하고 **base64로 인코딩**하면 다음과 같은 값이 나온다.
+* **Node.js 환경에서 해싱 및 인코딩하기**
+```js
+const crypto = require('crypto');
+const signature = crypto.createHmac('sha256', 'secret')
+             .update(encodedHeader + '.' + encodedPayload)
+             .digest('base64')
+             .replace('=', '');
+
+console.log('signature: ',signature);
+
+//signature: WE5fMufM0NDSVGJ8cAolXGkyB5RmYwCto1pQwDIqo2w
+```
+이 부분 또한 padding 이 생기면 지워준다.
+
+3번째 부분까지 끝났다!<br>
+지금까지 구한 값들을 **.** 을 중간자로 다 합쳐주면, 하나의 토큰이 완성된다.
+
+**eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.** **eyJpc3MiOiJ2ZWxvcGVydC5jb20iLCJleHAiOiIxNDg1MjcwMDAwMDAwIiwiaHR0cHM6Ly92ZWxvcGVydC5jb20vand0X2NsYWltcy9pc19hZG1pbiI6dHJ1ZSwidXNlcklkIjoiMTEwMjgzNzM3MjcxMDIiLCJ1c2VybmFtZSI6InZlbG9wZXJ0In0.** **WE5fMufM0NDSVGJ8cAolXGkyB5RmYwCto1pQwDIqo2w**<br>
+(위 토큰에선 **.** 을 기준으로 줄이 나뉘어 있지만 실제론 전부 이어져 있음)
+
+이 값을 https://jwt.io/ 의 디버거에 붙여 넣으면 아래와 같다. (JWT.IO 는 브라우저 상에서 JWT 토큰을 검증하고 생성할 수 있게 해주는 디버거 서비스이다)
+
+<img src="https://user-images.githubusercontent.com/55045377/125446155-69feec07-5dd8-4247-a73c-a11cf19713a3.png" width=80% height=80%>
+
+하단의 텍스트가 파란색으로 Signature Verified 라고 뜨면 JWT 토큰이 검증되었다는 것이다.
+
+---
+이번 포스트에서는 JWT의 구조가 어떻게 되어있는지, 그리고 어떤 과정을 거쳐서 만들어지는지 배울 수 있었다.<br>
+토큰에서 필요한 정보를 하나하나 인코딩하고 해싱하는것은 그렇게 대단한 작업은 아니지만 조금은 귀찮기도 하다.<br>
+실제로 JWT 를 서비스에서 사용할 때는 우리가 직접 base64 인코딩을 하거나 SHA256 해싱을 할 일은 없다.<br>
+JWT 담당 라이브러리에 설정만 해주면 자동으로 손쉽게 만들고, 또 검증도 쉽게 해주기 때문이다.
+<br><br><br>
+
 
 
 
@@ -220,4 +266,6 @@ HMACSHA256(
 ---
 # 출처
 * **JWT(JSON Web Token) [[JWT(JSON Web Token)](#jwtjson-web-token)]**
+  * https://velopert.com/2389 
   * https://ko.wikipedia.org/wiki/JSON_%EC%9B%B9_%ED%86%A0%ED%81%B0
+<br><br>
