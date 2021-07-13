@@ -268,4 +268,9 @@ JWT 담당 라이브러리에 설정만 해주면 자동으로 손쉽게 만들�
 * **JWT(JSON Web Token) [[JWT(JSON Web Token)](#jwtjson-web-token)]**
   * https://velopert.com/2389 
   * https://ko.wikipedia.org/wiki/JSON_%EC%9B%B9_%ED%86%A0%ED%81%B0
+<br><br><br>
+
+# 이어지는 포스트
+* **Refresh Token**<br>
+  https://github.com/jadeneu/TIL/blob/main/Web/Refresh%20Token.md
 <br><br>
