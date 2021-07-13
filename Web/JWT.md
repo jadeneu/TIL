@@ -35,7 +35,7 @@ JWT 는 . 을 구분자로 3가지의 문자열로 되어있다. 구조는 다�
 
 * **참고**<br>
 JWT 토큰을 만들때는 JWT를 담당하는 라이브러리가 자동으로 인코딩 및 해싱 작업을 해준다.<br>
-하지만 이 포스트에서는 JWT 토큰이 만들어지는 과정을 더 잘 파악하기 위해 하나하나 Node.js 환경에서 인코딩 및 해싱을 하도록 한다.
+하지만 이 포스트에서는 JWT 토큰이 만들어지는 과정을 더 잘 파악하기 위해 하나하나 **Node.js** 환경에서 인코딩 및 해싱을 하도록 한다.
 <br><br>
 
 ## 헤더(Header)
@@ -45,10 +45,10 @@ JWT 토큰을 만들때는 JWT를 담당하는 라이브러리가 자동으로 �
 * **alg** : 해싱 알고리즘을 지정한다.  해싱 알고리즘으로는 보통 **HMAC SHA256** 혹은 **RSA** 가 사용되며, 이 알고리즘은 토큰을 검증 할 때 사용되는 signature 부분에서 사용된다.
 
   * ***암호학에서 HMAC(keyed-hash message authentication code, hash-based message authentication code)는 암호화 해시 함수와 기밀 암호화 키를 수반하는 특정한 유형의 메시지 인증 코드(MAC)이다.*** SHA-2, SHA-3 등의 암호화 해시 함수는 HMAC 연산을 위해 사용할 수 있다. 그 결과가 되는 MAC 알고리즘은 HMAC-X이며 여기서 X는 사용이 되는 해시 함수(예: **HMAC-SHA256** 또는 HMAC-SHA3-256)를 의미한다. <br>
-  * 출처 : https://ko.wikipedia.org/wiki/HMAC<br><br>
+    - 출처 : https://ko.wikipedia.org/wiki/HMAC<br><br>
     
   * ***RSA 암호는 공개키 암호시스템의 하나로, 암호화뿐만 아니라 전자서명이 가능한 최초의 알고리즘으로 알려져 있다.*** RSA가 갖는 전자서명 기능은 인증을 요구하는 전자 상거래 등에 RSA의 광범위한 활용을 가능하게 하였다.<br>
-  * 출처 : https://ko.wikipedia.org/wiki/RSA_%EC%95%94%ED%98%B8
+    - 출처 : https://ko.wikipedia.org/wiki/RSA_%EC%95%94%ED%98%B8
 
 아래 예제를 살펴보자.
 ```
@@ -57,8 +57,37 @@ JWT 토큰을 만들때는 JWT를 담당하는 라이브러리가 자동으로 �
   "alg": "HS256"
 }
 ```
+(위 예제에서는 HMAC SHA256이 해싱 알고리즘으로 사용된다)
 
+이 정보를 base64로 인코딩을 하면 다음과 같다.
+* **Node.js 환경에서 인코딩하기**
+```js
+const header = {
+  "typ": "JWT",
+  "alg": "HS256"
+};
 
+// encode to base64
+const encodedHeader = new Buffer(JSON.stringify(header))
+                            .toString('base64')
+                            .replace('=', '');
+console.log('header: ',encodedHeader);
+
+/* Result:
+header: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9
+*/
+```
+자, 이제 JWT의 첫번째 파트가 완성되었다!
+<br><br>
+
+* **참고**<br>
+  JSON 형태의 객체가 base64 로 인코딩 되는 과정에서 공백/엔터들이 사라진다. 따라서, 다음과 같은 문자열을 인코딩을 하게 된다.<br><br>
+  ```
+  {"alg":"HS256","typ":"JWT"}
+  ```
+<br><br><br>
+
+## 정보(payload)
 
 
 
