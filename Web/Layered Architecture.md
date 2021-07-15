@@ -47,7 +47,7 @@ Presentation(View) <--> Controller <--> Business(Service) <--> Persistence(DAO) 
 
 애플리케이션의 비지니스 로직 처리와 비지니스와 관련된 도메인 모델의 적합성을 검증하고, 트랜잭션을 처리한다. Control계층과 Persistence계층을 연결하는 역할로서 두 계층이 직접 통신하지 않게 하여 애플리케이션의 유연성을 증가시킨다.
 
-* ***[Transaction](./DB/Transaction.md)***
+* ***[Transaction](../DB/Transaction.md)***
 https://github.com/jadeneu/TIL/blob/main/Web/Layered%20Architecture.md
 
 ### 4. Persistence layer : DAO
