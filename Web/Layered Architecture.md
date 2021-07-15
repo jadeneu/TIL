@@ -48,10 +48,12 @@ Presentation(View) <--> Controller <--> Business(Service) <--> Persistence(DAO) 
 애플리케이션의 비지니스 로직 처리와 비지니스와 관련된 도메인 모델의 적합성을 검증하고, 트랜잭션을 처리한다. Control계층과 Persistence계층을 연결하는 역할로서 두 계층이 직접 통신하지 않게 하여 애플리케이션의 유연성을 증가시킨다.
 
 * ***[Transaction](../DB/Transaction.md)***
-https://github.com/jadeneu/TIL/blob/main/Web/Layered%20Architecture.md
 
 ### 4. Persistence layer : DAO
 영구 데이터를 빼내어 객체화 시키며, 영구 저장소에 데이터를 저장, 수정, 삭제하는 계층이다. 데이터베이스나 파일에 접근하여 데이터를 CRUD하는 계층이다.
+
+* ***DAO란 Data Access Object의 약어로, Database의 data에 access하는 트랜잭션 객체이다.***<br>
+  출처 : https://genesis8.tistory.com/214
 
 ### 5. Domain Model Layer : VO, DTO
 관계형 데이터베이스의 엔티티와 비슷한 개념을 가지는 것으로 데이터 객체를 말한다.
@@ -70,7 +72,6 @@ https://github.com/jadeneu/TIL/blob/main/Web/Layered%20Architecture.md
 ---
 위와 같이 계층을 분리하는 이유는 간단하다. 한 곳에서 위의 모든 작업이 한꺼번에 이루어진다면 코드의 복잡성 증가, 유지보수의 어려움과 유연성 부족, 중복 코드의 증가, 낮은 확장성 등의 문제가 발생하기 때문이다.
 <br><br><br>
-
 
 
 
