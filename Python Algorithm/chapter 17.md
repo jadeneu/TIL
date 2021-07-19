@@ -80,6 +80,15 @@ i와 j를 비교하는 순서는 앞에서부터 할 수 있고 뒤에서부터 
 이 수도코드는 퀵 정렬의 메인 함수에서부터 시작한다.<br>
 파티션을 나누고 각각 재귀 호출하는 전형적인 분할 정복 구조를 띤다. <br>
 이 수도코드를 실제 동작 가능한 파이썬 코드로 구현해보면 다음과 같다.
+```python
+def quicksort(A, lo, hi):
+...
+    if lo < hi:
+        pivot = partition(lo, hi)
+        quicksort(A, lo, pivot - 1)
+        quicksort(A, pivot + 1, hi)
+```
+이제 리스트 17-3에서 파티션을 나누는 함수의 수도코드를 살펴보자.
 
 
 
