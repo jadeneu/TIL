@@ -107,6 +107,71 @@ def quicksort(A, lo, hi):
 이 코드는 앞서 언급한 퀵 소트의 가장 간단한 분할 알고리즘인 로무토 파티션 수도코드로, 로무토 파티션은 맨 오른쪽을 피벗으로 정하는 가장 단순한 방식이다.<br>
 이를 파이썬 코드로 구현하면 다음과 같다.<br>
 수도코드와 기본적인 알고리즘은 동일하며, 변수명만 i, j에서 left, right로, 좀 더 직관적으로 살짝 수정해봤다.
+```python
+def partition(lo, hi):
+    pivot = A[hi]
+    left = lo
+    for right in range(lo, hi):
+        if A[right] < pivot:
+            A[left], A[right] = A[right], A[left]
+            left += 1
+    A[left], A[hi] = A[hi], A[left]
+    return left
+```
+여기서 피벗은 맨 오른쪽 값을 기준으로 하며, 이를 기준으로 2개의 포인터가 이동해서 오른쪽 포인터의 값이 피벗보다 작다면 서로 스왑하는 형태로 진행된다.<br>
+이를 도식화해보면 다음 그림 17-4와 같다.
+
+<img src="https://user-images.githubusercontent.com/55045377/126113632-8b83244b-d86f-44db-9363-cdacebd25265.png" width=50% height=50%>
+
+이 그림에서 보듯이 오른쪽 right 포인터가 이동하면서 피벗의 값이 오른쪽 값보다 더 클 때, 왼쪽과 오른쪽의 스왑이 진행된다.<br>
+스왑 이후에는 왼쪽 left 포인터가 함께 이동한다.<br>
+여기서 피벗의 값은 4 이므로, 오른쪽 포인터가 끝에 도달하게 되면 4 미만인 값은 왼쪽으로, 4 이상인 값은 오른쪽에 위치하게 된다. <br>
+그리고 왼쪽 포인터의 위치로 피벗 아이템이 이동한다.<br>
+즉 그림 17-4에서 최종 결과인 8)을 보면, 4를 기준으로 작은 값은 왼쪽에, 큰 값은 오른쪽으로 분할되어 있고, 피벗이 그 중앙으로 이동하는 모습을 확인할 수 있다.<br>
+이렇게 계속 분할하면서 정복을 진행하여 코드 기준으로 lo < hi를 만족하지 않을 때까지, 즉 서로 위치가 역전할 때까지 계속 재귀로 반복되면서 정렬이 완료된다.<br>
+중첩 함수를 이용해 파이썬답게 구현해 좀 더 깔끔하게 정리한 전체 코드는 다음과 같다.
+```python
+def quicksort(A, lo, hi):
+    def partition(lo, hi):
+        pivot = A[hi]
+        1eft = lo
+        for right in range(lo, hi):
+            if A[right] < pivot:
+                A[left], A[right] = A[right], A[left]
+                left += 1
+        A[left], A[hi] = A[hi], A[left]
+        return left
+        
+    if lo < hi:
+        pivot = partition(lo, hi)
+        quicksort(A, lo, pivot - 1)
+        quicksort(A, pivot + 1, hi)
+```
+퀵 정렬은 그 이름처럼 매우 빠르며 굉장히 효율적인 알고리즘이다. 그러나 최악의 경우에는 O(η2) 이 된다.<br>
+만약 이미 정렬된 배열이 입력값으로 들어왔다고 가정해보자.<br>
+이 경우 피벗은 계속 오른쪽에 위치하게 되므로 파티셔닝이 전혀 이뤄지지 않는다.<br>
+이때 n번의 라운드에 걸쳐 결국 전체를 비교하기 때문에, 버블 정렬과 다를 바 없는 최악의 성능을 보이게 된다.<br>
+항상 일정한 성능을 보이는 병합 정렬과 달리, 퀵 정렬은 이처럼 입력값에 따라 성능 편차가 심한 편이다.<br>
+하지만 피벗을 선택하는 알고리즘을 개선해 퀵 정렬을 좀 더 최적화하는 등 이미 다양한 연구 결과가 많이 나와 있기도 하다.
+<br><br>
+
+### 퀵 정렬(quick sort) 알고리즘의 개념 요약
+* **과정 설명**
+  1. 리스트 안에 있는 한 요소를 선택한다. 이렇게 고른 원소를 피벗(pivot) 이라고 한다.
+  2. 피벗을 기준으로 피벗보다 작은 요소들은 모두 피벗의 왼쪽으로 옮겨지고 피벗보다 큰 요소들은 모두 피벗의 오른쪽으로 옮겨진다. (피벗을 중심으로 왼쪽: 피벗보다 작은 요소들, 오른쪽: 피벗보다 큰 요소들)
+  3. 피벗을 제외한 왼쪽 리스트와 오른쪽 리스트를 다시 정렬한다.
+      * 분할된 부분 리스트에 대하여 순환 호출 을 이용하여 정렬을 반복한다.
+      * 부분 리스트에서도 다시 피벗을 정하고 피벗을 기준으로 2개의 부분 리스트로 나누는 과정을 반복한다.
+  4. 부분 리스트들이 더 이상 분할이 불가능할 때까지 반복한다.
+      * 부분 리스트들이 더 이상 분할이 불가능할 때까지 반복한다.<br><br>
+        <img src="https://user-images.githubusercontent.com/55045377/126121380-afed4e11-df2f-4612-bc5e-88d9c795057f.png" width=60% height=60%>
+        
+<br><br>
+
+### 퀵 정렬(quick sort) 알고리즘의 예제
+배열에 5, 3, 8, 4, 9, 1, 6, 2, 7이 저장되어 있다고 가정하고 자료를 오름차순으로 정렬해 보자.<br><br>
+
+<img src="https://user-images.githubusercontent.com/55045377/126122115-5db293b7-a0a3-4dc5-a76d-0ccf25a9a0af.png" width=80% height=80%>
 
 
 
@@ -132,3 +197,12 @@ def quicksort(A, lo, hi):
 
 
 
+
+---
+# 출처
+* **퀵 정렬(quick sort) 알고리즘의 개념 요약**<br>
+  https://gmlwjd9405.github.io/2018/05/10/algorithm-quick-sort.html
+* **퀵 정렬(quick sort) 알고리즘의 예제**<br>
+  https://gmlwjd9405.github.io/2018/05/10/algorithm-quick-sort.html
+  
+<br><br><br>
