@@ -88,7 +88,26 @@ def quicksort(A, lo, hi):
         quicksort(A, lo, pivot - 1)
         quicksort(A, pivot + 1, hi)
 ```
+<br>
+
 이제 리스트 17-3에서 파티션을 나누는 함수의 수도코드를 살펴보자.
+* **리스트 17-3** 퀵 정렬 로무토 파티션 함수 수도코드
+
+  ```
+  partition(A, lo, hi)
+      pivot := A[hi]
+      i := lo
+      for j := lo to hi do
+          if A[j] < pivot then
+              swap A[i] wlth A[j]
+              i := i + 1
+      swap A[i] with A[hi]
+      return i
+  ```
+이 코드는 앞서 언급한 퀵 소트의 가장 간단한 분할 알고리즘인 로무토 파티션 수도코드로, 로무토 파티션은 맨 오른쪽을 피벗으로 정하는 가장 단순한 방식이다.<br>
+이를 파이썬 코드로 구현하면 다음과 같다.<br>
+수도코드와 기본적인 알고리즘은 동일하며, 변수명만 i, j에서 left, right로, 좀 더 직관적으로 살짝 수정해봤다.
+
 
 
 
