@@ -5,6 +5,7 @@
   * [클라이언트의 요청에 따른 흐름도](#클라이언트의-요청에-따른-흐름도)
 ---
 * [출처](#출처)
+* [참고하면 좋은 링크](#참고하면-좋은-링크)
 <br><br><br>
 
 # 아키텍쳐(Architecture)
@@ -124,5 +125,10 @@ Presentation(View) <--> Controller <--> Business(Service) <--> Persistence(DAO) 
     * https://walbatrossw.github.io/etc/2018/02/26/etc-layered-architecture.html#4-persistence-layer--dao
   * **클라이언트의 요청에 따른 흐름도 [[클라이언트의 요청에 따른 흐름도](#클라이언트의-요청에-따른-흐름도)]**
     * https://velog.io/@sj950902/%EA%B3%84%EC%B8%B5%ED%99%94-%EC%95%84%ED%82%A4%ED%85%8D%EC%B3%90Layered-Architecture
+
+<br><br>
+
+# 참고하면 좋은 링크
+* https://velog.io/@inyong_pang/Flask-Layered-Architecture-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0
 
 <br><br><br>
