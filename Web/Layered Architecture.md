@@ -132,7 +132,6 @@ Presentation(View) <--> Controller <--> Business(Service) <--> Persistence(DAO) 
   * https://velog.io/@sj950902/%EA%B3%84%EC%B8%B5%ED%99%94-%EC%95%84%ED%82%A4%ED%85%8D%EC%B3%90Layered-Architecture
 * **계층화 아키텍쳐(Layered Architecture) [[계층화 아키텍쳐(Layered Architecture)](#계층화-아키텍쳐layered-architecture)]**
   * https://velog.io/@sj950902/%EA%B3%84%EC%B8%B5%ED%99%94-%EC%95%84%ED%82%A4%ED%85%8D%EC%B3%90Layered-Architecture
-  * https://riiidtechblog.medium.com/gradle%EA%B3%BC-%ED%95%A8%EA%BB%98%ED%95%98%EB%8A%94-backend-layered-architecture-97117b344ba8
   * https://velog.io/@matisse/%EB%A0%88%EC%9D%B4%EC%96%B4%EB%93%9C-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98-%ED%8C%A8%ED%84%B4
   * **계층화 아키텍쳐의 구성요소 [[계층화 아키텍쳐의 구성요소](#계층화-아키텍쳐의-구성요소)]**
     * https://walbatrossw.github.io/etc/2018/02/26/etc-layered-architecture.html#4-persistence-layer--dao
