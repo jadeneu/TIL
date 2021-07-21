@@ -22,9 +22,21 @@ layered architecture란 말 그대로 계층이 나뉘어져 있는 아키텍쳐
 아키텍쳐의 컴포넌트들은 각각 어플리케이션의 특정한 역할을 수행하도록 가로로 나누어져 계층을 이룬다.<br>
 가장 널리 알려진 아키텍쳐로 전통적인 IT workflow 와 조직 구성과 잘 맞아 떨어져서 많은 비즈니스에서 채택된다.<br>
 주로 3가지 계층으로 이루어져 있다.
-* 유저 + 브라우저와 상호작용하는 로직이 잇는 **Presentation Layer**
-* 요청에 맞는 비즈니스 로직을 수행하는 **Business Layer**
-* 데이터를 저장하고 관리하는 **persistence Layer**가 있다.
+### - Presentation Layer
+* 유저 + 브라우저와 상호작용하는 로직이 있다.
+* 시스템 사용자, 클라이언트 시스템과 직접 연결되는 부분. 웹사이트에서는 UI에 해당하고 백엔드는 `엔드포인트 부분`에 해당한다. 여기에서는 두 가지 로직을 구현한다.
+  * API endpoint 정의한다.
+  * 전송된 HTTP request를 읽어들인다.
+
+### - Business Layer
+* 요청에 맞는 비즈니스 로직을 수행한다.
+* `시스템이 구현하는 로직`을 이 레이어에서 구현한다. 예를 들어 사용자가 전송하는 메시지가 300자를 넘을 경우, 이를 확인해 초과할 경우 거부하는 로직을 짜는 곳이다.
+
+### - Persistence Layer
+* 데이터를 저장하고 관리하는 등 데이터베이스와 관련된 로직을 구현하는 부분이다. 
+* business layer에서 필요한 데이터 생성, 수정, 읽기를 처리해 `데이터베이스에서 데이터를 저장, 수정, 읽어들이기`를 하는 역할을 한다.
+
+<br>
 
 각각의 계층은 다른 계층과 상호작용하지만, 다른 계층에서 발생하는 로직에는 신경쓰지 않아도 된다.<br>
 예를 들어, 데이터를 다루는 persistence layer는 그 데이터가 보여지는 presentation layer를 신경쓰지 않아도 되며, 오로지 자신의 역할에만 집중하면 된다.
@@ -121,6 +133,7 @@ Presentation(View) <--> Controller <--> Business(Service) <--> Persistence(DAO) 
 * **계층화 아키텍쳐(Layered Architecture) [[계층화 아키텍쳐(Layered Architecture)](#계층화-아키텍쳐layered-architecture)]**
   * https://velog.io/@sj950902/%EA%B3%84%EC%B8%B5%ED%99%94-%EC%95%84%ED%82%A4%ED%85%8D%EC%B3%90Layered-Architecture
   * https://riiidtechblog.medium.com/gradle%EA%B3%BC-%ED%95%A8%EA%BB%98%ED%95%98%EB%8A%94-backend-layered-architecture-97117b344ba8
+  * https://velog.io/@matisse/%EB%A0%88%EC%9D%B4%EC%96%B4%EB%93%9C-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98-%ED%8C%A8%ED%84%B4
   * **계층화 아키텍쳐의 구성요소 [[계층화 아키텍쳐의 구성요소](#계층화-아키텍쳐의-구성요소)]**
     * https://walbatrossw.github.io/etc/2018/02/26/etc-layered-architecture.html#4-persistence-layer--dao
   * **클라이언트의 요청에 따른 흐름도 [[클라이언트의 요청에 따른 흐름도](#클라이언트의-요청에-따른-흐름도)]**
