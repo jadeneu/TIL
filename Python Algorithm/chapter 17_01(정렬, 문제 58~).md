@@ -243,6 +243,97 @@ half는 slow의 바로 이전 값으로 한다.<br>
 그림 17-6에서는 5가 half가 된다. 
 
 이제 다음과 같이 분할해서 재귀 호출을 진행해보자.
+```python
+def sortList(self, head: ListNode) -> ListNode:
+    ...
+    l1 = self.sortList(head)
+    l2 = self.sortList(slow)
+```
+head는 시작 노드이고, slow는 우리가 탐색을 통해 발견한 중앙 지점이다.<br>
+그림 17-6에서는 3이 slow가 된다.<br>
+이 값을 기준으로 계속 재귀 호출을 해나가면 결국 연결 리스트는 -1, 5, 3, 4, 0 단일 아이템으로 모두 쪼개진다.
+```python
+def sortList(self, head: ListNode) -> ListNode:
+    ...
+    return self.mergeTwoLists(l1, l2)
+```
+이처럼 마지막에는 최종적으로 쪼갰던 아이템을 다시 합쳐서 리턴한다. <br>
+그냥 합치는 것이 아니라 다음처럼 크기 비교를 통해 정렬하면서 이어 붙인다.
+```python
+def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
+    if l1 and l2:
+        if l1.va1 > l2.va1:
+            l1, l2 = l2, l1
+        l1.next = self.mergeTwoLists(l1.next, l2)
+        
+    return l1 or l2
+```
+mergeTwoLists() 메소드는 연결 리스트를 입력값으로 받아, 길이가 얼마가 되든 재귀 호출을 통해 l1의 포인터를 이동하면서 정렬해 리턴한다.<br>
+여기서 return l1 or l2는 l1에 값이 있다면 항상 l1을 리턴하고, l1이 None인 경우 l2를 리턴한다.<br>
+즉 l1이 우선이며, 다음과 같은 간단한 실험을 통해 확인할 수 있다.
+```python
+>>> 1 or None
+l
+>>> 1 or 2
+1
+>>> None or 2
+2
+```
+
+이 부분은 앞서 8장 14번 '두 정렬 리스트 병합' 문제와 동일한 방식으로 풀이가 가능하다.<br>
+그때는 다음과 같은 코드로 풀이했다.
+```python
+def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
+    if (not l1) or (l2 and l1.va1 > l2.va1):
+        l1, l2 = l2, l1
+    if l1:
+        l1.next = se1f.mergeTwoLists(l1.next, l2)
+    return l1
+```
+굳이 l1 or l2를 비교하지 않고 l1이 None이라면 미리 스왑해버리는 방식인데, 어떤 식으로 풀이하든 결과는 동일하다.<br>
+둘 중 아무거나 마음에 드는 구현을 택하면 된다.
+
+그렇다면 과연 이 함수가 잘 동작하는지, 최종적으로 비교가 진행될 -1->5와 0->3->4의 마지막 정렬 부분을 그림으로 나타내 자세히 살펴보자.
+
+<img src="https://user-images.githubusercontent.com/55045377/126434287-0a59ee03-fef6-44bf-bd3e-f01ae1496fe6.png" width=50% height=50%>
+
+코드에서 처음에는 l1에 -1, l2에는 0이 입력값으로 들어오고, l1의 next인 5는 0보다 크기 때문에 스왑한다.<br>
+이후에는 스왑 없이 계속 next 순서로 3, 4로 연결된다.<br>
+마지막에는 4의 next가 None이고, 이 경우 return l1 or l2 부분에서 l2 값이 리턴되며, 즉 5가 리턴된다.<br>
+그림 17-7과 같은 순서로 진행이 되며, 재귀 호출된 부분들을 거슬러서 풀어보면 -1->0->3->4->5. <br>
+최종 정렬이 잘 진행됐음을 확인할 수 있다.
+
+이제 전체 코드는 다음과 같이 깔끔하게 정리할수 있다.
+```python
+# 두 정렬 리스트 병합
+def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
+    if l1 and l2:
+        if l1.va1 > l2.va1:
+            l1, l2 = l2, l1
+        l1.next = self.mergeTwoLists(l1.next, l2)
+        
+    return l1 or l2
+    
+def sortList(self, head: ListNode) -> ListNode:
+    if not (head and head.next):
+        return head
+        
+    # 런너 기법 활용
+    half, slow, fast = None, head, head
+    while fast and fast.next:
+        half, slow, fast = slow, slow.next, fast.next.next
+    half.next = None
+    
+    # 분할 재귀 호출
+    l1 = self.sortList(head)
+    l2 = self.sortList(slow)
+    
+    return self.mergeTwoLists(l1, l2)
+```
+이 풀이는 **320밀리초**가 걸려, 나쁘지 않은 실행 시간 속도를 보인다.
+<br><br><br>
+
+### 풀이2. 퀵 정렬
 
 
 
