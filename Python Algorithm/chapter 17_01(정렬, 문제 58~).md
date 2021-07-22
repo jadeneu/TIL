@@ -1,4 +1,21 @@
 # 목차
+* [chapter 17. 정렬](#17장-정렬)
+  + [버블 정렬](#버블-정렬)
+  + [병합 정렬](#병합-정렬)
+  + [퀵 정렬](#퀵-정렬)
+    - [퀵 정렬(quick sort) 알고리즘의 개념 요약](#퀵-정렬quick-sort-알고리즘의-개념-요약)
+    - [퀵 정렬(quick sort) 알고리즘의 예제](#퀵-정렬quick-sort-알고리즘의-예제)
+  + [안정 정렬 vs 불안정 정렬](#안정-정렬-vs-불안정-정렬)
+* [리트코드](#리트코드)
+  + [문제 58 리스트 정렬](#문제-58-리스트-정렬)
+  + [문제 58 리스트 정렬 풀이](#문제-58-리스트-정렬-풀이)
+    - [풀이1. 병합 정렬](#풀이1-병합-정렬)
+    - [풀이2. 퀵 정렬](#풀이2-퀵-정렬)
+    - [풀이3. 내장 함수를 이용하는 실용적인 방법](#풀이3-내장-함수를-이용하는-실용적인-방법)
+---
+* [References](#references)
+<br><br><br>
+
 
 # 17장 정렬
 > 정렬 알고리즘은 목록의 요소를 특정 순서대로 넣는 알고리즘이다. 대개 숫자식 순서(Numerical Order)와 사전식 순서(Lexicographical Order)로 정렬한다.
@@ -448,10 +465,7 @@ def sortList(self, head: ListNode) -> ListNode:
 
 
 ---
-# 출처
-* **퀵 정렬(quick sort) 알고리즘의 개념 요약**<br>
-  https://gmlwjd9405.github.io/2018/05/10/algorithm-quick-sort.html
-* **퀵 정렬(quick sort) 알고리즘의 예제**<br>
-  https://gmlwjd9405.github.io/2018/05/10/algorithm-quick-sort.html
+# References
+* https://gmlwjd9405.github.io/2018/05/10/algorithm-quick-sort.html
   
 <br><br><br>
