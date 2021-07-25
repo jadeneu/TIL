@@ -1,4 +1,18 @@
 # 목차
+* [chapter 17. 정렬](#17장-정렬)
+  * [문제 59 구간 병합](#문제-59-구간-병합)
+  * [문제 59 구간 병합 풀이](#문제-59-구간-병합-풀이)
+    * [풀이1. 정렬하여 병합](#풀이1-정렬하여-병합)
+    * [문법. 콤마(,) 연산자](#문법-콤마-연산자)
+  * [문제 60 삽입 정렬 리스트](#문제-60-삽입-정렬-리스트)
+  * [문제 60 삽입 정렬 리스트 풀이](#문제-60-삽입-정렬-리스트-풀이)
+    * [삽입 정렬이란?](#삽입-정렬이란)
+    * [풀이1. 삽입 정렬](#풀이1-삽입-정렬)
+    * [풀이2. 삽입 정렬의 비교 조건 개선](#풀이2-삽입-정렬의-비교-조건-개선)
+---
+* [References](#references)
+
+<br><br><br>
 
 # 17장. 정렬
 ## 문제 59 구간 병합
@@ -97,6 +111,43 @@ merged += i.,
 <br><br>
 
 ## 문제 60 삽입 정렬 리스트 풀이
+### 삽입 정렬이란?
+삽입 정렬은 자료 배열의 모든 요소를 앞에서부터 차례대로 이미 정렬된 배열 부분과 비교하여, 자신의 위치를 찾아 삽입함으로써 정렬을 완성하는 알고리즘이다.
+
+* 예제<br>
+1.
+```
+31	25	12	22	11			처음 상태.
+31	[25]	12	22	11		 	두 번째 원소를 부분 리스트에서 적절한 위치에 삽입한다.
+<25>	31	[12]	22	11		 	세 번째 원소를 부분 리스트에서 적절한 위치에 삽입한다.
+<12>	25	31	[22]	11		 	네 번째 원소를 부분 리스트에서 적절한 위치에 삽입한다.
+12	<22>	25	31	[11]		 	마지막 원소를 부분 리스트에서 적절한 위치에 삽입한다.
+<11>	12	22	25	31		 	종료.
+```
+
+<br>
+
+2.
+
+<img src="https://user-images.githubusercontent.com/55045377/126889378-fc8986ed-25c4-4df5-a8f8-a80f5a776230.png" width=30% height=30%>
+
+* 소스 코드
+```python
+def insert_sort(x):
+    for i in range(1, len(x)):
+        j = i - 1
+        key = x[i]
+        while x[j] > key and j >= 0:
+            x[j+1] = x[j]
+            j = j - 1
+        x[j+1] = key
+    return x
+```
+
+시간 복잡도는 **O(n^2)** 이다.
+
+<br><br>
+
 ### 풀이1. 삽입 정렬
 입력값 4->2->1->3 연결 리스트이고 head는 루트 노드인 4를 가리킬 때의 삽입 정렬 과정을 그림 17-10으로 나타냈다.
 
@@ -137,17 +188,88 @@ def insertionSortList(self, head: ListNode) -> ListNode:
             
         cur.next, head.next, head = head, cur.next, head.next
 
-        cur = parent
+        cur = parent   # 1
     return cur.next
 ```
-매우 깔끔한 삽입 정렬 풀이법이다.그러나 수행시간은 **1936 밀리초**, 거의 2초가 걸렸다.<br>
+<br>
+
+* 실제 돌려볼 수 있는 코드
+```python
+class ListNode(object):
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+class Solution(object):
+    def insertionSortList(self, head: ListNode) -> ListNode:
+        cur = parent = ListNode(None)
+        while head:
+            while cur.next and cur.next.val < head.val:
+                cur = cur.next
+                
+            cur.next, head.next, head = head, cur.next, head.next
+    
+            cur = parent
+        return cur.next
+        
+solution = Solution()
+n1 = ListNode(3)
+n2 = ListNode(1,n1)
+n3 = ListNode(2,n2)
+n4 = ListNode(4,n3)
+print(solution.insertionSortList(n4))
+```
+
+매우 깔끔한 삽입 정렬 풀이법이다. 그러나 수행시간은 **1936 밀리초**, 거의 2초가 걸렸다.<br>
 이 정도면 타임아웃으로 처리되어도 할 말이 없다. <br>
-분명 문제에서 제시한 대로 삽입 정렬을 정석대로 풀이했는데 왜 이런 결과가 나왔을까? 좀 더 최적화할 방
-법은 없을까?
+분명 문제에서 제시한 대로 삽입 정렬을 정석대로 풀이했는데 왜 이런 결과가 나왔을까? 좀 더 최적화할 방법은 없을까?
 
 <br><br>
 
 ### 풀이2. 삽입 정렬의 비교 조건 개선
+사실 풀이1은 제대로 된 삽입 정렬 풀이가 아니다.<br>
+왜냐면 삽입 정렬은 정답 셋과 정답이 아닌 셋을 비교할 때, 정답 셋의 가장 큰 값부터 왼쪽 방향으로 내려가며 스왑되는 위치를 찾는다.<br>
+그러나 이 문제의 경우 연결 리스트이고 게다가 이중 연결 리스트도 아니기 때문에, 큰 값에서부터 작은 값까지 거꾸로 거슬러 내려가는 게 사실상 불가능하다. <br>
+그러다 보니 매번 가장 작은 값부터 차례대로 크기 비교를 하는 매우 비효율적인 연산이 수행된다. <br>
+풀이1 이 2초씩이나 걸린 이유이기도 하다.
+
+그렇다면 어떻게 이 부분을 개선할 수 있을까? 풀이1을 가만히 살펴보면 "# 1" 부분인 다음과 같은 코드가 눈에 띈다.
+```python
+cur = parent
+```
+다음번 head를 비교할 때 정렬된 노드인 cur도 다시 맨 처음으로 되돌아가라는 명령인데, **만약 다음번 head도 cur보다 작은 상태라면 굳이 되돌아가지 않아도 되지 않을까?**<br>
+되돌아가지 않고 그 상태에서 계속 비교를 진행할 수 있다면, 비교 횟수를 획기적으로 줄일 수 있을 것 같다.<br>
+거꾸로 비교할 수 없는 대신, 필요할 때만 돌아가는 형태로 개선할 수 있을 것이고, 되돌아가는 경우는 cur가 head보다 클 때만 하면 될 것 같다.<br>
+cur = parent 앞에 조건문을 추가해 다음과 같이 수정해 보자.
+```python
+if head and cur.val > head.val:
+    cur = parent
+```
+이동한 다음번 head가 None일 수도 있기 때문에 존재 여부를 확인하고 cur와 head의 값을 비교해 꼭 필요할 경우에만 되돌아가게 했다. <br>
+cur.val이 head.val보다 작다면, 그다음 반복 때 while 구문이 실행되지 않고 바로 교환이 진행될 것이므로, 불필요한 while 반복은 진행하지 않아도 된다. <br>
+수정 사항을 반영한 전체 코드는 다음과 같다.
+```python
+def insertionSortList(self, head: ListNode) -> ListNode:
+    # 초깃값 변경
+    cur = parent = ListNode(0)
+    while head:
+        while cur.next and cur.next.val < head.val:
+            cur = cur.next
+            
+        cur.next, head.next, head = head, cur.next, head.next
+
+        # 필요한 경우에만 cur 포인터가 되돌아가도록 처리
+        if head and cur.val > head.val:
+            cur = parent
+    return parent.next
+```
+cur.val을 비교할 때 None타입이면 에러가 발생하므로, 이 부분 때문에 초기 값을 풀이1의 ListNode(None) 에서 ListNode(0)으로 약간 수정해봤다.<br>
+이외에는 조건문 한 줄을 추가한 것 외에 모든 부분이 동일하다.<br>
+
+수행 시간은 **180밀리초**가 걸렸고, 단 한 줄의 조건문으로 기존 대비 10배 이상 성능을 높일 수 있었다.<br>
+이처럼 약간의 최적화만 거쳐도 성능을 획기적으로 개선할 수 있으며, 얼마든지 알고리즘을 최적화할 수 있다.
+
+<br><br><br>
 
 
 
@@ -164,24 +286,8 @@ def insertionSortList(self, head: ListNode) -> ListNode:
 
 
 
+---
+# References
+* https://ko.wikipedia.org/wiki/%EC%82%BD%EC%9E%85_%EC%A0%95%EB%A0%AC
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<br><br><br>
