@@ -45,7 +45,8 @@
 def to_swap(n1: int, n2: int) -> bool:
     return str(n1) + str(n2) < str(n2) + str(n1)
 ```
-이 함수의 결과가 True라면 위치 변경이 이뤄져야 한다.<br>
+이 함수의 결과가 True라면 위치 변경이 이뤄져야 한다.
+
 앞서 삽입 정렬을 열심히 풀어봤으니, 리스트 17-4과 같은 수도코드를 참고하여 이 문제도 삽입 정렬로 다시 한번 풀이해보자.
 * **리스트 17-4** 삽입 정렬 수도코드
 ```
@@ -73,6 +74,36 @@ def largestNumber(self, nums: List[int]) -> str:
         i += 1
         ...
 ```
+이 파이썬 코드가 수도코드 알고리즘과 다른 한 가지 부분이라면, 수도코드의 while 문의 A[j-1] > A[j] 비교를 self.to_swap(nums[j - 1], nums[j]) 비교로 변경한 부분이다.<br>
+이 부분은 이전 값이 더 커서 스왑이 필요한지 여부를 체크하는 로직인데, 우리는 이 부분을 문제에 적합하게 단순 비교가 아닌 to_swap( )이라는 함수를 통해 스왑 여부를 판별할 수 있도록 구현했고, 따라서 이 함수를 호출하는 형태로 코드를 변경했다.
+
+배열은 이처럼 깔끔하게 구현할 수 있기 때문에 연결 리스트 때처럼 포인터를 맨 앞으로 돌릴지 비교하는 등의 최적화는 수행할 필요가 없다.<br>
+아울러 정렬된 리스트 변수를 별도로 선언했던 것과 달리 원래 삽입 정렬을 배열로 구현하게 되면, 이처럼 제자리 정렬(In-Place Sort)이 가능하여 공간 복잡도도 줄일 수 있다.
+
+이제 전체 코드는 다음과 같다.
+```python
+class Solution:
+    # 문제에 적합한 비교 함수
+    @staticmethod
+    def to_swap(n1: int, n2: int) -> bool:
+        return str(n1) + str(n2) < str(n2) + str(n1)
+        
+    # 삽입 정렬 구현
+    def largestNumber(self, nums: List[int]) -> str:
+        i = 1
+        while i < len(nums):
+            j = i
+            while j > 0 and self.to_swap(nums[j - 1], nums[j]):
+                nums[j], nums[j - 1] = nums[j - 1], nums[j]
+                j -= 1
+            i += 1
+            
+        return str(int(''.join(map(str, nums))))  # 1
+```
+마지막에 리턴하는 '# 1' 부분이 다소 번잡하다. <br>
+원래 ''.join(map(str, nums)) 정도면 끝나게 되겠지만, 여기서는 입력값이 ["0", "0"] 인 경우도 있기 때문에 그냥 문자로 처리해 버리면 리턴값이 00이 되기 때문이다.<br>
+따라서 join( ) 결과를 int로 바꿔서 00 이 0이 되도록 만들어 준 후, 다시 str로 변경해서 그런 일이 없게 했다.
+
 
 
 
