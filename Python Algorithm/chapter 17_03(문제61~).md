@@ -228,8 +228,22 @@ white와 blue 사이는 계속 비교가 진행된다. <br>
 이제 이 알고리즘을 코드로 정리하면 전체 코드는 다음과 같다.
 
 ```python
-
+def sortColors(self, nums: List[int]) -> None:
+    red, white, blue = 0, 0, len(nums)
+    
+    while white < blue:
+        if nums[white] < 1:
+            nums[red], nums[white] = nums[white], nums[red]
+            white += 1
+            red += 1
+        elif nums[white] > 1:
+            blue -= 1
+            nums[white], nums[blue] = nums[blue], nums[white]
+        else:
+            white += 1
 ```
+수도코드와는 변수명이 다르고 mid 변수를 값 1로 직접 대입해서 풀이했다는 차이만 있을 뿐, 알고리즘은 완전히 동일하다.<br>
+동일한 알고리즘으로 잘 풀이할 수 있었다.
 
 <br><br>
 
@@ -242,6 +256,13 @@ a = [2, 1, 5, 4, 3]
 a.sort()
 print(a)  # [1, 2, 3, 4, 5]
 ```
+
+<br><br>
+
+## 문제 64 원점에 K번째로 가까운 점
+> 511p
+
+
 
 
 
