@@ -1,5 +1,5 @@
-OpenAPI는 [postman](https://www.postman.com/)에서 개발했고, 개발한 API를 테스트할 수 있었다.<br>
-OpenAPI를 개발하면서 느꼈던 점을 정리해보려고 한다.
+API는 [postman](https://www.postman.com/)에서 만들었고, 작성한 API를 테스트할 수 있었다.<br>
+API를 작성하면서 느꼈던 점을 정리해보려고 한다.
 <br><br>
 
 ## 새로 배운 것
