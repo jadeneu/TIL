@@ -226,8 +226,40 @@ def quicksort(A, lo, hi):
 <br><br>
 
 * **내가 짠 코드**<br>
+  풀이를 보고 코드를 짜봤다.
   ```python
-  
+  class Node(object):
+  def __init__(self, val=0, next=None):
+    self.val = val
+    self.next = next
+
+  class Solution(object):
+    def sort_list(self, lst):
+      if not(lst and lst.next):
+        return lst
+
+      half, slow, fast = None, lst, lst
+      while fast and fast.next:
+        half, slow, fast = slow, slow.next, fast.next.next
+      half.next = None
+
+      l1 = self.sort_list(lst)
+      l2 = self.sort_list(slow)
+      return self.merge(l1, l2)
+
+    def merge(self, l1, l2):
+      if l1 and l2:
+        if l1.val > l2.val:
+          l1, l2 = l2, l1
+        l1.next = self.merge(l1.next, l2)
+      return l1 or l2
+
+  solution = Solution()
+  n1 = Node(3)
+  n2 = Node(1, n1)
+  n3 = Node(2, n2)
+  n4 = Node(4, n3)
+  print(solution.sort_list(n4))
   ```
 <br><br>
 
