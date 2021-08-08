@@ -119,15 +119,70 @@ and '면역 기능'은 있긴 하지만 1번 방법에서는 결과개수가 510
 에서는 2개 뿐임.
 ```
 
+<br>
 
+이 두 방법을 절충하기 위해 2가지 방법을 더 생각해봤다.
+```
+3. tag 이름 전체를 supplements.effect에서 찾거나, supplement_name에서 찾아서
+select
 
+SELECT id, supplement_name, effect, name, count(*) FROM supplements, tags
+WHERE effect LIKE CONCAT('%',name,'%') OR
+	supplement_name LIKE CONCAT('%', name, '%')
+GROUP BY name
+ORDER BY name
 
+4. tag 이름 전체를 supplements.effect에서 찾거나 tag 이름 중 띄어쓰기 앞 단어를 
+supplements.supplement_name에서 찾아서 select
 
+SELECT id, supplement_name, effect, name, count(*) FROM supplements, tags
+WHERE effect LIKE CONCAT('%',name,'%') OR
+	supplement_name LIKE CONCAT('%',(SELECT SUBSTRING_INDEX(name, ' ', 1)),'%')
+GROUP BY name
+ORDER BY name
+```
+3번 방법으로 select를 했을 때는 앞서 1번 방법과 큰 차이가 없었고,<br>
+4번 방법은 `tag_name`과 관련이 없는 영양제까지 검색되어 연결되는 문제점이 있었다.<br>
+Ex) `tag_name`은 '갱년기 남성'인데 앞 단어 '갱년기'를 기준으로 effect를 검색하니 '갱년기여성...'과 같은 제품도 검색되어 적합하지 않은 제품까지 연결되었다.
 
+이러한 문제점들 때문에 앞 글자를 추출해서 supplement_name을 검색하는 row 값을 제한하기로 결정했다.<br>
+앞 단어로 supplement_name을 검색해야 했던 태그 이름들 중 가장 필요했던 단어는 '칼슘'이었고, 최종적으로 다음과 같이 sql 문을 작성하여 `supplement_tags` 테이블의 row를 insert 할 수 있었다.
+```
+SELECT id, supplement_name, effect, name, count(*) FROM supplements, tags
+WHERE effect LIKE CONCAT('%',name,'%') OR
+	supplement_name LIKE CONCAT('%', name, '%') OR
+    (name = "칼슘 흡수" AND effect LIKE CONCAT("%칼슘%"))
+GROUP BY name
+ORDER BY name
+```
 
+### 3. 오류 해결
+`supplement_tags` insert를 할 방법을 결정한 뒤 sql 스크립트를 작성하는데 오류가 생겼다.
 
+* sql 스크립트
 
+<img src="https://user-images.githubusercontent.com/55045377/128627375-30c2834f-72c5-4ccb-95e6-f7b80afc6e02.png" width=60% height=60%>
 
+* 오류 내용
+```
+ERROR 1100 (HY000) at line 158: Table 'SUPPLEMENTS' was not locked with LOCK TABLES
+```
+알고 보니 `supplement_tags`에 테이블 LOCK을 걸고 `supplements` 테이블을 사용하려고 해서 생긴 문제였다.<br>
+그래서 맨 윗줄의 `LOCK TABLES ...`만 지워주면 해결되는 거였다.
+
+<br>
+
+* 오류 해결 sql 스크립트
+
+<img src="https://user-images.githubusercontent.com/55045377/128627469-3c78945c-37ee-4eda-83dc-1a043e5859ab.png" width=60% height=60%>
+
+-------
+
+`supplement_tags` 테이블에 insert가 잘 된 것을 확인할 수 있다.
+
+<img src="https://user-images.githubusercontent.com/55045377/128627579-4abc012c-4237-44a6-8ad4-f6af60ad2449.png" width=35% height=35%>
+
+<br><br><br>
 
 
 
