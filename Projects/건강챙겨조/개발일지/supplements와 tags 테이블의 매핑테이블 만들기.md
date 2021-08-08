@@ -57,9 +57,67 @@ UNLOCK TABLES;
 
 또한, 각각 `tags`, `supplements` 테이블의 fk이었기 때문에 `tag_name`과 `supplement_id`는 `tags`와 `supplements` 테이블로부터 row 값을 가져와야 했다.
 
+그래서 처음 생각한 로직이 다음과 같다.
+```
+태그를 선택하면 불러오는 영양제들
 
+1. effect 에 해당 태그 단어가 있는 경우
+2. supplement_name에 해당 태그 단어가 있는 경우
 
+but 가장 우선순위인 제품은 1,2번 모두 해당하는 경우임
+```
+여기서 effect는 영양제의 효능을 나타내는 `supplements` 테이블 컬럼 effect를 말한다.
 
+<br>
+
+로직은 정했고, row 값을 채우는 방법을 고안해내야 했다.<br>
+**(1)처음에는 `IF`를 사용할까 생각했다.**
+* `IF` 사용 로직
+```
+if tag_name이 effect에 포함된다면 or 제목에 포함된다면 
+그 태그 이름과 영양제 id 보여주기
+```
+그러나 `IF`보다는 더 광범위한 조건을 포함할 수 있는 조건문이 필요했다.
+
+그래서 생각해낸 것이 **(2)`WHERE`문에 `LIKE`를 사용하는 것이었다.**<br>
+```
+1. tag 이름 전체를 supplements.effect에서 찾아내서 select
+
+SELECT id, supplement_name, effect, name, count(*) FROM supplements, tags
+WHERE effect LIKE CONCAT('%',name,'%')
+GROUP BY name
+```
+`supplements`와 `tags` 테이블을 불러와서 컬럼들을 열거시키고 그 중에서 effect가 `tags`의 name 컬럼 row 값을 포함시키는 경우만 select하게 했다. 또한, name으로 그루핑을 하여 name을 기준으로 row들을 묶었다.
+
+이렇게 해서 생기는 특징은 다음과 같았다.
+```
+-> 검색결과가 제한적이기 때문에 무분별한 정보가 없음. but 우리가 갖고있는 정보량에
+비해 적은 영양제가 추출돼서 아쉬운 부분이 있음. 태그 개수가 18개임.
+```
+만약 `tags`의 name 컬럼의 row 값이 `치아 건강`이라면 저 단어가 포함된 effect 값만 불러오고, `치아`가 포함된 내용은 불러오질 못해 생각보다 적은 영양제가 추출되었다.<br>
+그래서 또 다른 방법을 생각해 냈다.
+```
+2. tag 이름 중 띄어쓰기 앞 단어를 supplements.effect에서 찾아내서 select
+
+SELECT id, supplement_name, effect, name, count(*) FROM supplements, tags
+WHERE effect LIKE CONCAT('%',(SELECT SUBSTRING_INDEX(name, ' ', 1)),'%')
+GROUP BY name
+```
+`tags` 테이블의 name 컬럼 row 값들의 앞단어만 추출하여 `supplements` 테이블의 effect 컬럼 row를 검색하는 것이었다.<br>
+이렇게 해서 생기는 특징은 다음과 같았다.
+```
+-> 다양한 태그 검색 가능, but '위 건강/소화기능' 이나 '장 건강' 같은 경우는
+'위', '장' 을 포함하는 effect를 뽑아내기 때문에 실제 위, 장에 도움이 되지 않는 영양제
+도 포함됨 and 태그 개수가 24개임
+```
+위와 같은 문제점이 있었지만 1번 방법보다 나은 점도 있었기 때문에 어떤 방법을 쓸지 고민이 되었다.
+* 2번 방법이 1번 방법보다 나은 점
+```
+-> 1번 방법이 2번 방법과 비교해서 빠지는 태그이름: 치아 건강, 위 건강/소화기능, 운동수행 능력
+개선, 배뇨 기능, 어린이 성장, "질내 유익균 증식, 유해균 억제"
+and '면역 기능'은 있긴 하지만 1번 방법에서는 결과개수가 5103개인데 비해 2번 방법
+에서는 2개 뿐임.
+```
 
 
 
