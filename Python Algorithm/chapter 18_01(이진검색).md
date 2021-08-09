@@ -35,6 +35,86 @@
 <br><br>
 
 ## 문제 65 이진 검색
+> 518p
+
+* 정렬된 nums를 입력받아 이진 검색으로 target에 해당하는 인덱스를 찾아라.
+* 입력
+```
+nums = [-1,0,3,5,9,12], target = 9
+```
+* 출력
+```
+4
+```
+
+<br><br>
+
+### 문제 65 내가 짠 코드
+* 잘못된 풀이1
+```python
+def solution(nums, target):
+  while len(nums) > 0:
+    mid = (len(nums)//2) - 1
+    if nums[mid] > target:
+      nums = nums[:mid+1]
+    elif nums[mid] < target:
+      nums = nums[mid+1:]
+    else:
+      return mid
+
+nums = [-1,0,3,5,9,12]
+target = 9
+print(solution(nums, target))
+```
+`nums`를 `mid`값을 기준으로 슬라이싱하는 방법으로 풀었는데, 이렇게 하니 정확한 인덱스 값이 나오지 않았다.
+
+<br>
+
+* 잘못된 풀이2
+```python
+def solution(nums, target):
+  start = 0
+  last = len(nums) - 1
+  while start < last:
+    mid = (last - start)//2
+    if nums[mid] > target:
+      last = mid
+    elif nums[mid] < target:
+      start = mid + 1
+    else:
+      return mid
+
+nums = [-1,0,3,5,9,12]
+target = 9
+print(solution(nums, target))
+```
+`mid`값을 (`last`-`start`)//2 로 두니 `mid`값은 계속 작을 수 밖에 없었고, 무한 루프가 발생했다.
+
+<br>
+
+* 완성 코드
+```python
+def solution(nums, target):
+  start = 0
+  last = len(nums) - 1
+  while start < last:
+    mid = (last + start)//2
+    if nums[mid] > target:
+      last = mid
+    elif nums[mid] < target:
+      start = mid + 1
+    else:
+      return mid
+
+nums = [-1,0,3,5,9,12]
+target = 9
+print(solution(nums, target))
+```
+`mid` 값을 (`last`+`start`)//2 로 두니 나의 의도대로 mid 값이 부여되었고, 정답도 잘 출력되었다.
+
+<br><br>
+
+
 
 
 
