@@ -110,7 +110,7 @@ nums = [-1,0,3,5,9,12]
 target = 9
 print(solution(nums, target))
 ```
-`mid` 값을 (`last`+`start`)//2 로 두니 나의 의도대로 mid 값이 부여되었고, 정답도 잘 출력되었다.
+`mid` 값을 (`last`+`start`)//2 로 두니 의도한 대로 mid 값이 부여되었고, 정답도 잘 출력되었다.
 
 <br><br>
 
