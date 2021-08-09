@@ -114,7 +114,8 @@ print(solution(nums, target))
 
 <br><br>
 
-
+## 문제 65 이진 검색 풀이
+### 풀이1. 재귀 풀이
 
 
 
