@@ -166,6 +166,72 @@ mid_pivot은 중앙의 위치 mid에 피벗 pivot만큼 이동하고, 배열의 
 당연히 최종 결과도 mid_pivot의 값을 리턴받아 결과로 삼는다.
 
 이제 전체 코드는 다음과 같다.
+```python
+from typing import List
+
+
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        # 예외 처리
+        if not nums:
+            return -1
+
+        # 최소값 찾아 피벗 설정
+        left, right = 0, len(nums) - 1
+        while left < right:
+            mid = left + (right - left) // 2
+
+            if nums[mid] > nums[right]:
+                left = mid + 1
+            else:
+                right = mid
+
+        pivot = left
+        
+        # 피벗 기준 이진 검색
+        left, right = 0, len(nums) - 1
+        while left <= right:
+            mid = left + (right - left) // 2
+            mid_pivot = (mid + pivot) % len(nums)
+
+            if nums[mid_pivot] < target:
+                left = mid + 1
+            elif nums[mid_pivot] > target:
+                right = mid - 1
+            else:
+                return mid_pivot
+        return -1
+```
+
+<br><br>
+
+## 문제 67 두 배열의 교집합
+> 529p
+
+* 두 배열의 교집합을 구하라.
+* 입력
+```
+nums1 = [1,2,2,1], nums2 = [2,2]
+```
+* 출력
+```
+[2]
+```
+
+<br>
+
+* 입력
+```
+nums1 = [4,9,5], nums2 = [9,4,9,8,4]
+```
+* 출력
+```
+[9,4]
+```
+
+<br><br>
+
+### 문제 67 내가 짠 코드
 
 
 
