@@ -40,7 +40,7 @@ def binary_search(lst, target):
 
   # 이진 검색
   while start < last:
-    mid = (start + (last-start))//2
+    mid = start + (last-start)//2
     if lst[mid] > target:
       last = mid - 1
     elif lst[mid] < target:
@@ -78,7 +78,7 @@ def binary_search(lst, target):
 
   # 이진 검색
   while start < last:
-    mid = (start + (last-start))//2
+    mid = start + (last-start)//2
     if lst[mid] > target:
       last = mid - 1
     elif lst[mid] < target:
