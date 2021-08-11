@@ -148,10 +148,24 @@ while left <= right:
         return mid
     ...
 ```
+여기서는 앞서 최솟값 left를 찾아내 pivot으로 구성하고, 이를 기준으로 피벗의 위치만큼 살짝 틀어준 mid_pivot을 구성한 다음, 다시 이진 검색을 통해 target 값을 찾았다.<br>
+**그렇다면 mid_pivot을 실제로는 어떤 식으로 구현하면 될까?** <br>
+다음 코드를 한번 살펴보자.
+```python
+mid_pivot = (mid + pivot) % len(nums)
+```
+mid_pivot은 중앙의 위치 mid에 피벗 pivot만큼 이동하고, 배열의 길이를 초과할 경우 모듈로 연산으로 회전될 수 있도록 처리했다.<br>
+이제 타겟과 값을 비교하는 부분은 mid가 아닌 mid_pivot을 기준으로 하되, left와 right는 mid를 기준으로 이동한다.
 
+예제의 입력값을 기준으로 나타낸 그림 18-4를 살펴보자.
 
+<img src="https://user-images.githubusercontent.com/55045377/128969111-d0072330-2baf-4145-8163-75ef4c0660dc.png" width=50% height=50%>
 
+이 그림에서 값에 대한 비교는 mid_pivot의 위치를 기준으로 하지만, mid의 이동은 기존 이진 검색과 동일하게 left, right를 기준으로 한다.<br>
+즉 다른 포인터를 가리키는 셈이며, 실제로 값에 대한 비교는 pivot의 위치인, 4칸 우측으로 떨어진 mid_pivot을 기준으로 한다.<br>
+당연히 최종 결과도 mid_pivot의 값을 리턴받아 결과로 삼는다.
 
+이제 전체 코드는 다음과 같다.
 
 
 
