@@ -232,6 +232,31 @@ nums1 = [4,9,5], nums2 = [9,4,9,8,4]
 <br><br>
 
 ### 문제 67 내가 짠 코드
+```python
+def solution(nums1, nums2):
+  nums1 = sorted(set(nums1))
+  nums2 = sorted(set(nums2))
+  answer = []
+
+  for i in nums1:
+    start, last = 0, len(nums2) - 1
+    while start <= last:
+      mid = start + (last-start) // 2
+      if nums2[mid] > i:
+        last = mid - 1
+      elif nums2[mid] < i:
+        start = mid + 1
+      else:
+        answer.append(nums2[mid])
+        break
+
+  return answer
+
+
+nums1 = [1,2,2,1]
+nums2 = [2,2] 
+print(solution(nums1, nums2))
+```
 
 
 
