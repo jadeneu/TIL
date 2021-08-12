@@ -1,4 +1,18 @@
 # 목차
+* [chapter 18. 이진 검색](#18장-이진-검색)
+	+ [문제 66 회전 정렬된 배열 검색](#문제-66-회전-정렬된-배열-검색)
+		- [문제 66 내가 짠 코드](#문제-66-내가-짠-코드)
+	+ [문제 66 회전 정렬된 배열 검색 풀이](#문제-66-회전-정렬된-배열-검색-풀이)
+		- [풀이1. 피벗을 기준으로 한 이진 검색](#풀이1-피벗을-기준으로-한-이진-검색)
+			- [넘파이(NumPy) 모듈로 한 줄로 피벗을 찾을 수 있다?](#넘파이numpy-모듈로-한-줄로-피벗을-찾을-수-있다)
+	+ [문제 67 두 배열의 교집합](#문제-67-두-배열의-교집합)
+		- [문제 67 내가 짠 코드](#문제-67-내가-짠-코드)
+	+ [문제 67 두 배열의 교집합 풀이](#문제-67-두-배열의-교집합-풀이)
+		- [풀이1. 브루트 포스로 계산](#풀이1-브루트-포스로-계산)
+		- [풀이2. 이진 검색으로 일치 여부 판별](#풀이2-이진-검색으로-일치-여부-판별)
+		- [풀이3. 투 포인터로 일치 여부 판별](#풀이3-투-포인터로-일치-여부-판별)
+
+<br><br><br>
 
 # 18장 이진 검색
 ## 문제 66 회전 정렬된 배열 검색
@@ -258,10 +272,100 @@ nums2 = [2,2]
 print(solution(nums1, nums2))
 ```
 
+<br><br>
+
+## 문제 67 두 배열의 교집합 풀이
+### 풀이1. 브루트 포스로 계산
+이 문제는 이진 검색과 투 포인터 등 다양한 풀이법을 시도할 수 있다. <br>
+먼저 가장 간단하고 직관적인 **브루트 포스(Brute-Force)** 부터 풀이해보자.
+```python
+from typing import List, Set
 
 
+class Solution:
+    def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        result: Set = set()
+        for n1 in nums1:
+            for n2 in nums2:
+                if n1 == n2:
+                    result.add(n1)
+
+        return result
+```
+**O(n^2)** 으로 반복하면서 일치하는 경우 무조건 추가한다.<br>
+데이터 타입은 집합(set)이기 때문에 속도는 느리긴 해도 중복된 값은 알아서 잘 처리해줄 것이다.
+
+<br><br>
+
+### 풀이2. 이진 검색으로 일치 여부 판별
+한쪽은 순서대로 탐색하고 다른 쪽은 정렬해서 이진 검색으로 값을 찾으면, 검색 효율을 획기적으로 높일 수 있다.<br>
+이 경우 시간 복잡도는 **O(n log n)** 이 될 것이다.
+```python
+...
+nums2.sort()
+for n1 in nums1:
+		i2 = bisect.bisect_left(nums2, n1)
+		if n1 == nums2[i2]:
+				result.add(n1)
+```
+nums2는 정렬한 상태에서, nums1을 O(n) 순차 반복하면서 nums2를 O(log n) 이진 검색한다. <br>
+최초 정렬에 소요되는 O(n log n)을 감안해도 전체 O(n log n)에 가능하므로 앞서 O(n^2) 에 비해 훨씬 좋은 성능을 보인다.<br>
+예외 처리를 포함한 전체 코드는 다음과 같다.
+```python
+import bisect
+from typing import List, Set
 
 
+class Solution:
+    def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        result: Set = set()
+        nums2.sort()
+        for n1 in nums1:
+            # 이진 검색으로 일치 여부 판별
+            i2 = bisect.bisect_left(nums2, n1)
+            if len(nums2) > 0 and len(nums2) > i2 and n1 == nums2[i2]:
+                result.add(n1)
+
+        return result
+```
+
+<br><br>
+
+### 풀이3. 투 포인터로 일치 여부 판별
+이 문제는 양쪽 다 정렬하여 투 포인터로 풀이할 수도 있다.<br>
+마치 병합 정렬 시 마지막에 최종 결과를 비교하는 과정과 유사하다.<br>
+다만 일치하는 값을 판별한다는 차이만 있을 뿐이다. <br>
+이 경우 각각 정렬에 2 * O(n log n), 비교에 O(2n)이 소요되므로, 마찬가지로 전체 O(n log n)에 풀이가 가능하다. 
+
+전체 코드는 다음과 같다.
+```python
+from typing import List, Set
+
+
+class Solution:
+    def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        result: Set = set()
+        # 양쪽 모두 정렬
+        nums1.sort()
+        nums2.sort()
+        i = j = 0
+        # 투 포인터 우측으로 이동하며 일치 여부 판별
+        while i < len(nums1) and j < len(nums2):
+            if nums1[i] > nums2[j]:
+                j += 1
+            elif nums1[i] < nums2[j]:
+                i += 1
+            else:
+                result.add(nums1[i])
+                i += 1
+                j += 1
+
+        return result
+```
+값이 작은 쪽 배열의 포인터가 한 칸씩 앞으로 이동하는 형태로 해서, 어느 한쪽의 포인터가 끝까지 도달하면 종료한다.<br>
+이 경우 정렬을 제외하면, 비교에 따른 시간 복잡도는 싱수항을 제외해서 **O(n)** 에 불과하다.
+
+<br><br><br>
 
 
 
