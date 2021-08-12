@@ -1,0 +1,205 @@
+# 목차
+
+# 18장 이진 검색
+## 문제 68 두 수의 합 II
+> 532p
+
+* 정렬된 배열을 받아 덧셈하여 타겟을 만들 수 있는 배열의 두 숫자 인덱스를 리턴하라.<br>
+※ 주의: 이 문제에서 배열은 0이(Zero-Based) 아닌 1부터 시작하는 것으로 한다.
+
+* 입력
+```
+numbers = [2,7,11,15], target = 9
+```
+* 출력
+```
+[1,2]
+```
+
+<br><br>
+
+### 문제 68 내가 짠 코드
+```python
+
+```
+
+<br><br>
+
+## 문제 68 두 수의 합 II 풀이
+### 풀이1. 투 포인터
+앞서 7장에서 7번 '두 수의 합' 문제는 투 포인터로 풀 수 없다(풀이5)고 했다.<br>
+그러나 그 문제의 다른 버전 격인 이 문제는 입력 배열이 정렬되어 있다는 가정이 추가됐다.<br>
+따라서 이 문제는 투 포인터로도 잘 풀릴 것이다.<br>
+그렇다면 앞서 7번 문제에서는 풀이에 실패했던, 투 포인터 코드(풀이5)의 일부를 가져와보자.
+```python
+left, right = 0, len(nums) - 1
+while not left == right:
+    if nums[left] + nums[right] < target:
+        left += 1
+    elif nums[left] + nums[right] > target:
+        right -= 1
+    else:
+        return left, right  # 1
+```
+이 문제의 경우 특별히 0이 아닌 1부터 시작한다고 했으니, 리턴하는 "# 1" 부분의 값에 각각 +1 을 하고, 문제에서 입력값에 해당하는 변수명이 기존 nums에서 numbers로 바뀌었으니 이 부분만 수정해주면 문제 없이 잘 풀릴 것 같다.
+
+전체 코드는 다음과 같다.
+```python
+from typing import List
+
+
+class Solution:
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+        left, right = 0, len(numbers) - 1
+        while not left == right:
+            if numbers[left] + numbers[right] < target:
+                left += 1
+            elif numbers[left] + numbers[right] > target:
+                right -= 1
+            else:
+                return left + 1, right + 1  # 리턴 값 +1
+```
+투 포인터 풀이의 경우 **O(n)** 에 풀이할 수 있다. 이 풀이는 68밀리초가 걸렸다.
+
+<br><br>
+
+### 풀이2. 이진 검색
+이번에는 이 장의 주제인 이진 검색으로 풀이해보자.<br>
+현재 값을 기준으로 나머지 값이 맞는지 확인하는 형태의 이진 검색 풀이를 시도해볼 수 있을 것 같다. 
+
+전체 코드는 다음과 같다.
+```python
+from typing import List
+
+
+class Solution:
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+        for k, v in enumerate(numbers):
+            left, right = k + 1, len(numbers) - 1
+            expected = target - v
+            # 이진 검색으로 나머지 값 판별
+            while left <= right:
+                mid = left + (right - left) // 2
+                if numbers[mid] < expected:
+                    left = mid + 1
+                elif numbers[mid] > expected:
+                    right = mid - 1
+                else:
+                    return k + 1, mid + 1
+```
+이 경우 이진 검색 log n을 n번 반복하므로 시간 복잡도는 **O(n log n)** 이 된다.<br>
+이 2가지 방식만 놓고 봤을 때는, 투포인터가 O(n)으로 이진 검색 풀이 O(n log n)에 비해 더 빠르게 실행된다.<br>
+이진 검색 풀이의 실행 속도는 112밀리초로 2배가량 늦다. <br>
+그렇다면 이진 검색에 bisect 모듈을 사용해 좀 더 속도를 높일 수 있을까?
+
+<br><br>
+
+### 풀이3. bisect 모듈, 슬라이싱
+bisect 모듈을 사용해 이진 검색을 구현해보자.<br>
+이렇게 하면 이진 검색 알고리즘을 직접 구현할 필요가 없기 때문에, 코드도 한결 깔끔해질 것이다.
+
+전체 코드는 다음과 같다.
+```python
+import bisect
+from typing import List
+
+
+class Solution:
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+        for k, v in enumerate(numbers):
+            expected = target - v
+            i = bisect.bisect_left(numbers[k + 1:], expected)
+            if i < len(numbers[k + 1:]) and numbers[i + k + 1] == expected:
+                return k + 1, i + k + 2
+```
+left와 right 변수도 필요 없고, 예상대로 코드는 엄청나게 깔끔해졌다. <br>
+그런데 문제가 있다. 이 풀이의 실행 속도는 무려 **2184밀리초**에 다다른다. 2초 이상 소요되는 셈이다.
+앞서 이진 검색 풀이가 112밀리초 정도였으니, 20배 이상 느려졌다. 왜 그럴까?<br>
+성능 개선을 시도해보자.
+
+<br><br>
+
+### 풀이4. bisect 모듈 + 슬라이싱 최소화
+아무래도 파이썬 슬라이싱을 무리하게 적용한 게 원인인 듯 하여 nums 변수에 한 번만 사용해 담아두는 형태로 다음과 같이 개선을 시도해봤다.
+```python
+import bisect
+from typing import List
+
+
+class Solution:
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+        for k, v in enumerate(numbers):
+            expected = target - v
+            nums = numbers[k + 1:]
+            i = bisect.bisect_left(nums, expected)
+            if i < len(nums) and numbers[i + k + 1] == expected:
+                return k + 1, i + k + 2
+```
+이렇게 하니 **1136밀리초**에 풀려, 앞서 풀이3에 비해 2배가량 속도가 빨라졌다. <br>
+그래도 풀이1 투 포인터 풀이에 비해서는 많이 느리다. 좀 더 개선할 방법이 필요하다.
+
+<br><br>
+
+### 풀이5. bisect 모듈 + 슬라이싱 제거
+bisect 모듈의 기능을 좀 더 활용하기로 하고, 이진 검색 시 사용하는 bisect_left() 메소드의 공식 문서를 살펴보니 다음과 같이 기본 파라미터 외에도 여러 추가 파라미터가 있는 것을 발견했다.
+```python
+bisect.bisect_left(a, x, lo=0, hi=len(a))
+```
+이 문서를 참고해서 왼쪽 범위를 제한하는 파라미터인 lo를 찾아냈고, 이 값을 지정하는 것으로 풀이를 진행했다.<br>
+* **NOTE: `lo`를 쓰면 왼쪽 범위만 제한하며, 리스트를 슬라이싱 하진 않음**
+
+이제 더 이상 슬라이싱을 사용할 필요가 없어졌다.
+```python
+import bisect
+from typing import List
+
+
+class Solution:
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+        for k, v in enumerate(numbers):
+            expected = target - v
+            i = bisect.bisect_left(numbers, expected, k + 1)
+            if i < len(numbers) and numbers[i] == expected:
+                return k + 1, i + 1
+```
+이 경우 **68밀리초**로 드디어 투 포인터 풀이와 속도가 같아졌다. <br>
+슬라이싱을 사용하지 않고도 bisect 모듈만을 이용해 이진 검색의 성능을 개선하는 데 비로소 성공했다.
+
+<br>
+
+* **NOTE: 슬라이싱은 편리하고 빠른 모듈이지만, 이처럼 생각 없이 무분별하게 남용하다 보면 속도 저하의 주범이 될 수 있다. <br>
+경우에 따라서는, 꼭 필요한 곳에만 적절히 사용해야 실행 속도를 좀 더 최적화할 수 있다.**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
