@@ -20,8 +20,30 @@ numbers = [2,7,11,15], target = 9
 
 ### 문제 68 내가 짠 코드
 ```python
+import bisect
 
+def solution(numbers, target):
+  idx = bisect.bisect_left(numbers, target)  # idx = 2
+
+  for i in range(idx):
+    compare = target - numbers[i]
+    start, last = i + 1, idx - 1
+    while start <= last:
+      mid = start + (last-start) // 2
+      if numbers[mid] > compare:
+        last = mid - 1
+      elif numbers[mid] < compare:
+        start = mid + 1
+      else:
+        return [i + 1, mid + 1]
+
+numbers = [2,7,11,15]
+target = 9
+print(solution(numbers, target))
 ```
+* 먼저 `bisect` 모듈을 사용하여 `target`이 `numbers`에 들어갈 수 있는 왼쪽 기준의 인덱스(`idx`)를 구한다.
+* `numbers`의 0 인덱스부터 `idx - 1` 인덱스까지 for문을 돌며, 인덱스 순서대로 `target`에서 `numbers` 값을 빼서 `compare` 값을 만든 후 탐색을 한다. 
+* 문제에서 리스트가 1부터 인덱스를 시작한다고 했으므로 `[i + 1, mid + 1]`을 return 해준다.
 
 <br><br>
 
