@@ -19,7 +19,7 @@ print(solution(arr,com))
 ```
 <br><br>
 
-## 다른 코드
+## 다른 풀이
 ### 1.
 ```python
 def solution(array, commands):
