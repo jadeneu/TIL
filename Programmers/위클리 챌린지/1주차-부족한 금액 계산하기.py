@@ -1,5 +1,4 @@
-## 내가 짠 코드
-```python
+
 def solution(price, money, count):
     for i in range(1, count+1):
         money -= price*i
@@ -7,5 +6,4 @@ def solution(price, money, count):
         return 0
     else:
         return abs(money)
-```
-<br><br>
+
