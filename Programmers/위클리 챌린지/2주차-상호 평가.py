@@ -1,4 +1,3 @@
-
 def solution(scores):
     answer = ''
     for i in range(len(scores)):
@@ -27,3 +26,5 @@ def get_rating(avg):
     else:
         return 'F'
 
+    
+    
