@@ -1,5 +1,4 @@
-## 내가 짠 코드
-```python
+
 def solution(scores):
     answer = ''
     for i in range(len(scores)):
@@ -27,4 +26,4 @@ def get_rating(avg):
         return 'D'
     else:
         return 'F'
-```
+
