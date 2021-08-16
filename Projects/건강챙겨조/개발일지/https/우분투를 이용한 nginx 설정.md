@@ -3,13 +3,14 @@ Nginx 설정에서 도메인이 제대로 설정되어 있는지 확인해야한
 
 Nginx 설정 파일은 웹서버 설치 방식에 따라 달라지지만 Nginx 기본 설치 방식으로는 설치 시 /etc/nginx/conf.d/에 있고, 우분투에서 권장하는 방식으로 설치 시 /etc/nginx/sites-available/ 디렉토리에 있다.
 
-나는 Nginx 기본 설치 방식으로 설치했고, 이제 도메인을 설정해보자.
+나는 Nginx 기본 설치 방식으로 설치했고 Nginx 설정 파일은 /etc/nginx/conf.d 디렉토리 아래에 default.conf라는 이름으로 있었다.<br>
+이제 도메인을 설정해보자.
 
 <br><br>
 
 ## 도메인 설정 및 확인
 ```
-$ sudo vim /etc/nginx/conf.d
+$ sudo vim /etc/nginx/conf.d/default.conf
 ```
 위 명령어를 입력하여 vim 편집기에 들어간다.
 
