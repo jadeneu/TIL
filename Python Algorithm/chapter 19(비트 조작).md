@@ -12,7 +12,7 @@
 
 ## 부울 연산자
 
-<img src="https://user-images.githubusercontent.com/55045377/129554537-d14bb16c-4948-4b2f-904d-a7b493b11cf3.png" width=50% height=50%>
+<img src="https://user-images.githubusercontent.com/55045377/129554537-d14bb16c-4948-4b2f-904d-a7b493b11cf3.png" width=60% height=60%>
 
 먼저, 가장 기본적인 부울 연산(Boolean Operation)부터 살펴보자.<br>
 부울 연산은 그림 19-1과 같으며 코드로는 다음과 같이 표현할 수 있다.
@@ -87,7 +87,7 @@ False
 다만, 0은 모두 0이 되고, 1은 기존의 값이 그대로 내려온다. <br>
 '# 2'의 0011과 0101 두 이진수의 곱셈 계산 과정은 다음 그림 19-2에서 볼 수 있다.
 
-<img src="https://user-images.githubusercontent.com/55045377/129557665-a193065a-9d79-406f-887a-78333a59d579.png" width=50% height=50%>
+<img src="https://user-images.githubusercontent.com/55045377/129557665-a193065a-9d79-406f-887a-78333a59d579.png" width=35% height=35%>
 
 
 
