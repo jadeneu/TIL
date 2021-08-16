@@ -19,7 +19,7 @@ See system logs and 'systemctl status nginx.service' for details.
 ## 에러 해결 방법
 전혀 해결되지 않아서 아래 방법으로 nginx를 재가동 시켰다.
 ```
-sudo nginx -s reload
+$ sudo nginx -s reload
 ```
 
 <br><br><br>
