@@ -10,6 +10,19 @@ $ sudo certbot --nginx -d example.com -d www.example.com
 ```
 An unexpected error occurred:
 ...
+socket.gaierror: [Errno -3] Temporary failure in name resolution
+
+During handling of the above exception, another exception occurred:
+...
+raise NewConnectionError(
+urllib3.exceptions.NewConnectionError: <urllib3.connection.VerifiedHTTPSConnection object at 0x7f87a22ae6d0>: 
+Failed to establish a new connection: [Errno -3] Temporary failure in name resolution
+
+During handling of the above exception, another exception occurred:
+...
+raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='acme-v02.api.letsencrypt.org', port=443): Max retries exceeded with url: /directory (Caused by 
+NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7f87a22ae6d0>: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution'))
 
 During handling of the above exception, another exception occurred:
 
