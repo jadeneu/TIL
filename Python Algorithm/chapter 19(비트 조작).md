@@ -94,7 +94,8 @@ False
 
 * **# 1**<br>
 	```python
-	bin(0b0110 + 0b0010)
+	>>> bin(0b0110 + 0b0010)
+	'0b1000'
 	```
   ```
     11
@@ -106,7 +107,8 @@ False
   
 * **# 2**<br>
 	```python
-	bin(0b0011 * 0b0101)
+	>>> bin(0b0011 * 0b0101)
+	'0b1111'
 	```
   ```
       0011
@@ -124,7 +126,8 @@ False
 	[-> 시프트 연산](https://github.com/jadeneu/TIL/blob/main/Math/%EC%8B%9C%ED%94%84%ED%8A%B8%20%EC%97%B0%EC%82%B0.md)
 	
 	```python
-	bin(0b1101 >> 2)
+	>>> bin(0b1101 >> 2)
+	'0b11'
 	```
   ```
   1101
@@ -134,7 +137,8 @@ False
 	
 * **# 4**<br>
 	```python
-	bin(0b1101 << 2)
+	>>> bin(0b1101 << 2)
+	'0b110100'
 	```
 	```
 	00001101
@@ -156,7 +160,8 @@ False
 * **# 5**<br>
 	[-> NOT 연산](https://github.com/jadeneu/TIL/blob/main/Math/%EB%B9%84%ED%8A%B8%20%EC%97%B0%EC%82%B0/NOT%20%EC%97%B0%EC%82%B0%EC%9E%90.md)
 	```python
-	bin(0b0101 ^ ~0b1100)
+	>>> bin(0b0101 ^ ~0b1100)
+	'-0b1010'
 	```
 	```python
 	# ~1100
