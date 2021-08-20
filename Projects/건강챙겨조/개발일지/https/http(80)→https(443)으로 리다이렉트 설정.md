@@ -19,11 +19,17 @@ http -> https 접근 방법을 알아보자.
 
 ### 3. 기존에 설정되어있던 기본 작업 "다음으로 전달 중: ..."을 삭제한다.
 
+<br>
+
 ### 4. "작업 추가"를 누른 후, "리디렉션 대상..."을 선택한다.
+
+<br>
 
 ### 5. 다음과 같이 입력 후 "업데이트" 한다.
 
 <img src="https://user-images.githubusercontent.com/55045377/130225116-ba164bf2-c1a7-4ee3-8cb7-56a40eae7a29.png" width=80% height=80%>
+
+<br>
 
 ### 이제 http://ggulgguk.shop 으로 접속하면 https://ggulgguk.shop 으로 리다이렉션 된다.
 
