@@ -58,6 +58,41 @@
    1  3  -1  -3  5 [3  6  7]      7
    ```
 
+<br><br>
+
+### 문제 75 내가 구현한 코드
+```python
+def solution(nums, k):
+  # 예외 처리
+  if not nums:                # 1
+    return []
+
+  left, right = 0, k-1        # 2
+  answer = []
+
+  while right < len(nums):
+    tmp = nums[left:right+1]  # 3
+    answer.append(max(tmp))   # 4
+    left += 1                 # 5
+    right += 1
+
+  return answer
+
+
+nums = [1,3,-1,-3,5,3,6,7]
+k = 3
+print(solution(nums, k))
+```
+* **# 1**: `nums`가 빈 리스트인 경우 `return []`을 한다.
+* **# 2**: `left`와 `right`를 인덱스 `0`과 `k-1`로 설정한다.
+* **# 3**: `tmp`는 `nums`를 `k` 크기만큼 슬라이싱한 리스트이다.
+* **# 4**: `nums`를 슬라이싱한 `tmp` 요소 중 가장 큰 요소를 `answer`에 append 한다.
+* **# 5**: `left`와 `right`를 한 칸 이동시킨다.
+
+<br><br>
+
+## 문제 75 최대 슬라이딩 윈도우 풀이
+### 풀이1. 브루트 포스로 계산
 
 
 
