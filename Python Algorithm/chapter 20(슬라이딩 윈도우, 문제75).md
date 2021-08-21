@@ -64,16 +64,16 @@
 ```python
 def solution(nums, k):
   # 예외 처리
-  if not nums:                # 1
+  if not nums:                    # 1
     return []
 
-  left, right = 0, k-1        # 2
+  left, right = 0, k-1            # 2
   answer = []
 
   while right < len(nums):
-    tmp = nums[left:right+1]  # 3
-    answer.append(max(tmp))   # 4
-    left += 1                 # 5
+    tmp = nums[left:right+1]      # 3
+    answer.append(max(tmp))       # 4
+    left += 1                     # 5
     right += 1
 
   return answer
@@ -93,6 +93,38 @@ print(solution(nums, k))
 
 ## 문제 75 최대 슬라이딩 윈도우 풀이
 ### 풀이1. 브루트 포스로 계산
+제목부터 '슬라이딩 윈도우'라는 단어가 포함된 전형적인 슬라이딩 윈도우 문제로, 문제를 잘 읽어보면 파이썬에서는 슬라이싱과 내장 함수를 사용해 매우 쉬운 방식으로 풀이할 수 있을 것 같다.
+```python
+r = []
+for i in range(len(nums) - k + 1):
+    r.append(max(nums[i:i + k]))
+```
+이 코드는 정확히 문제에서 요구하는 대로, 슬라이딩 윈도우를 우측으로 움직여 가며 max()로 최댓값을 추출한다.<br>
+매번 윈도우의 최댓값을 계산하기 때문에 이 경우 시간 복잡도는 O(n)이다. 이 풀이는 **704밀리초**가 소요된다.
+```python
+from typing import List
+
+
+class Solution:
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        if not nums:
+            return nums
+
+        r = []
+        for i in range(len(nums) - k + 1):
+            r.append(max(nums[i:i + k]))
+
+        return r
+```
+
+<br><br>
+
+### 풀이2. 큐를 이용한 최적화
+좀 더 최적화할 수 있는 방법이 있을 것 같다. 어차피 슬라이딩 윈도우를 한 칸씩 움직여야 하는 부분은 개선이 어렵다.<br>
+그렇다면 max()를 계산하는 부분에서 최적화를 할 수 있지 않을까?<br>
+정렬되지 않은 슬라이딩 윈도우에서 최댓값을 추출하려면 어떠한 알고리즘이든 결국 한 번 이상은 봐야 하기 때문에, 최댓값 계산을 O(n) 이내로 줄일 수 있는 방법이 없다. <br>
+따라서 가급적 최댓값 계산을 최소화하기 위해 이전의 최댓값을 저장해뒀다가 한 칸씩 이동할 때 새 값에 대해서만 더 큰 값인지 확인하고, 최댓값이 윈도우에서 빠지게 되는 경우에만 다시 전체를 계산하는 형태로 개선한다면, 계산량을 획기적으로 줄일 수 있을 것 같다. <br>
+선입선출(FIFO, First-In First-Out) 형태로 풀이할 수 있기 때문에, 이에 해당하는 대표적인 자료형인 큐(Queue)(9장 참고)를 사용하고 처음에는 다음과 같이 구현한다.
 
 
 
