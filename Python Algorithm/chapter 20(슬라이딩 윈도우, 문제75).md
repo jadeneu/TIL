@@ -121,11 +121,98 @@ class Solution:
 
 ### 풀이2. 큐를 이용한 최적화
 좀 더 최적화할 수 있는 방법이 있을 것 같다. 어차피 슬라이딩 윈도우를 한 칸씩 움직여야 하는 부분은 개선이 어렵다.<br>
-그렇다면 max()를 계산하는 부분에서 최적화를 할 수 있지 않을까?<br>
-정렬되지 않은 슬라이딩 윈도우에서 최댓값을 추출하려면 어떠한 알고리즘이든 결국 한 번 이상은 봐야 하기 때문에, 최댓값 계산을 O(n) 이내로 줄일 수 있는 방법이 없다. <br>
-따라서 가급적 최댓값 계산을 최소화하기 위해 이전의 최댓값을 저장해뒀다가 한 칸씩 이동할 때 새 값에 대해서만 더 큰 값인지 확인하고, 최댓값이 윈도우에서 빠지게 되는 경우에만 다시 전체를 계산하는 형태로 개선한다면, 계산량을 획기적으로 줄일 수 있을 것 같다. <br>
+그렇다면 **max()를 계산하는 부분에서 최적화**를 할 수 있지 않을까?<br>
+정렬되지 않은 슬라이딩 윈도우에서 최댓값을 추출하려면 어떠한 알고리즘이든 결국 한 번 이상은 봐야 하기 때문에, 최댓값 계산을 O(n) 이내로 줄일 수 있는 방법이 없다.
+
+따라서 가급적 최댓값 계산을 최소화하기 위해 이전의 최댓값을 저장해뒀다가 한 칸씩 이동할 때 새 값에 대해서만 더 큰 값인지 확인하고, 최댓값이 윈도우에서 빠지게 되는 경우에만 다시 전체를 계산하는 형태로 개선한다면, 계산량을 획기적으로 줄일 수 있을 것 같다.
+
 선입선출(FIFO, First-In First-Out) 형태로 풀이할 수 있기 때문에, 이에 해당하는 대표적인 자료형인 큐(Queue)(9장 참고)를 사용하고 처음에는 다음과 같이 구현한다.
 
+```python
+current_max = float('-inf')
+
+for i, v in enumerate(nums):
+    window.append(v)
+    if i < k - 1:
+        continue
+    ...
+```
+이 코드에서는 k 만큼, 이후 비즈니스 로직은 상관하지 않고 일단 값을 계속 채워 넣는다.
+
+참고로 파이썬에서는 큐 사용이 필요할 경우, 실제로는 기능이 많고 좀 더 성능이 좋은 데크를 주로 사용한다.<br>
+다음과 같이 collections 모듈을 이용해 선언할 수 있다.
+```python
+window = collections.deque()
+```
+
+<br>
+
+아직 최댓값이 반영된 상태가 아니라면, 현재 윈도우 전체의 최댓값을 계산해야 한다.<br>
+이미 최댓값이 존재한다면 새로 추가된 값이 기존 최댓값보다 더 큰 경우에만 최댓값을 교체한다.<br>
+바로 이 부분이 성능 개선을 위한 핵심이다. 매번 최댓값을 계산할 필요가 없기 때문이다.
+
+이 로직을 코드로 구현해보면 다음과 같다.
+```python
+if current_max == float('-inf'):
+    current_max = max(window)
+elif v > current_max:
+    current_max = v
+```
+이처럼 새로 추가된 값이 기존 최댓값보다 더 큰 경우에만 최댓값을 교체한다.
+
+이제 다음과 같이 최댓값을 결과에 추가한다.
+```python
+results.append(current_max)
+```
+
+<br>
+
+슬라이딩 윈도우는 오른쪽으로 점차 이동한다.,<br>
+이동하면서 시작하자마자 다시 신규 요소가 추가될 것이므로 가장 오래된 값은 마지막에 제거한다.<br>
+이때 만약 그 값이 현재 윈도우의 최댓값이라면, 기존의 최댓값은 더 이상 윈도우에 포함되지 않으므로 다음과 같이 처리한다.
+```python
+if current_max == window.popleft():
+    current_max = float('-inf')
+```
+
+* **참고**<br>
+최댓값에 시스템이 지정할 수 있는 가장 낮은 값을 지정하여 초기화한다. 이렇게 하면 이후에 다시 최댓값을 계산하게 할 수 있다.
+
+<br>
+
+전체 코드는 다음과 같다.
+```python
+import collections
+from typing import List
+
+
+class Solution:
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        results = []
+        window = collections.deque()
+        current_max = float('-inf')
+        for i, v in enumerate(nums):
+            window.append(v)
+            if i < k - 1:
+                continue
+
+            # 새로 추가된 값이 기존 최대값보다 큰 경우 교체
+            if current_max == float('-inf'):
+                current_max = max(window)
+            elif v > current_max:
+                current_max = v
+
+            results.append(current_max)
+
+            # 최대값이 윈도우에서 빠지면 초기화
+            if current_max == window.popleft():
+                current_max = float('-inf')
+        return results
+```
+필요할 때만 전체의 최댓값을 계산하고 이외에는 새로 추가되는 값이 최대인지만을 확인하는 형태로 계산량을 획기적으로 줄였다.<br>
+실행 속도는 **156밀리초**로 브루트 포스로 모두 계산하는 것에 비해 약 5배가량 더 빠른 속도에 실행되도록 개선할 수 있었다.
+
+<br><br><br>
 
 
 
