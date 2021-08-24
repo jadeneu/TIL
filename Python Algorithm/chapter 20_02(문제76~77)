@@ -17,4 +17,219 @@
 <br><br>
 
 ### 문제 76 내가 구현한 코드
+```python
+
+```
+
+<br><br>
+
+## 문제 76 부분 문자열이 포함된 최소 윈도우 풀이
+### 풀이1. 모든 윈도우 크기를 브루트 포스로 탐색
+먼저, 브루트 포스로 풀어보자.<br>
+최소 윈도우라고 했으니 일단 T의 크기부터 시작해 점점 크기를 키워가며 모든 윈도우 크기에 대해 그림 20-2와 같이 탐색을 시도해볼 수 있겠다.
+
+<img src="https://user-images.githubusercontent.com/55045377/130556719-1de9bc5b-a1f4-41a2-b16a-c5d45b410077.png" width=50% height=50%>
+
+이 문제의 예제에서 T는 3개의 문자이므로 먼저 슬라이딩 윈도우 사이즈를 3으로 하고, 끝까지 스캔한 다음, T에 해당하는 문자열을 발견하지 못한 경우 4, 다시 5, 6 ... 으로 크기를 늘리는 방법을 고민할 수 있다.<br>
+이렇게 하면 **T 문자열을 가장 먼저 찾게 되는 윈도우 사이즈가 정답**이 된다. 
+
+그러나 이 문제에는 시간 복잡도 O(η) 제한이 있다.<br>
+이 풀이의 경우 O(n^2)이므로 이렇게 풀이해선 안 되며, 실제로 이렇게 구현해본 다음의 코드는 타임아웃으로 풀리지 않았다.
+```python
+import collections
+from typing import List
+
+
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+        def contains(s_substr_lst: List, t_lst: List):
+            for t_elem in t_lst:
+                if t_elem in s_substr_lst:
+                    s_substr_lst.remove(t_elem)
+                else:
+                    return False
+            return True
+
+        if not s or not t:
+            return ''
+
+        window_size = len(t)
+
+        for size in range(window_size, len(s) + 1):
+            for left in range(len(s) - size + 1):
+                s_substr = s[left:left + size]
+                if contains(list(s_substr), list(t)):
+                    return s_substr
+        return ''
+```
+여기서 중요한 부분은 **contains() 함수**인데, t의 문자를 하나씩 비교하며 슬라이딩 윈도우 내에 속한 문자를 다음과 같이 제거하는 방식으로 포함 여부를 판단했다.
+```python
+for t_elem in t_lst:
+    if t_elem in s_substr_lst:
+        s_substr_lst.remove(t_elem)
+    else:
+        return False
+```
+만약 이미 제거되었거나 등의 이유로 문자가 없다면 False를 리턴하게 했다.<br>
+문자 단위의 포함 여부를 판별하는 것은 반드시 일대일로 문자가 대응되어야 한다는 점에서, 전체를 한 번에 비교하기 어렵고, 정렬해서 풀이하기도 어렵다.
+
+<br><br>
+
+### 풀이2. 투 포인터, 슬라이딩 윈도우로 최적화
+이런 유형의 문제는 투 포인터를 사용하면 O(n^2) 에서 O(n)으로 줄일 수 있다. <br>
+특히 그림 20-3과 같이 계속 우측으로 이동하는 슬라이딩 윈도우이면서 적절한 위치를 찾았을 때 좌우 포인터의 크기를 좁혀 나가는 투 포인터로 풀이할 수 있을 것 같다.
+
+<img src="https://user-images.githubusercontent.com/55045377/130557333-a880edae-83d0-4ad9-ac20-0c71d2275396.png" width=50% height=50%>
+
+먼저, 다음과 같이 기본 변수를 정의해보자.
+```python
+need = collections.Counter(t)
+missing = len(t)
+```
+need는 필요한 문자 각각의 개수, missing은 필요한 문자의 전체 개수로 한다.
+
+<br>
+
+```python
+for right, char in enumerate(s, 1):
+    missing -= need[char] > 0
+    need[char] -= 1
+    ...
+```
+이제 오른쪽 포인터인 right 값을 계속 늘려 나간다. <br>
+슬라이딩 윈도우의 크기가 점점 더 커지는 형태가 된다. <br>
+여기서 enumerate(n, 1) 은 1부터 시작한다는 의미다.<br> 
+파이썬의 슬라이싱은 s[n:n + 1]의 형태이므로 오른쪽 포인터인 right는 l부터 시작하게 한다. <br>
+만약 현재 문자가 필요한 문자 need[char]에 포함되어 있다면 필요한 문자의 전체 개수인 missing을 1 감소하고, 해당 문자의 필요한 개수 need[char]도 1 감소한다.
+```python
+if missing == 0:
+    while left < right and need[s[left]] < 0:
+        need[s[left]] += 1
+        left += 1
+```
+missing이 0이 되면, 즉 필요한 문자의 개수가 0이 된다면 이제 왼쪽 포인터를 더 줄일 수 있는지 살핀다. <br>
+기준은 음수인 경우다. 즉 왼쪽 포인터가 불필요한 문자를 가리키고 있다면 분명 음수일 것이고, 0을 가리키는 위치까지 왼쪽 포인터를 이동한다.<br>
+while 조건문은 while left < right and need[s[left]] != 0: 으로 해도 동일한 결과가 된다.<br>
+다시 슬라이딩 윈도우의 크기가 점점 더 줄어드는 형태가 된다.
+```python
+if missing == 0:
+    ...
+    if not end or right - left <= end - start:
+        start, end = left, right
+    need[s[left]] += 1
+    missing += 1
+    left += 1
+```
+그렇게 missing이 0이 될 때까지의 오른쪽 포인터와, need[s[left]]가 0이 될 때까지의 왼쪽 포인터를 정답으로 간주한다.<br>
+이 값은 더 작은 값을 찾을 때까지 유지하다가 가장 작은 값인 경우, 정답으로 슬라이싱 결과를 리턴한다.
+
+전체 코드는 다음과 같다.
+```python
+import collections
+
+
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+        need = collections.Counter(t)
+        missing = len(t)
+        left = start = end = 0
+
+        # 오른쪽 포인터 이동
+        for right, char in enumerate(s, 1):
+            missing -= need[char] > 0
+            need[char] -= 1
+
+            # 필요 문자가 0이면 왼쪽 포인터 이동 판단
+            if missing == 0:
+                while left < right and need[s[left]] < 0:
+                    need[s[left]] += 1
+                    left += 1
+
+                if not end or right - left <= end - start:
+                    start, end = left, right
+                need[s[left]] += 1
+                missing += 1
+                left += 1
+        return s[start:end]
+```
+
+<br><br>
+
+### 풀이3. Counter로 좀 더 편리한 풀이
+이번에는 필요한 문자의 개수를 직접 계산하지 않고 collections.Counter의 기능을 이용해, 매우 편리하게 풀이해보자.<br>
+같은 방식으로 풀되 missing == 0 대신 Counter()의 AND 연산으로 다음과 같이 좀 더 우아하게 비교해보자.
+```python
+t_count = collections.Counter(t)
+...
+for right, char in enumerate(s, 1):
+    current_count[char] += 1
+    
+    while current_count & t_count == t_count:
+        ...
+```
+이렇게 지금까지 계산한 current_count와 t_count의 AND 연산으로 모든 결과가 포함되는지 여부를 확인할 수 있다. <br>
+만약 요소가 하나라도 비어 있다면 AND 연산 결과는 t_count와 일치하지 않을 것이다.<br>
+나머지 전체 코드는 이전 풀이와 큰 차이가 없다.
+```python
+import collections
+
+
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+        t_count = collections.Counter(t)
+        current_count = collections.Counter()
+
+        start = float('-inf')
+        end = float('inf')
+
+        left = 0
+        # 오른쪽 포인터 이동
+        for right, char in enumerate(s, 1):
+            current_count[char] += 1
+
+            # AND 연산 결과로 왼쪽 포인터 이동 판단
+            while current_count & t_count == t_count:
+                if right - left < end - start:
+                    start, end = left, right
+                current_count[s[left]] -= 1
+                left += 1
+
+        return s[start: end] if end - start <= len(s) else ''
+```
+그러나 아쉽게도, 이 풀이는 너무 느리게 실행된다.<br>
+다행히 타임아웃이 발생하지는 않으나 **1,924밀리초**라는 너무 오랜 시간이 걸린다. <br>
+아마도 Counter끼리 AND 연산으로 비교하는 과정 current_count & t_count이 내부적으로 매우 무거운 연산이기 때문으로 추측된다.<br>
+편리하긴 하나 너무 오래 실행되는 풀이인 만큼, 코딩 테스트나 실무에서는 이런식으로 풀이하긴 어려울 것 같다.
+
+<br><br>
+
+## 문제 77 가장 긴 반복 문자 대체
+> 581p
+
+* 대문자로 구성된 문자열 s가 주어졌을 때 k번만큼의 변경으로 만들 수 있는, 연속으로 반복된 문자열의 가장 긴 길이를 출력하라.
+* 입력
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
