@@ -155,8 +155,27 @@ def fractional_knapsack(cargo):
 
 * **내가 구현한 코드**<br>
 ```python
+def solution(lst):
+  max_p = 0
 
+  for i in range(len(lst)-1):
+    if lst[i] < lst[i+1]:             # 1
+      max_p += lst[i+1] - lst[i]
+    else:                             # 2
+      continue
+  
+  return max_p
+
+lst = [7,1,5,3,6,4]
+print(solution(lst))
 ```
+* **# 1**: `lst`의 현재 인덱스와 다음 인덱스 값을 비교해서 다음 인덱스 값이 더 크다면 두 값의 차를 `max_p`에 더한다.
+* **# 2**: 아니라면 continue를 해서 다음 인덱스로 넘어간다.
+
+<br><br>
+
+## 문제 78 주식을 사고팔기 가장 좋은 시점 II 풀이
+### 풀이1. 그리디 알고리즘
 
 
 
