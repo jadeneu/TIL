@@ -153,7 +153,7 @@ def fractional_knapsack(cargo):
 
 <br><br>
 
-* **내가 구현한 코드**<br>
+### 문제 78 내가 구현한 코드
 ```python
 def solution(lst):
   max_p = 0
@@ -176,8 +176,55 @@ print(solution(lst))
 
 ## 문제 78 주식을 사고팔기 가장 좋은 시점 II 풀이
 ### 풀이1. 그리디 알고리즘
+7장 '배열'에서 풀어본 12번 '주식을 사고팔기 가장 좋은 시점' 문제의 2탄 격인 문제로, 한 번이 아닌 여러 번의 거래를 할 수 있다는 차이가 있다. <br>
+12번 문제를 풀이할 때 사용한 그림 7-12를 다시 한번 그림 21-3으로 가져와본다.
+
+<img src="https://user-images.githubusercontent.com/55045377/131307768-8af4be17-0780-4b5e-9ab8-83ab0fa6c630.png" width=40% height=40%>
+
+이 문제는 단 한 번의 거래였기 때문에 저점과 고점에만 체크했다. <br>
+그러나 이제는 여러 번 거래를 할 수 있다. 그렇다면 해법은 간단하다. 내리기 전에 팔고, 오르기 전에 사면 된다. <br>
+따라서 항상 이익을 내는 방향으로 몇 번이든 사고팔고를 반복하면 된다. '탐욕'이라는 의미에 잘 어울리는 그리디 알고리즘 문제라 할 수 있다.
+
+다시 한번 풀이에 맞게 그림을 그려보면 그림 21-4와 같다.
+
+<img src="https://user-images.githubusercontent.com/55045377/131308357-1c44954c-8a4a-4571-85a4-d41684c2788e.png" width=40% height=40%>
+
+지난번 문제 그림 21-3에서 고점, 저점 체크를 제거했고, 다음번 값이 오르면 사고 다음번 값이 내리면 파는, 항상 그리디하게 사고파는 형태로 그림 21-4와 같이 변경했다.
+
+이와 같이 다음번 값이 현재보다 오르는 경우에 항상 이익을 취하는 형태로, 실제 코드를 구현하면 될 것 같다.<br>
+계속 오르는 경우라도 몇 번이든 사고팔 수 있기 때문에, 매번 단계마다 이익을 취하는 탐욕 구조로 구현할 수 있다.
+```python
+from typing import List
 
 
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        result = 0
+        # 값이 오르는 경우 매번 그리디 계산
+        for i in range(len(prices) - 1):
+            if prices[i + 1] > prices[i]:
+                result += prices[i + 1] - prices[i]
+        return result
+```
+
+<br><br>
+
+### 풀이2. 파이썬다운 방식
+파이썬다운 방식으로 바꿔보면 다음 정도로 전체 코드를 정리할 수 있다.
+```python
+from typing import List
+
+
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        # 0보다 크면 무조건 합산
+        return sum(max(prices[i + 1] - prices[i], 0) for i in range(len(prices) - 1))
+```
+이전 풀이에서 단계별로 값이 올랐는지 가격을 매번 비교하는 방식으로 풀이했다.<br>
+그런데 어차피 곰곰이 생각해보면, 매번 이익을 계산해 0보다 크면 무조건 합산할 수 있다.<br>
+마찬가지로 탐욕 구조며, 동일한 결과를 얻을 수 있다. 실행 속도 또한 양쪽 모두 동일하다.
+
+<br><br>
 
 
 
