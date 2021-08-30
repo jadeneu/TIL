@@ -64,9 +64,50 @@ cargo = [
 
 r = fractional_knapsack(cargo)
 ```
+**(1) 먼저, 짐 cargo를 '(가격, 무게)'의 튜플 리스트로 정의하고, 함수 fractional_knapsack()을 호출한다.**
 
+<br>
 
+앞서 단가 기준으로 알고리즘을 설명한 그대로 구현하기 위해 **(2) 단가를 계산하고 역순으로 정렬한다.**<br>
+즉 가장 단가가 높은 짐이 맨 위에 오도록 다음과 같이 구현한다.
+```python
+for c in cargo:
+    pack.append((c[0] / c[1], c[0], c[1]))
+pack.sort(reverse=True)
+```
 
+**(3) 이제 단가 순으로 그리디 알고리즘으로 계산하면 된다.** 전체 코드는 다음과 같다.
+```python
+def fractional_knapsack(cargo):
+    capacity = 15
+    pack = []
+    # 단가 계산 역순 정렬
+    for c in cargo:
+        pack.append((c[0] / c[1], c[0], c[1]))
+    pack.sort(reverse=True)
+    
+    # 단가 순 그리디 계산
+    total_value: float = 0
+    for p in pack:
+        if capacity - p[2] >= 0:
+            capacity -= p[2]
+            total_value += p[1]
+        else:
+            fraction = capacity / p[2]
+            total_value += p[1] * fraction
+            break
+            
+    return total_value
+```
+이처럼 구현했을때 total_value는 17.3을 구할 수 있다. 앞서 알고리즘을 설명했을 때와 동일한 정답이다.
+
+* **주의**<br>
+그러나 이 문제에서 만약 짐을 쪼갤 수 없다면 지금까지 실행한 방식대로 단가 순으로 배치해선 안 된다.<br>
+이와 같이 짐을 쪼갤 수 없는 0-1 배낭 문제는 23장 632페이지에서 풀이해본다.
+
+<br><br>
+
+## 동전 바꾸기 문제
 
 
 
