@@ -1,4 +1,17 @@
 # 목차
+* [람다(lambda)](#람다lambda)
+  + [람다함수의 형식](#람다함수의-형식)
+  + [람다함수 응용법](#람다함수-응용법)
+    - [1. 할당하지 않고 쓰기](#1-할당하지-않고-쓰기)
+    - [2. 인자 두 개 쓰기](#2-인자-두-개-쓰기)
+    - [3. if 사용하기](#3-if-사용하기)
+    - [4. 리스트를 정렬할 때 key로 사용(sort, sorted)](#4-리스트를-정렬할-때-key로-사용sort-sorted)
+    - [5. 람다 표현식을 인수로 활용(map, filter, reduce)](#5-람다-표현식을-인수로-활용map-filter-reduce)
+---
+* [References](#references)
+
+<br><br><br>
+
 
 # 람다(lambda)
 > 람다(lambda)는 익명함수를 지칭하는 용어이다. 즉 람다함수를 통해 이름 없는 함수를 만들 수 있다.
@@ -46,6 +59,8 @@ add_num = lambda x: x+1
 ```python
 check_pass = lambda x: 'pass' if x>=70 else 'fail'
 ```
+
+<br>
 
 ### 4. 리스트를 정렬할 때 key로 사용(sort, sorted)
 #### 1.
