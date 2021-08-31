@@ -84,10 +84,12 @@ s = ['2 A', '1 B', '4 C', '1 A']
 >>>sorted(s)
 ['1 A', '1 B', '2 A', '4 C']
 
-#하지만 나는 뒤에 문자 순 정렬을 원한다!
+# 하지만 나는 뒤에 문자 순 정렬을 원한다!
 >>> s.sort(key=lambda x: (x.split[1], x.split[0]))
 ['1 A', '2 A', '1 B', '4 C']
 ```
+
+<br>
 
 ### 5. 람다 표현식을 인수로 활용(map, filter, reduce)
 #### 1. map()과 함께
@@ -95,6 +97,21 @@ s = ['2 A', '1 B', '4 C', '1 A']
 >>> list(map(lambda x: x+10, [1,2,3]))
 [11, 12, 13]
 ```
+* **map**<br>
+map은 리스트의 요소를 지정된 함수로 처리해주는 함수이다(map은 원본 리스트를 변경하지 않고 새 리스트를 생성함).<br>
+  * list(map(함수, 리스트))
+  * tuple(map(함수, 튜플))
+  * 예시
+    ```python
+    >>> a = [1.2, 2.5, 3.7, 4.6]
+    >>> a = list(map(int, a))
+    >>> a
+    [1, 2, 3, 4]
+    ```
+ 
+  출처: https://dojang.io/mod/page/view.php?id=2286
+  
+<br>
 
 #### 2. filter()와 함께
 filter()는 boolean 값을 리턴하는 함수를 받아 조건에 맞으면 데이터를 반환하고 그렇지 않으면 반환하지 않는다.
@@ -103,9 +120,67 @@ filter()는 boolean 값을 리턴하는 함수를 받아 조건에 맞으면 데
 >>> result = list(filter(lambda x : x > 7 and x < 15, a)) 
 [8, 9, 11, 13]
 ```
-(filter 형식 설명 넣기)
+* **filter**<br>
+filter는 특정 조건으로 걸러서 걸러진 요소들로 iterator 객체를 만들어서 리턴해준다.
+  * filter(적용시킬 함수, 적용할 요소들)
+  * 예시
+    ```python
+    target = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
+    def is_even(n):
+        return True if n % 2 == 0 else False
 
+    result = filter(is_even, target)
+
+    print(list(result))
+    # [2, 4, 6, 8, 10]
+    ```
+    * 람다 사용
+    ```python
+    target = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    result = filter(lambda x : x%2==0, target)
+    print(list(result))
+    # [2, 4, 6, 8, 10]
+    ```
+
+  출처: https://wikidocs.net/22803
+  
+<br>
+
+#### 3. reduce()와 함께
+```python
+# reduce는 functools 모듈을 불러와야 사용가능.
+>>> from functools import reduce t = [47, 11, 42, 13] 
+>>> result = reduce(lambda x, y : x + y, t)
+113
+```
+* **reduce**<br>
+reduce는 여러 개의 데이터를 대상으로 주로 누적 집계를 내기 위해서 사용한다.
+  * reduce(함수, 순회 가능한 데이터[, 초기값])
+  * 함수와 순회 가능한 데이터는 반드시 전달되어야 하고, 초기값은 선택이다.
+  * 예시
+    ```python
+    >>> def sum(x, y): 
+    ... return x+y 
+    ... 
+    >>> reduce(sum, [1, 2, 3, 4, 5])
+    15
+    ```
+    * 람다 사용
+    ```python
+    >>> reduce(lambda x, y: x+y, [1, 2, 3, 4, 5])
+    15
+    ```
+    * 초기값 사용
+    ```python
+    >>> reduce(lambda x, y: x+y, [1, 2, 3, 4, 5], 10)
+    25
+    ```
+    
+  출처: https://www.daleseo.com/python-functools-reduce/,<br>
+  https://codepractice.tistory.com/86
+
+<br><br>
 
 
 
