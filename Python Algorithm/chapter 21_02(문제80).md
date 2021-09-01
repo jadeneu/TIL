@@ -73,7 +73,17 @@ idle 빈칸 생성은 같지만 B가 넣어질 때도 쿨타임은 유지해야 
 파이썬의 heapq만으로 구현하기에는 상당히 번거로운 작업들이 필요하다. <br>
 따라서 여기서는 가능한 한 파이썬답게 간결한 방식으로 풀어보기 위해 Counter 모듈을 사용해 코드를 구현해보자.
 
-우선, 이 풀이의 전체 코드는 다음과 같다.
+---
+* **풀이에 들어가기 전에~**<br>
+풀이를 보기 전에 이 풀이를 한눈에 정리해보자.
+
+* **# 1**: for문 돌 때마다 태스크 하나가 실행된다.
+* **# 2**: for문을 돌 때마다 빈도수가 높은 태스크의 개수를 센다.
+* **# 3**: for문을 돌면서 태스크 하나가 실행되므로 result에 1을 더한다.
+* **# 4**: 태스크가 하나 실행되므로 `counter`에서 해당 태스크를 하나 뺀다.
+* **# 5**: `counter`가 빌 때까지, 즉 모든 태스크가 실행될 때까지 while문을 반복한다.
+* **# 6**: most_common(n + 1) 을 추출하고 n + 1개가 추출될 때는 idle 없이 실행한다. 즉 이 부분에선 `result`에 idle 개수를 더한다.
+
 ```python
 import collections
 from typing import List
@@ -87,18 +97,18 @@ class Solution:
         while True:
             sub_count = 0
             # 개수 순 추출
-            for task, _ in counter.most_common(n + 1):
-                sub_count += 1
-                result += 1
+            for task, _ in counter.most_common(n + 1):        # 1
+                sub_count += 1                                # 2
+                result += 1                                   # 3
 
-                counter.subtract(task)
+                counter.subtract(task)                        # 4
                 # 0 이하인 아이템을 목록에서 완전히 제거
                 counter += collections.Counter()
 
-            if not counter:
+            if not counter:                                   # 5
                 break
 
-            result += n - sub_count + 1
+            result += n - sub_count + 1                       # 6
 
         return result
 ```
