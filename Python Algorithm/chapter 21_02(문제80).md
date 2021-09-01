@@ -102,6 +102,19 @@ class Solution:
 
         return result
 ```
+* **subtract**<br>
+subtract()는 각 요소의 값을 각각 빼준다.<br>
+```python
+>>> a = Counter(a=5, b=3)
+>>> b = Counter(b=5, c=2)
+>>> a.subtract(b)
+>>> a
+Counter({'a': 5, 'b': -2, 'c': -2})
+```
+출처: https://dongdongfather.tistory.com/70
+
+<br>
+
 이 문제의 전체 코드는 간단하지만, 사실 여기에는 몇 가지 트릭이 있으며, 직관적으로 알아내기 어려운 부분들이 숨어 있다. 
 
 우선 하나씩 살펴보자. 먼저, 우선순위 큐를 사용해 가장 개수가 많은 아이템부터 하나씩 추출해야 하는데, 문제는 전체를 추출하는 게 아니라 하나만 추출하고 빠진 개수를 업데이트할 수 있는 구조가 필요하다는 점이다.
