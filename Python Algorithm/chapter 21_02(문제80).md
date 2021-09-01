@@ -175,8 +175,18 @@ counter += collections.Counter()
 # 0 이하인 아이템을 목록에서 완전히 제거  "# 1"
 counter += collections.Counter()
 ```
+* **코드 들여다 보기**<br>
+```python
+tasks = ["A", "A", "A", "B", "B", "B", "C"]
+counter = collections.Counter(tasks)  # Counter({'A': 3, 'B': 3, 'C': 1})
+for task, _ in counter.most_common():
+    counter.subtract(task)            # Counter({'A': 2, 'B': 2, 'C': 0})
+    
+counter += collections.Counter()      # Counter({'A': 2, 'B': 2})
+```
+0 이하인 아이템이 완전히 제거됨을 알 수 있다.
 
-<br>
+<br><br>
 
 또 다른 트릭은 n과 관련된 내용이다. <br>
 만약 다음의 입력값을 most_common(n)으로 추출하고, 뒤에 idle을 덧붙이는 형태로 실행한다고 가정해보자.
