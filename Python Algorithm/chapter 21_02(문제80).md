@@ -18,50 +18,37 @@ A -> B -> idle -> A -> B -> idle -> A -> B
 
 <br><br>
 
----
-쉽게 말하면 같은 task가 실행될 때 n만큼 쉬어줘야 한다. 쉬는 동안에는 다른 작업을 수행하거나 idle을 수행할 수 있다.
-
-문제의 핵심은 가장 많이 나온 task가 가장 많은 idle 을 만들 수 있다는 것이다.<br>
-따라서 가장 많이 나온 task로 idle 수를 구한 다음 남은 task 들을 idle에 최대한 채워넣는걸 목표로 한다.
-
-* **Ex)**<br>
-tasks = { A, A, A, B, B }, n = 2 일 때를 생각해보자.<br>
-cooling time인 n은 동일한 task가 가장 많은 수와 관련이 있다.
-```
-A _ _ A _ _ A
-```
-위의 경우 A가 3개, B가 2개 이므로 A만 채웠을 때 idle(빈 칸)이 4가 될 것이다.<br>
-B는 idle들 사이에 넣어주면 된다.
-```
-A B _ A B _ A
-```
-따라서 정답은 7이 된다.
-
-여기서 B를 넣기 전(가장 많이 나온 task로 idle을 구할 때) idle의 총 수를 구할 수 있다.
-```
-idle 수 = (가장 많이 나온 task 수 - 1) x n
-```
-`task 수 - 1`을 한 이유는 idle은 task들 사이에만 나오기 때문이다.<br>
-이 idle에 남은 task들을 집어넣는다고 생각하면 된다. 집어넣으면서 남은 idle 수를 갱신한 뒤,<br>
-최종 정답은 **task들의 수 + 남은 idle 수**가 된다.
-
-이제 남은 task들을 idle에 집어넣으면서 idle 수를 갱신하는 걸 보자.
-* **Ex)**<br>
-tasks = { A, A, A, B, B, B }, n = 2 일 때
-```
-A B _ A B _ A B
-```
-idle 빈칸 생성은 같지만 B가 넣어질 때도 쿨타임은 유지해야 하므로 마지막 B는 idle에 넣을 수 없다.<br>
-따라서 task i(i는 알파벳 중 하나)를 idle에 끼워넣는다고 할 때 감소되는 idle 수는 **min(i task 수, 가장 많이 나온 task 수 -1)** 과 같다.<br>
-위의 예시에서 i를 B라 하면 B task를 idle에 넣는다면 3(B 개수), 2(가장 많이 나온 task(A)의 수 - 1)의 최소값인 2가 감소돼서 idle 수는 4에서 2가 된다.<br>
-모든 task 알파벳을 탐색하며 남은 idle의 수를 갱신한 뒤 **tasks 수(알파벳 수 아님) + idle 수**가 정답이 된다.
-
- 
-<br><br>
-
 ### 문제 80 내가 구현한 코드
+풀이를 보고 코드를 구현했다.
 ```python
+import collections
 
+
+def leastInterval(tasks, n):
+    counter = collections.Counter(tasks)  # Counter({'A': 3, 'B': 3})
+    result = 0
+
+    while True:
+        sub_count = 0
+
+        for task, _ in counter.most_common(n+1):
+            sub_count += 1
+            result += 1
+
+            counter.subtract(task)
+            # 0 이하인 아이템을 목록에서 완전히 제거
+            counter += collections.Counter()
+
+        if not counter:
+            break
+
+        result += n - sub_count + 1
+
+    return result
+        
+tasks = ["A", "A", "A", "B", "C", "D"]
+n = 2
+print(leastInterval(tasks, n))
 ```
 
 <br><br>
