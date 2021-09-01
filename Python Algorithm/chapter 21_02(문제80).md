@@ -139,10 +139,26 @@ counter = collections.Counter(tasks)
 for task, _ in counter.most_common():
     counter.subtract(task)
 ```
+
+* **코드 들여다 보기**<br>
+```python
+- counter -> Counter({'A': 3, 'B': 3})
+
+- counter.most_common() -> [('A', 3), ('B', 3)]
+
+- task -> key 값 (A,B,..)
+
+- for문 후 counter -> Counter({'A': 2, 'B': 2})
+```
+
+<br>
+
 이전의 전체 코드와 같은 역할을 하는 코드인데, 훨씬 더 간결하다.<br>
 most_common()은 가장 개수가 많은 아이템부터 출력하는 함수이며, 사실상 최대 힙과 같은 역할을 한다. <br>
 그러나 pop()으로 추출되는 것은 아니기 때문에 subtract(task)를 지정해 1개씩 개수를 별도로 줄여나간다. <br>
 이처럼 Counter 모듈은 개수를 줄이는 메소드도 지원하기 때문에 매우 편리하다. 
+
+<br><br>
 
 그런데 Counter는 0과 음수도 처리하는 특징이 있다. <br>
 원래는 편리한 특징이지만 사실 우리에게는 0 이하는 필요가 없기 때문에, 매번 0 이하인지 체크하거나, 0 이하일 때는 아예 삭제하는 기능이 필요하다. 
