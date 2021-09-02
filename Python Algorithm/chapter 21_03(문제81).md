@@ -31,6 +31,53 @@ gas = [1,2,3,4,5], cost = [3,4,5,1,2]
 
 ```
 
+<br><br>
+
+## 문제 81 주유소 풀이
+### 풀이1. 모두 방문
+예제의 입력값을 표현해보면 그림 21-6과 같다.
+
+<img src="https://user-images.githubusercontent.com/55045377/131791103-881415cc-6fcc-40b7-b717-8b3bbe9056d8.png" width=50% height=50%>
+
+우선, 처음부터 한 칸씩 출발점으로 지정하고, 나머지 모든 주유소를 방문하는 방법으로 풀이해보자.
+```python
+for start in range(len(gas)):
+    ...
+    for i in range(start, len(gas) + start):
+        index = i % len(gas)
+        ...
+```
+주유소의 경로는 원형으로 연결되어 있으므로, 모듈로 연산(나머지 연산)을 하여 인덱스를 다시 0부터 지정할 수 있게 한다. <br>
+그리고 모든 주유소를 방문 가능한지 점검하고, 가능할 경우 이 문제에서는 출발점이 유일하다는 제약이 있기 때문에, 즉 정답이 한 군데이기 때문에 바로 해당 출발점을 결과로 리턴한다. <br>
+만약 중간에 끊길 경우 다시 다음번 출발점으로 이 작업을 반복한다. 
+
+전체 코드는 다음과 같다.
+```python
+from typing import List
+
+
+class Solution:
+    def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
+        for start in range(len(gas)):
+            fuel = 0
+            for i in range(start, len(gas) + start):
+                index = i % len(gas)
+
+                can_travel = True
+                if gas[index] + fuel < cost[index]:
+                    can_travel = False
+                    break
+                else:
+                    fuel += gas[index] - cost[index]
+            if can_travel:
+                return start
+        return -1
+```
+두 번의 루프가 중첩되어 있으므로 O(n^2)이다.<br>
+아울러 이 풀이는 실행 속도가 빠르지 않다. 좀 더 최적화가 필요하다.
+
+<br><br>
+
 
 
 
