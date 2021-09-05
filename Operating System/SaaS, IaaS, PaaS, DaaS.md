@@ -71,6 +71,8 @@
 <br>
 
 ### 대표적인 PaaS 서비스
+* Amazon Web Services
+* Microsoft Azure
 * Google의 Google Cloud Platform
 * 세일즈포스 닷컴의 Salesforce1 Platform (세일즈포스 닷컴은 CRM 전문 SaaS기업)
 * Naver의 Naver Cloud Platform
