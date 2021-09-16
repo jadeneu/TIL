@@ -28,7 +28,7 @@ polling은 진짜 하염없이 기다리는 거고, interrupt는 IRQ라는 메�
 
 
 
-# Reference
+# References
 * https://kkhipp.tistory.com/155
 * https://velog.io/@chy0428/polling%EA%B3%BC-interrupt%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90
 
