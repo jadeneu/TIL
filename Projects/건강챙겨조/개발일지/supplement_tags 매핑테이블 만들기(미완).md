@@ -156,27 +156,7 @@ GROUP BY name
 ORDER BY name
 ```
 
-### 3. 오류 해결
-`supplement_tags` insert를 할 방법을 결정한 뒤 sql 스크립트를 작성하는데 오류가 생겼다.
-
-* sql 스크립트
-
-<img src="https://user-images.githubusercontent.com/55045377/128627375-30c2834f-72c5-4ccb-95e6-f7b80afc6e02.png" width=60% height=60%>
-
-* 오류 내용
-```
-ERROR 1100 (HY000) at line 158: Table 'SUPPLEMENTS' was not locked with LOCK TABLES
-```
-알고 보니 `supplement_tags`에 테이블 LOCK을 걸고 `supplements` 테이블을 사용하려고 해서 생긴 문제였다.<br>
-그래서 맨 윗줄의 `LOCK TABLES ...`만 지워주면 해결되는 거였다.
-
 <br>
-
-* 오류 해결 sql 스크립트
-
-<img src="https://user-images.githubusercontent.com/55045377/128627469-3c78945c-37ee-4eda-83dc-1a043e5859ab.png" width=60% height=60%>
-
--------
 
 `supplement_tags` 테이블에 insert가 잘 된 것을 확인할 수 있다.
 
