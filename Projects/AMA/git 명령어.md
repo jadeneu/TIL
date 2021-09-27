@@ -2,3 +2,8 @@
 ```
 $ git pull upstream main
 ```
+
+* merge, pull 취소
+```
+$ git reset --merge ORIG_HEAD
+```
