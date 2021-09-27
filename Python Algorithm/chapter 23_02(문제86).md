@@ -15,3 +15,54 @@
 ```
 * 설명<br>
 [4,-1,2,1]은 합 6으로 가장 큰 서브 배열이다.
+
+<br><br>
+
+### 문제 86 내가 구현한 코드
+```python
+def solution(arr):
+  max_arr = []
+  max_arr.append(arr[0])           # 1
+  for i in range(len(arr)-1):      # 2
+    sum = max_arr[i] + arr[i+1]
+    if arr[i+1] < sum:
+      max_arr.append(sum)
+    else:
+      max_arr.append(arr[i+1])
+
+  return max(max_arr)              # 3
+
+arr = [-2,1,-3,4,-1,2,1,-5,4]
+print(solution(arr))
+```
+`arr`의 요소를 차례대로 둘씩 더하면서 더한 값이 원래 요소 값보다 크면 계속 다음 요소 값을 더하면서 값을 늘리고,<br>
+더한 값보다 원래 요소 값이 더 크면 그대로 둬서 더 큰 값이 갱신되도록 하는 코드이다.
+
+<br>
+
+코드를 자세히 설명하면 아래와 같다.
+
+* **# 1**: `arr`의 첫번째 요소를 `max_arr`에 넣는다. 나중에 for문을 돌면서 `arr`의 요소의 합과 크기 비교를 하기 위한 처리다.
+* **# 2**: for문에서 `i+1`번째 인덱스까지 보기 때문에 range를 `len(arr)-1`로 둔다.
+* **# 3**: 값 갱신이 끝나면(for문이 끝나면) 갱신 값들 중 가장 큰 값을 return 한다.
+
+<br><br>
+
+## 문제 86 최대 서브 배열 풀이
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
