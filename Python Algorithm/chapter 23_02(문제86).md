@@ -54,6 +54,56 @@ print(solution(arr))
 #### ✅ 메모이제이션이란?
 메모이제이션(memoization)은 컴퓨터 프로그램이 동일한 계산을 반복해야 할 때, 이전에 계산한 값을 메모리에 저장함으로써 동일한 계산의 반복 수행을 제거하여 프로그램 실행 속도를 빠르게 하는 기술이다.
 
+<br><br>
+
+피보나치 수열을 예로 들어보자.<br>
+
+---
+* **피보나치 수열**<br>
+피보나치 수는 첫째 및 둘째 항이 1이며 그 뒤의 모든 항은 바로 앞 두 항의 합인 수열이다. (편의상 0번째 항을 0으로 두기도 함)
+
+<img src="https://user-images.githubusercontent.com/55045377/135254677-90d5d23f-c7ed-4efe-9314-743e5be35709.png" width=40% height=40%>
+
+---
+
+<br><br>
+
+피보나치 수열을 구하는 가장 단순한 방법은 다음과 같다.<br>
+* 피보나치 수열의 n번째 항을 구하는 함수
+```c
+fib(n) {
+   if n is 1 or 2, return 1;
+   return fib(n-1) + fib(n-2);
+}
+```
+fib 함수가 재귀적으로 실행되면서 같은 인자값에 대해 여러번 실행하게 된다. 
+
+<img src="https://user-images.githubusercontent.com/55045377/135256442-01944e84-02a5-4fdd-8d95-2eb943d80f20.png">
+
+<br>
+
+이때 메모이제이션을 통해 반복 작업을 피할 수 있다.
+```
+1. memo 배열을 만들어 0으로 초기화한다. (파이썬의 경우 빈 리스트 or 딕셔너리 memo 생성)
+2. memo[1]과 memo[2]를 각각 1로 초기화한다.
+```
+```c
+fib(n) {
+   if memo[n] is zero:
+       memo[n] = fib(n-1) + fib(n-2);
+   return memo[n];
+}
+```
+
+<img src="https://user-images.githubusercontent.com/55045377/135257737-b0150535-7426-4c07-b4dd-921acef3cc7c.png">
+
+<br>
+
+---
+
+<br>
+
+다시 풀이로 돌아와 보자.
 
 
 
@@ -86,9 +136,13 @@ print(solution(arr))
 
 
 
+<br><br>
 
 
+---
+# References
+* https://ssminji.github.io/2020/02/05/the-cake-thief/
+* https://ko.wikipedia.org/wiki/%EB%A9%94%EB%AA%A8%EC%9D%B4%EC%A0%9C%EC%9D%B4%EC%85%98
 
-
-
+<br><br><br>
 
