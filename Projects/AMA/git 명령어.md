@@ -7,3 +7,8 @@ $ git pull upstream main
 ```
 $ git reset --merge ORIG_HEAD
 ```
+
+* push 취소
+```
+$ git reset HEAD^
+```
