@@ -39,8 +39,25 @@
 
 ## 문제 B3 캐시 풀이
 ### 데크를 이용한 LRU 구현
-* **LRU란?**
-LRU 알고리즘은 **Least Recently Used**의 약자로 직역하자면 가장 최근에 사용되지 않은 것 정도의 의미를 가지고 있다.<br>
+### ✅LRU란?
+* **LRU**<br>
+LRU 알고리즘은 **Least Recently Used**의 약자로 직역하자면 가장 최근에 사용되지 않은 것 정도의 의미를 가지고 있다.<br><br>
+캐시에서 메모리를 다루기 위해 사용되는 알고리즘이며,<br>
+캐시가 사용하는 리소스의 양은 제한되어 있고<br>
+캐시는 제한된 리소스 내에서 데이터를 빠르게 저장하고 접근할 수 있어야 한다.<br><br>
+이를 위해 LRU 알고리즘은 메모리 상에서 **가장 최근에 사용된 적이 없는 캐시의 메모리부터 대체**하며 새로운 데이터로 갱신시켜준다.
+
+<br>
+
+* **LRU 알고리즘 그림 설명**<br><br>
+**Input: 123145<br>
+Output: 5413**
+
+<img src="https://user-images.githubusercontent.com/55045377/139869843-3319dac5-18e9-45b4-8547-ec7c21ce1a1a.jpg" width=60%>
+
+
+* 4초 : 1은 재참조된 것이므로, 가장 오랫동안 참조되지 않은 순으로 저장된 순서를 변경한다.
+* 6초 : cache size가 가득차 5가 들어갈 수 없으므로, 가장 오랫동안 참조되지 않은(Least Recently Used) 2를 제거한 후 저장한다.
 
 
 
@@ -63,3 +80,13 @@ LRU 알고리즘은 **Least Recently Used**의 약자로 직역하자면 가장 
 
 
 
+
+
+
+
+
+# References
+* https://gomguard.tistory.com/115
+* https://j2wooooo.tistory.com/121
+
+<br><br><br>
