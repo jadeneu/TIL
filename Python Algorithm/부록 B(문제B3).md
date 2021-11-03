@@ -59,12 +59,93 @@ Output: 5413**
 * 4초 : 1은 재참조된 것이므로, 가장 오랫동안 참조되지 않은 순으로 저장된 순서를 변경한다.
 * 6초 : cache size가 가득차 5가 들어갈 수 없으므로, 가장 오랫동안 참조되지 않은(Least Recently Used) 2를 제거한 후 저장한다.
 
+<br>
+
+---
+
+<br>
+
+이제 본격적인 풀이에 들어가보자.
+
+<br>
+
+LRU는 캐시 교체 전략 중 하나로, 가장 오래전에 사용된 아이템을 버리는 방식이다. 이 문제에서는 한 가지 주의해야 할 점이 있는데, 입력값에 0이 포함되어 있다는 점이다. <br>
+이 경우 예외 처리를 하지 않고 LRU 알고리즘을 구현한다면, 입출력이 달라질 수 있으므로 주의가 필요하다. <br>
+
+또한 LRU를 바닥부터 구현할 수도 있지만 길이가 제한된 자료형이 있다면 구현하기가 한결 쉬울 것 같다.<br>
+파이썬에 그런 자료형이 있는데, 바로 데크(Deque)다.
+```python
+cache = collections.deque(maxlen=cacheSize)
+```
+데크는 크기를 지정할 수 있는 maxlen 파라미터를 지원하며, 이 경우 최대 크기를 초과할 때 가장 오래된 항목부터 제거된다.
+
+<br>
+
+### ✅데크의 maxlen
+maxlen이 지정되지 않거나 None이면, 데크는 임의의 길이로 커질 수 있다. 그렇지 않으면, 데크는 지정된 최대 길이로 제한된다.<br>
+일단 제한된 길이의 데크가 가득 차면, 새 항목이 추가될 때 해당하는 수의 항목이 반대쪽 끝에서 삭제된다.<br><br>
+  * **예시**<br>
+  ```python
+  from collections import deque
+
+  deq = deque(maxlen=3)
+
+  for i in range(5):
+      deq.append(i)
+      print(deq)
+  ```
+  ```
+  deque([0], maxlen=3)
+  deque([0, 1], maxlen=3)
+  deque([0, 1, 2], maxlen=3)
+  deque([1, 2, 3], maxlen=3)
+  deque([2, 3, 4], maxlen=3)
+  ```
+
+<br>
+
+---
+
+<br>
+
+```python
+>>> cache = collections.deque(maxlen=3)
+>>> cache.append(l)
+>>> cache.append(2)
+>>> cache.append(3)
+>>> cache
+deque([l, 2, 3])
+>>> cache.append(4)
+>>> cache
+deque([2, 3, 4])
+```
+따라서, LRU를 구현하기 위해서는 가장 최근에 액세스된 아이템을 재삽입해주기만 하면 나머지는 알아서 처리된다.
+
+전체 코드는 다음과 같다.
+```python
+import collections
+from typing import List
 
 
+def solution(cacheSize: int, cities: List[str]) -> int:
+    elapsed: int = 0
+    cache = collections.deque(maxlen=cacheSize)
+
+    for c in cities:
+        c = c.lower()
+        # 캐시 히트 시 재삽입 처리
+        if c in cache:
+            cache.remove(c)
+            cache.append(c)
+            elapsed += 1
+        else:  # 캐시 미스 시 삽입만
+            cache.append(c)
+            elapsed += 5
+    return elapsed
+```
 
 
-
-
+<br><br>
 
 
 
@@ -88,5 +169,7 @@ Output: 5413**
 # References
 * https://gomguard.tistory.com/115
 * https://j2wooooo.tistory.com/121
+* https://docs.python.org/ko/3/library/collections.html
+* https://codetorial.net/tips_and_examples/collections_deque.html
 
 <br><br><br>
