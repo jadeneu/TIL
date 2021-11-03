@@ -1,4 +1,17 @@
 # 목차
+* [부록 B 카카오 공채 문제 풀이](#부록-b-카카오-공채-문제-풀이)
+  + [문제 B3 캐시](#문제-b3-캐시)
+  + [문제 B3 캐시 풀이](#문제-b3-캐시-풀이)
+    - [데크를 이용한 LRU 구현](#데크를-이용한-lru-구현)
+    - [✅LRU란?](#lru란)
+    - [✅데크의 maxlen](#데크의-maxlen)
+
+---
+* [References](#references)
+
+<br><br><br>
+
+
 
 # 부록 B 카카오 공채 문제 풀이
 ## 문제 B3 캐시
@@ -174,7 +187,7 @@ print(solution(3, ["Jeju","Pangyo","Seoul","Jeju","Pangyo","Seoul","Jeju","Pangy
 ```
 
 
-
+<br><br>
 
 
 
