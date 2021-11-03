@@ -170,6 +170,7 @@ def solution(cacheSize: int, cities: List[str]) -> int:
     return elapsed
     
 print(solution(3, ["Jeju","Pangyo","Seoul","Jeju","Pangyo","Seoul","Jeju","Pangyo","Seoul"]))
+#print(solution(3, ["Jeju","Pangyo","Seoul","NewYork","LA","Jeju","Pangyo","Seoul","NewYork","LA"]))
 ```
 
 
