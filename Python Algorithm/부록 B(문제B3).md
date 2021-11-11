@@ -199,7 +199,6 @@ print(solution(3, ["Jeju","Pangyo","Seoul","Jeju","Pangyo","Seoul","Jeju","Pangy
 
 
 
-
 # References
 * https://gomguard.tistory.com/115
 * https://j2wooooo.tistory.com/121
