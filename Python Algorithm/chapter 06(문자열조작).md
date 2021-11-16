@@ -22,21 +22,21 @@
   * **[replace](#replace)**
   * **[translate](#translate)**
 * **문자열 분리하기**
-  * **split**
+  * **[split](#split)**
 * **구분자 문자열과 문자열 리스트 연결하기**
-  * **join**
+  * **[join](#join)**
 * **소문자를 대문자로 바꾸기**
-  * **upper**
+  * **[upper](#upper)**
 * **대문자를 소문자로 바꾸기**
-  * **lower**
+  * **[lower](#lower)**
 * **왼쪽 공백 삭제하기/왼쪽의 특정 문자 삭제하기**
-  * **lstrip**
+  * **[lstrip](#lstrip)**
 * **오른쪽 공백 삭제하기/오른쪽의 특정 문자 삭제하기**
-  * **rstrip**
+  * **[rstrip](#rstrip)**
 * **양쪽 공백 삭제하기/양쪽의 특정 문자 삭제하기**
-  * **strip**
+  * **[strip](#strip)**
 * **문자열을 왼쪽 정렬하기**
-  * **ljust**
+  * **[ljust](#ljust)**
 * **문자열을 오른쪽 정렬하기**
   * **rjust**
 * **문자열을 가운데 정렬하기**
@@ -89,6 +89,139 @@ table = str.maketrans('aeiou', '12345')
 ```
 '1ppl2'
 ```
+
+<br>
+
+## split
+**split()** 은 공백을 기준으로 문자열을 분리하여 리스트로 만든다.<br>
+```python
+'apple pear grape pineapple orange'.split()
+```
+```
+['apple', 'pear', 'grape', 'pineapple', 'orange']
+```
+**split('기준문자열')** 과 같이 기준 문자열을 지정하면 기준 문자열로 문자열을 분리한다.
+```python
+'apple, pear, grape, pineapple, orange'.split(', ')
+```
+```
+['apple', 'pear', 'grape', 'pineapple', 'orange']
+```
+
+<br>
+
+## join
+**join(리스트)** 는 구분자 문자열과 문자열 리스트의 요소를 연결하여 문자열로 만든다.<br>
+```python
+# 공백
+' '.join(['apple', 'pear', 'grape', 'pineapple', 'orange'])
+```
+```
+'apple pear grape pineapple orange'
+```
+```python
+# 마이너스 '-'
+'-'.join(['apple', 'pear', 'grape', 'pineapple', 'orange'])
+```
+```
+'apple-pear-grape-pineapple-orange'
+```
+
+<br>
+
+## upper
+**upper()** 는 문자열의 문자를 모두 대문자로 바꾼다.<br>
+```python
+'python'.upper()
+```
+```
+'PYTHON'
+```
+
+<br>
+
+## lower
+**lower()** 는 문자열의 문자를 모두 소문자로 바꾼다.<br>
+```python
+'PYTHON'.lower()
+```
+```
+'python'
+```
+
+<br>
+
+## lstrip
+**lstrip()** 은 문자열에서 왼쪽에 있는 연속된 모든 공백을 삭제한다.<br>
+```python
+'   Python   '.lstrip()
+```
+```
+'Python   '
+```
+**lstrip('삭제할문자들')** 과 같이 삭제할 문자들을 문자열 형태로 넣어주면 문자열 왼쪽에 있는 해당 문자를 삭제한다. 단, 여기서는 공백을 넣지 않았으므로 공백은 그대로 둔다.<br>
+```python
+', python.'.lstrip(',.')
+```
+```
+' python.'
+```
+
+<br>
+
+## rstrip
+**rstrip()** 은 문자열에서 오른쪽에 있는 연속된 모든 공백을 삭제한다.<br>
+```python
+'   Python   '.rstrip()
+```
+```
+'   Python'
+```
+**rstrip('삭제할문자들')** 과 같이 삭제할 문자들을 문자열 형태로 넣어주면 문자열 오른쪽에 있는 해당 문자를 삭제한다. 마찬가지로 공백을 넣지 않았으므로 공백은 그대로 둔다.<br>
+```python
+', python.'.rstrip(',.')
+```
+```
+', python'
+```
+
+<br>
+
+## strip
+**strip()** 은 문자열에서 양쪽에 있는 연속된 모든 공백을 삭제한다.<br>
+```python
+'   Python   '.strip()
+```
+```
+'Python'
+```
+**strip('삭제할문자들')** 과 같이 삭제할 문자들을 문자열 형태로 넣어주면 문자열 양쪽에 있는 해당 문자를 삭제한다. 여기서도 공백을 넣지 않았으므로 공백은 그대로 둔다.<br>
+```python
+', python.'.strip(',.')
+```
+```
+' python'
+```
+
+<br>
+
+## ljust
+**ljust(길이)** 는 문자열을 지정된 길이로 만든 뒤 왼쪽으로 정렬하며 남는 공간을 공백으로 채운다.<br>
+```python
+'python'.ljust(10)
+```
+```
+'python    '
+```
+
+
+
+
+
+
+
+
+
 
 
 
