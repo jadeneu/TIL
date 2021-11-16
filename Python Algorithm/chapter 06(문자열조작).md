@@ -38,12 +38,11 @@
 * **문자열을 왼쪽 정렬하기**
   * **[ljust](#ljust)**
 * **문자열을 오른쪽 정렬하기**
-  * **rjust**
+  * **[rjust](#rjust)**
 * **문자열을 가운데 정렬하기**
-  * **center**
-* **메서드 체이닝**
+  * **[center](#center)**
 * **문자열 왼쪽에 0 채우기**
-  * **zfill**
+  * **[zfill](#zfill)**
 * **문자열 위치 찾기**
   * **find**
 * **오른쪽에서부터 문자열 위치 찾기**
@@ -212,6 +211,43 @@ table = str.maketrans('aeiou', '12345')
 ```
 ```
 'python    '
+```
+
+<img src="https://dojang.io/pluginfile.php/13715/mod_page/content/3/024001.png" width=60%>
+
+
+## rjust
+**rjust(길이)** 는 문자열을 지정된 길이로 만든 뒤 오른쪽으로 정렬하며 남는 공간을 공백으로 채운다.<br>
+```python
+'python'.rjust(10)
+```
+```
+'    python'
+```
+
+<img src="https://dojang.io/pluginfile.php/13715/mod_page/content/3/024002.png" width=60%>
+
+
+## center
+center(길이)는 문자열을 지정된 길이로 만든 뒤 가운데로 정렬하며 남는 공간을 공백으로 채운다.<br>
+```python
+'python'.center(10)
+```
+```
+'  python  '
+```
+
+<img src="https://dojang.io/pluginfile.php/13715/mod_page/content/3/024003.png" width=60%>
+
+## zfill
+**zfill(길이)** 는 지정된 길이에 맞춰서 문자열의 왼쪽에 0을 채운다.<br>
+```python
+>>> '35'.zfill(4)        # 숫자 앞에 0을 채움
+'0035'
+>>> '3.5'.zfill(6)       # 숫자 앞에 0을 채움
+'0003.5'
+>>> 'hello'.zfill(10)    # 문자열 앞에 0을 채울 수도 있음
+'00000hello'
 ```
 
 
