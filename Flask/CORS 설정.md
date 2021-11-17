@@ -1,13 +1,8 @@
-# 목차
-* [References](#references)
-
-
-<br><br><br>
-
 # CORS
 **CORS**(Cross Origin Resource Sharing) 설정은 언제 필요할까?
 
-* 다른 도메인이나 로컬 환경에서 자바스크립트로 api 등을 호출하는 경우 브라우저에서 동일 출처 위반의 에러가 나타날 수 있다.
+* 다른 도메인이나 로컬 환경에서 자바스크립트로 api 등을 호출하는 경우 브라우저에서 동일 출처 위반의 에러가 나타날 수 있다.<br>
+-> 동일출처정책(same-origin policy)때문에 일반적인 경우 외부서버에서 온 요청을 차단하게 된다.
 
 이를 해결하기위해 **CORS**를 설정할 수 있다.
 
@@ -74,17 +69,7 @@ CORS(application, resources={r'*': {'origins': ['https://webisfree.com', 'http:/
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+<br><br><br>
 
 
 
