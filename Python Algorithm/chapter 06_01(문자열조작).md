@@ -58,7 +58,7 @@
 
 
 ## replace
-replace('바꿀문자열', '새문자열')은 문자열 안의 문자열을 다른 문자열로 바꾼다.<br>
+**replace('바꿀문자열', '새문자열')** 은 문자열 안의 문자열을 다른 문자열로 바꾼다.<br>
 ```python
 s = 'Hello, world!'
 print(s.replace('world!', 'Python'))
@@ -79,7 +79,7 @@ Hello, world!
 <br>
 
 ## translate
-translate는 문자열 안의 문자를 다른 문자로 바꾼다.<br>
+**translate**는 문자열 안의 문자를 다른 문자로 바꾼다.<br>
 먼저 str.maketrans('바꿀문자', '새문자')로 변환 테이블을 만든다. 그다음에 translate(테이블)을 사용하면 문자를 바꾼 뒤 결과를 반환한다. 
 ```python
 table = str.maketrans('aeiou', '12345')
