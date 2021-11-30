@@ -1,6 +1,6 @@
 # 목차
 
-<img src="https://user-images.githubusercontent.com/55045377/144026889-ce73caf1-61bf-473f-b02c-1f4d36e5f085.png" width=40%>
+<img src="https://user-images.githubusercontent.com/55045377/144027246-f194644b-60b3-4347-a0b7-d397bffa2a15.png" width=40%>
 
 # chapter 01 장고 개발의 기본 사항 및 가상 환경 사용하기
 ## 1.1 장고 개발의 기본 사항
