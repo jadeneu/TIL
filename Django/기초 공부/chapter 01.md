@@ -1,5 +1,7 @@
 # 목차
 
+<img src="https://user-images.githubusercontent.com/55045377/144026889-ce73caf1-61bf-473f-b02c-1f4d36e5f085.png" width=40%>
+
 # chapter 01 장고 개발의 기본 사항 및 가상 환경 사용하기
 ## 1.1 장고 개발의 기본 사항
 ### 1.1.1 MVT 개발 방식
