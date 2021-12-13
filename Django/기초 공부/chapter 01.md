@@ -90,8 +90,11 @@ URLconf를 정의할 때는 하나의 파일에 정의할 수도 있고, 2개의
 ### 1.2.1 가상 환경 만들기
 가상 환경을 만들고 설치된 패키지 목록을 기록할 수 있다.
 ```
-// venv 가상 환경에 설치된 패키지 목록을 구한다.
-(venv)$ pip freeze > requirements.txt
+# venv 가상 환경에 설치된 패키지 목록을 구한다.
+(venv)$ pip freeze > requirements.txt 
+
+# venv 가상 환경의 패키지와 동일하게 다른 가상 환경에 설치한다.
+(othervenv)$ pip install -r requirements.txt
 ```
 
 
