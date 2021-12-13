@@ -84,6 +84,15 @@ URLconf를 정의할 때는 하나의 파일에 정의할 수도 있고, 2개의
 * Admin 화면에서 기본적으로 User와 Group 테이블이 보이는 것은 이미 settings.py 파일에 django.contrib.auth 애플리케이션이 등옥되어 있기 때문이다.
 * Admin 사이트에 원하는 테이블을 등록하기 위해서는 admin.py 파일에 작업하면 된다.
 
+<br><br>
+
+## 1.2 가상 환경 사용하기 - venv 모듈
+### 1.2.1 가상 환경 만들기
+가상 환경을 만들고 설치된 패키지 목록을 기록할 수 있다.
+```
+// venv 가상 환경에 설치된 패키지 목록을 구한다.
+(venv)$ pip freeze > requirements.txt
+```
 
 
 
