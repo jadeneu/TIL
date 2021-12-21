@@ -69,9 +69,31 @@ URL 설계 내용은 URLconf 코딩에 반영되고, urls.py 파일에 코딩한
 이 중 뷰는 사용자 요청을 처리하고 응답을 반환하는 역할을 한다.<br>
 뷰는 함수로도, 클래스로도 구현할 수 있는데, 클래스로 구현하면 **제네릭 뷰**를 사용할 수 있다.
 
+장고에서는 용도에 따라 다양한 [제네릭 뷰](https://docs.djangoproject.com/ko/3.1/ref/class-based-views/)를 제공하고 있으며, 우리는 이 제네릭 뷰를 상속하고 메서드를 재정의하여 좀 더 편리하게 작업할 수 있다.<br>
+제너릭 뷰에는 용도에 따라 ListView, DetailView, FormView, TemplateView 등이 있는데, 전부 **View** 클래스를 상속받고 있다. 그렇기 때문에 **View** 클래스 메서드를 이해하면, 다른 제네릭 뷰들의 공통 메서드도 이해할 수 있을 것이다.
+
+## View
+앞서 언급했듯이, 다른 제너릭 뷰가 상속받는 기본 제너릭 뷰이다. 메서드는 다음과 같다.
+
+### 1. setup(request, \*args, \*\*kwargs)
+`dispatch()` 전에 초기화를 수행한다. 이 메서드를 재정의하는 경우 `super()`를 호출해야 한다. 아래는 **View**에 정의된 `setup()` 코드이다.<br>
+* **NOTE:** `super`는 기반 class, 즉 superior class, 부모 class를 찾는 과정이라고 생각하자.
+```python
+    def setup(self, request, *args, **kwargs):
+        """Initialize attributes shared by all view methods."""
+        self.request = request
+        self.args = args
+        self.kwargs = kwargs
+```
+
+### 2. dispatch(request, \*args, \*\*kwargs)
+요청을 받고 HTTP 응답을 반환하는 메서드이다. GET 요청은 `get()`으로, POST 요청은 `post()` 메서드로 호출한다.
 
 
-### references
+
+
+
+## references
 * https://velog.io/@reowjd/Djangoview-%EC%82%B4%ED%8E%B4%EB%B3%B4%EA%B8%B0
 
 
