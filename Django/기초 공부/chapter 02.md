@@ -77,7 +77,7 @@ URL 설계 내용은 URLconf 코딩에 반영되고, urls.py 파일에 코딩한
 
 ### 1. setup(request, \*args, \*\*kwargs)
 `dispatch()` 전에 초기화를 수행한다. 이 메서드를 재정의하는 경우 `super()`를 호출해야 한다. 아래는 **View**에 정의된 `setup()` 코드이다.<br>
-* **NOTE:** `super`는 기반 class, 즉 superior class, 부모 class를 찾는 과정이라고 생각하자.
+* **NOTE:** `super()`는 기반 class, 즉 superior class, 부모 class를 찾는 과정이라고 생각하자.
 ```python
     def setup(self, request, *args, **kwargs):
         """Initialize attributes shared by all view methods."""
