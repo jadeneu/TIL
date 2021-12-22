@@ -88,7 +88,17 @@ URL 설계 내용은 URLconf 코딩에 반영되고, urls.py 파일에 코딩한
 
 ### 2. dispatch(request, \*args, \*\*kwargs)
 요청을 받고 HTTP 응답을 반환하는 메서드이다. GET 요청은 `get()`으로, POST 요청은 `post()` 메서드로 호출한다.
-
+```python
+   def dispatch(self, request, *args, **kwargs):
+        # Try to dispatch to the right method; if a method doesn't exist,
+        # defer to the error handler. Also defer to the error handler if the
+        # request method isn't on the approved list.
+        if request.method.lower() in self.http_method_names:
+            handler = getattr(self, request.method.lower(), self.http_method_not_allowed)
+        else:
+            handler = self.http_method_not_allowed
+        return handler(request, *args, **kwargs)
+```
 
 
 
