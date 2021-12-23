@@ -100,6 +100,16 @@ URL 설계 내용은 URLconf 코딩에 반영되고, urls.py 파일에 코딩한
         return handler(request, *args, **kwargs)
 ```
 
+### 3. http_method_not_allowed(request, \*args, \*\*kwargs)
+뷰가 지원하지 않는 HTTP 메서드를 호출한 경우, `http_method_not_allowed()` 메서드가 대신 호출된다.
+```python
+   def http_method_not_allowed(self, request, *args, **kwargs):
+        logger.warning(
+            'Method Not Allowed (%s): %s', request.method, request.path,
+            extra={'status_code': 405, 'request': request}
+        )
+        return HttpResponseNotAllowed(self._allowed_methods())
+```
 
 
 
