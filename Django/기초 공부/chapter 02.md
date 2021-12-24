@@ -60,7 +60,7 @@ URL 설계 내용은 URLconf 코딩에 반영되고, urls.py 파일에 코딩한
 
 
 
-
+<br><br>
 
 ## 제네릭 뷰
 > 제네릭 뷰는 장고에서 기본적으로 제공하는 뷰 클래스를 의미한다. 
@@ -111,7 +111,16 @@ URL 설계 내용은 URLconf 코딩에 반영되고, urls.py 파일에 코딩한
         return HttpResponseNotAllowed(self._allowed_methods())
 ```
 
-
+### 4. options(request, \*args, \*\*kwargs)
+HTTP OPTIONS 요청에 대한 응답을 처리한다.
+```python
+    def options(self, request, *args, **kwargs):
+        """Handle responding to requests for the OPTIONS HTTP verb."""
+        response = HttpResponse()
+        response['Allow'] = ', '.join(self._allowed_methods())
+        response['Content-Length'] = '0'
+        return response
+```
 
 ## references
 * https://velog.io/@reowjd/Djangoview-%EC%82%B4%ED%8E%B4%EB%B3%B4%EA%B8%B0
