@@ -38,7 +38,12 @@ URL 설계 내용은 URLconf 코딩에 반영되고, urls.py 파일에 코딩한
 
 <img src="https://user-images.githubusercontent.com/55045377/146678037-c9fb616d-419c-4a35-994a-e399270a0115.png" width=70%>
 
+<br>
 
+### 2.1.5 작업/코딩 순서
+* 이 책에서의 작업/코딩 순서
+
+<img src="https://user-images.githubusercontent.com/55045377/147384772-e99bbb5b-54ad-46c9-8e58-80096c619138.png" width=70%>
 
 
 
