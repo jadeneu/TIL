@@ -71,8 +71,99 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 <br>
 
-**두 번째로** 프로젝트에 포함되는 애플리케이션들은 모두 설정 파일에 등록되어야 한다.
+**두 번째로** 프로젝트에 포함되는 애플리케이션들은 모두 설정 파일에 등록되어야 한다. 따라서 startapp 명령으로 애플리케이션을 생성했다면, 설정 파일에 꼭 등록해야 한다.
 
+<br>
+
+**세 번째로** 템플릿 관련 사항도 확인한다. 템플릿 항목을 설정하는 방법은 1.8 버전부터 변경되었다. 자세한 설명은 [15.1 템플릿 설정 항목](#)을 참고하자. 보통 DIRS 항목을 제외한 나머지 항목들은 변경하지 않고 사용한다. DIRS 항목은 프로젝트 템플릿 파일이 위치할 디렉토리를 지정한다. 템플릿 파일을 찾을 때, 프로젝트 디렉토리는 애플리케이션 템플릿 디렉토리보다 먼저 검색한다.
+```python
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],   # 
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+```
+
+<br>
+
+**네 번째로** 프로젝트에 사용할 데이터베이스 엔진이다. 장고는 디폴트로 SQLite3 데이터베이스 엔진을 사용하도록 설정되어 있다. 물론 다른 데이터베이스 엔진으로 변경할 수도 있는데, 만일 MySQL이나 Oracle, PostgreSQL 등 다른 데이터베이스로 변경하고 싶다면 settings.py 파일에서 수정해주면 된다. 이 책에서는 SQLite3 데이터베이스를 사용할 것이므로, 설정된 사항을 변경하지 않고 확인만 한다.
+
+파일 중간에 다음과 같은 데이터베이스 설정 항목을 확인할 수 있다.
+```python
+# Database
+# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+```
+
+<br>
+
+**다섯 번째는** 타임존 지정이다. 처음에는 세계표준시(UTC)로 되어 있는데, 한국 시간으로 변경한다.
+```python
+# TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
+```
+
+<br>
+
+**여섯 번째는** 정적 파일에 관한 설정이다. STATIC_URL 항목은 최초 settings.py 파일이 만들어질 때 장고가 지정해준 그대로이고, STATICFILES_DIRS 항목은 프로젝트 정적 파일이 위치할 디렉토리를 의미하는데, 개발자가 직접 지정한다. 
+
+템플릿 파일을 찾는 순서와 비슷하게, 정적 파일을 찾을 때도 각 애플리케이션의 static/ 디렉토리보다 STATICFILES_DIRS 항목으로 지정한 디렉토리를 먼저 검색한다.
+
+정적 파일 처리에 대한 자세한 설명은 [15.7 staticfiles 애플리케이션 기능](#)을 참고하자.
+```python
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]    # 추가
+```
+
+<br>
+
+**일곱 번째는** 미디어 관련 사항을 지정하는 것이다. 이 항목들은 파일 업로드 기능을 개발할 대 필요한 설정이다. 
+```python
+# 추가
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+```
+
+<br>
+
+지금까지 설정 파일에 등록한 7개 항목 이외에도 특정 앱에서 필요한 항목이나 여러분이 임의로 원하는 항목을 추가, 삭제해도 된다. 한 예로 한국 시간대만 사용하는 프로젝트인 경우 아래와 같이 지정하면, DB에 저장되는 시간도 UTC가 아니라 한국 시간으로 저장되어 편리하다.
+```python
+# USE_TZ = True
+USE_TZ = False
+```
+
+<br>
+
+또 다른 예로 장고의 사용 언어를 아래처럼 한글로 지정하면, Admin 사이트 화면의 메뉴 및 설명 등이 한글로 표시된다. 이 설정은 날짜/시간 등의 표현이 달라지므로 주의해야 한다. 예를 들어, [3.2.5절의 post_archive_year.html](#)에 사용된 date:'b'의 의미가 en-us인 경우는 'jan'이 되지만, ko-kr인 경우는 '1월'로 변경된다는 점을 유의하기 바랍니다.
+```python
+# LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko-kr'
+```
+
+<br>
+
+사실 settings.py 설정 파일은 프로젝트의 전반적인 사항들을 설정해주는 곳으로, 루트 디렉토리를 포함한 각종 디렉토리의 위치, 로그의 형식, 프로젝트에 포함된 애플리케이션 등이 지정되어 있어서 그 내용에 익숙해질수록 장고의 모습을 이해하는 데 도움이 된다. 그러니 당장은 이햐가 되지 않더라도 어떤 항목이 정의되어 있는지 자주 확인해보자.
+
+<br><br>
+
+### 2.2.3 기본 테이블 생성
+다음은 기본 테이블 생성을 위해 아래 명령을 실행한다. migrate 명령은 데이터베이스에 변경사항이 있을 때 이를 반영해주는 명령이다.
 
 
 
