@@ -61,10 +61,24 @@ class HomeView(TemplateView):                  # 1
 ```
 
 위 소스를 라인별로 설명하면 다음과 같다.
-* **# 1**: [TemplateView](https://docs.djangoproject.com/ko/3.1/ref/class-based-views/base/#templateview) 제네릭 뷰를 상속받아 사용하고 있다. TemplateView를 사용하는 경우에는 필수적으로 template_name 클래스 변수를 오버라이딩으로 지정해줘야 한다.
+* **# 1**: TemplateView 제네릭 뷰를 상속받아 사용하고 있다. TemplateView를 사용하는 경우에는 필수적으로 template_name 클래스 변수를 오버라이딩으로 지정해줘야 한다.<br>
+TemplateView는 urls.py에서 view를 지정하지 않고 템플릿을 바로 지정해야 할 때 사용한다. 템플릿이 주어지면 해당 템플릿을 렌더링한다.
 * **# 2**: projects 프로젝트의 첫 화면을 보여주기 위한 템플릿 파일을 home.html로 지정했다. 템플릿 파일이 위치하는 디렉토리 settings.py 파일의 TEMPLATE_DIRS 항목으로 지정되어 있다.
 
+<br>
 
+### 4.2.5 템플릿 코딩하기 - 부트스트랩 메인 메뉴: home.html
+첫 페이지의 템플릿을 코딩할 파일의 이름은 home.html이다. 이는 앞의 views.py 파일에 있는 HomeView에서 지정한 파일명이다. 파일의 위치는 개별 애플리케이션 템플릿이 아니라 프로젝트 템플릿이므로, 프로젝트 템플릿 디렉토리에 생성한다. 프로젝트 템플릿 디렉토리는 settings.py 파일에 다음과 같이 정의한 바 있다.
+```python
+TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
+```
+home.html에는 모든 페이지에서 공통으로 사용하는 제목과 메뉴도 포함되는데, 이들은 4.2.6절에서 장고의 상속 기능을 활용하여 base.html로 옮길 것이다.
+
+새로운 디렉토리를 만들고 home.html 템플릿 파일에 다음과 같이 입력한다.
+* 부트스트랩 메인 메뉴 - templates/home.html
+```html
+
+```
 
 
 
