@@ -240,6 +240,15 @@ class Bookmark(models.Model):
 <br>
 
 ### 2.3.2 Admin 사이트에 테이블 반영
+앞서 models.py 파일에서 정의한 테이블을 Admin 사이트에 보이도록 등록하자. 다음처럼 admin.py 파일에 등록해주면 된다.
+```python
+from django.contrib import admin
+from bookmark.models import Bookmark
+
+@admin.register(Bookmark)
+class BookmarkAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'url')
+```
 
 
 
