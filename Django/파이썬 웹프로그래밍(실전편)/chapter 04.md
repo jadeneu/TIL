@@ -50,6 +50,19 @@ urlpatterns = [
 ```
 
 ### 4.2.4 뷰 코딩하기
+이제 URLconf에서 지정한 HomeView를 코딩한다. HomeView는 특별한 처리 로직 없이 단순히 템플릿만 보여주는 로직이므로, TemplateView 제네릭 뷰를 상속받아 코딩한다.
+
+파일의 위치는 프로젝트와 관련된 뷰이므로, projects/views.py 파일에 코딩하는 것이 적절하다. 다음과 같은 내용으로 views.py 파일을 새로 만든다.
+```python
+from django.views.generic import TemplateView
+
+class HomeView(TemplateView):                  # 1
+    template_name = 'home.html'                # 2
+```
+
+위 소스를 라인별로 설명하면 다음과 같다.
+* **# 1**: [TemplateView](https://docs.djangoproject.com/ko/3.1/ref/class-based-views/base/#templateview) 제네릭 뷰를 상속받아 사용하고 있다. TemplateView를 사용하는 경우에는 필수적으로 template_name 클래스 변수를 오버라이딩으로 지정해줘야 한다.
+* **# 2**: projects 프로젝트의 첫 화면을 보여주기 위한 템플릿 파일을 home.html로 지정했다. 템플릿 파일이 위치하는 디렉토리 settings.py 파일의 TEMPLATE_DIRS 항목으로 지정되어 있다.
 
 
 
