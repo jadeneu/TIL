@@ -89,7 +89,7 @@ home.html에는 모든 페이지에서 공통으로 사용하는 제목과 메�
 </head>
 
 <body style="padding-top:90px;">  # 4
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">  # 5 (<nav> 전체)
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">  --------------------------------------------- # 5
         <a class="navbar-brand" href="#">Navbar</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
             <span class="navbar-toggler-icon"></span>
@@ -123,15 +123,15 @@ home.html에는 모든 페이지에서 공통으로 사용하는 제목과 메�
                 <button class="btn btn-outline-successs my-2 ny-sm-0" type="submit">Search</button>
             </form>
         </div>
-    </nav>  # 5 (<nav> 전체)
+    </nav>  ------------------------------------------------------------------------------------------------------------- # 5
 
-    <div class="container bg-warning">  # 6 (<div> 전체)
+    <div class="container bg-warning">  --------- # 6
         <h4>This is CONTENT area.</h4>
-    </div>
+    </div>  ------------------------------------- # 6
 
-    <footer class="fixed-bottom bg-info">  # 7 (<footer> 전체)
+    <footer class="fixed-bottom bg-info">  ------ # 7
         <h4>This is FOOTER area.</h4>
-    </footer>
+    </footer>  ---------------------------------- # 7
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/und/popper.min.js"></script>
@@ -156,16 +156,16 @@ home.html에는 모든 페이지에서 공통으로 사용하는 제목과 메�
 
 이번에는 home.html 코드에 장고의 상속 기능을 적용해서, base.html과 home.html 두 개의 파일로 나눈다.
 
-다음과 같이 base.html 파일에 입력한다. base.html에는 모든 페이지에서 공통으로 사용하는 제목과 메뉴, 그리고 상속 기능에 맞춰 페이지 구성 요소들을 배치하는 [{% block %}](#-block-) 태그 기능이 들어 있다. 
+다음과 같이 base.html 파일에 입력한다. base.html에는 모든 페이지에서 공통으로 사용하는 제목과 메뉴, 그리고 상속 기능에 맞춰 페이지 구성 요소들을 배치하는 [{% block %}](#--block-) 태그 기능이 들어 있다. 
 
 * 상속 기능 적용 - base.html 코딩
 ```html
-<!DOCTYPE html>  # 1
+<!DOCTYPE html>  ---------------------------------------------------------------- # 1
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  # 1
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  ----- # 1
     
     <title>{% block title %}Django Web Programming{% endblock %}</title>  # 2
 
@@ -174,7 +174,7 @@ home.html에는 모든 페이지에서 공통으로 사용하는 제목과 메�
     {% block extra-style %}{% endblock %}  # 3
 </head>
 
-<body style="padding-top: 90px;">  # 4 (<nav> 끝까지)
+<body style="padding-top: 90px;">  ----------------------------------------------------------------------------------- # 4 
     
     ######## home.html 의 중간 내용과 동일 ########
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
@@ -211,11 +211,11 @@ home.html에는 모든 페이지에서 공통으로 사용하는 제목과 메�
                 <button class="btn btn-outline-successs my-2 ny-sm-0" type="submit">Search</button>
             </form>
         </div>
-    </nav>  # 4 (<nav> 끝까지)
+    </nav>  ---------------------------------------------------------------------------------------------------------- # 4
 
-    <div class="container bg-warning">  # 5
+    <div class="container bg-warning">  ------- # 5
         {% block content %}{% endblock %}
-    </div>  # 5
+    </div>  ----------------------------------- # 5
 
     {% block footer %}{% endblock %}  # 6
 
@@ -232,21 +232,21 @@ home.html에는 모든 페이지에서 공통으로 사용하는 제목과 메�
 라인별로 설명하면 다음과 같다.
 * **# 1**: 이 부분은 {% block %} 태그가 없으므로, 상속을 받는 하위 html 파일, 이번 절에서는 home.html에도 동일하게 들어간다.
 * **# 2**: \<title\> 태그 부분은 각 페이지마다 달라지는 부분이므로 {% block %} 태그를 사용했다. 하위 html 파일에서 오버라이딩하지 않으면, 즉 {% block title %} 태그를 사용하지 않으면 Django Web Programming이라는 문구가 디폴트로 사용된다. 아래와 같이 코딩하는 것과의 차이점을 이해하자.<br>
-```python
-<title>{% block title %}{% endblock %}</title>
-```
+    ```python
+    <title>{% block title %}{% endblock %}</title>
+    ```
 * **# 3**: 하위 html 파일에서 이 부분에 \<style\> 태그를 추가할 가능성이 있으므로, {% block %} 태그를 기입했다. 이때 블록 태그 이름 extra-style은 변경해도 된다.
 * **# 4**: 변경 사항 없음. {% block %} 태그가 없으므로 하위 html 파일에 동일하게 나타난다.
 * **# 5**: 본문 내용은 각 페이지마다 달라질 수 있으므로, {% block %} 태그를 사용했다. 블록 태그 이름은 content이다. 하위 html 파일에서 채우는 {% block content %} 내용에는 container 클래스가 적용되도록 했다. 즉 아래와 같이 코딩하는 것과의 차이점을 이해하자.<br>
-```python
-{% block content %}{% endblock %}
-```
+    ```python
+    {% block content %}{% endblock %}
+    ```
 * **# 6**: 하위 html 파일에서 이 부분에 FOOTER 내용을 추가할 가능성이 있으므로, {% block %} 태그를 기입했다. 블록 태그 이름은 footer이다. '# 5'와 유사한 설명인데, 하위 html 파일에서는 FOOTER 내용이 없을 수도 있으므로, 아래와 같이 코딩하지 않았다.
-```python
-<footer class="fixed-bottom bg-info">
-{% block footer %}{% endblock %}
-</footer>
-```
+    ```python
+    <footer class="fixed-bottom bg-info">
+    {% block footer %}{% endblock %}
+    </footer>
+    ```
 
 <br>
 
@@ -259,6 +259,125 @@ home.html에는 모든 페이지에서 공통으로 사용하는 제목과 메�
 <br>
 
 ### 4.2.7 템플릿 코딩하기 - 상속 기능: home.html
+> 템플릿 상속 기능을 사용함으로써 home.html 코드가 간단해지고 base.html 코드를 재사용하고 있다는 점이 중요하다.
+
+아래와 같이 home.html 파일의 내용을 변경한다. 상위 base.html 파일에서 정의한 블록 태그들을 하위 home.html 파일에서 오버라이딩하면 된다.
+
+* 상속 기능 적용 - home.html 코딩
+```html
+{% extends 'base.html' %}  # 1
+
+{% block title %}home.html{% endblock %}  # 2
+
+{% block content %}  -------------------- # 3
+    <h4>This is CONTENT area.</h4>
+{% endblock %}   ------------------------ # 3
+
+{% block footer %}  --------------------- # 4
+<footer class="fixed-bottom bg-info">
+    <h4>This is FOOTER area.</h4>
+</footer>
+{% endblock %}  ------------------------- # 4
+```
+
+라인별로 설명하면 다음과 같다.
+* **# 1**: base.html 템플릿 파일을 상속받는다. {% extends %} 태그 문장은 항상 첫 줄에 작성해야 한다.
+* **# 2**: title 블록을 재정의한다. 즉, 페이지 title을 home.html이라고 정의한다.
+* **# 3**: content 블록을 재정의한다. 블록의 내용은 [4.2.5 템플릿 코딩하기](#425-템플릿-코딩하기---부트스트랩-메인-메뉴-homehtml)와 동일하다.
+* **# 4**: footer 블록을 재정의한다. 블록의 내용은 [4.2.5 템플릿 코딩하기](#425-템플릿-코딩하기---부트스트랩-메인-메뉴-homehtml)와 동일하다.
+
+상위 base.html 파일에서 정의한 extra-style 블록과 extra-script 블록처럼, 하위 home.html 파일에서 필요하지 않으면 사용하지 않아도 된다.
+
+이렇게 [4.2.5 템플릿 코딩하기](#425-템플릿-코딩하기---부트스트랩-메인-메뉴-homehtml)에서 작성한 home.html 파일을, 템플릿 상속 기능을 활용하여 base.html과 home.html 두 개의 파일로 나누어 작성했다.
+
+<br>
+
+### 4.2.8 템플릿 코딩하기 - base.html 완성
+앞에서 작성한 base.html 파일은 부트스트랩의 샘플 코드를 사용한 것이므로, 이제 우리 프로젝트에 맞게 수정하자. 주요 내용은 메인 메뉴의 모습을 변경하는 것이다. 변경된 최종 코드는 다음과 같다.
+
+* base.html 완성
+```html
+<!DOCTYPE html>  ------------------------------------------------------------------------------------------------- # 1
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Django Web Programming{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    {% block extra-style %}{% endblock %}
+</head>
+
+<body style="padding-top: 90px;">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">  --------------------------------------- # 1
+        <span class="navbar-brand mx-5 nb-0 font-weight-bold font-italic">Django - Python Web Programming</span>  # 2
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item mx-1 btn btn-primary">  ------------------------------------------------------- # 3
+                    <a class="nav-link text-white" href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="nav-item mx-1 btn btn-primary">
+                    <a class="nav-link text-white" href="{% url 'bookmark:index' %}">Bookmark</a>
+                </li>
+                <li class="nav-item mx-1 btn btn-primary">
+                    <a class="nav-link text-white" href="{% url 'blog:index' %}">Blog</a>
+                </li>
+                <li class="nav-item mx-1 btn btn-primary">
+                    <a class="nav-link text-white" href="">Photo</a>
+                </li>  -------------------------------------------------------------------------------------------- # 3
+
+                <li class="nav-item dropdown mx-1 btn btn-primary">  ---------------------------------------------- # 4
+                    <a class="nav-link dropdown-toggle text-white" href="#" data-toggle="dropdown">Util</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdowm-item" href="{% url 'admin:index' %}">Admin</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdowm-item" href="{% url 'blog:post_archive' %}">Archive</a>
+                        <a class="dropdowm-item" href="">Search</a>
+                    </div>
+                </li>  -------------------------------------------------------------------------------------------- # 4
+            </ul>
+
+            <form class="form-inline my-2" action="" method="post"> {% csrf_token %}  ----------------------------- # 5
+                <input class="form-control mr-sm-2" type="search" placeholder="global search" name="search_word">
+            </form>  ---------------------------------------------------------------------------------------------- # 5
+        </div>
+    </nav>
+
+    <div class="container">  ----------------- # 6
+        {% block content %}{% endblock %}
+    </div>  ---------------------------------- # 6
+
+    {% block footer %}{% endblock %}
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/und/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/c998a172fe.js"></script>  # 7
+
+    {% block extra-script %}{% endblock %}
+
+</body>
+</html>
+```
+
+라인별로 설명하면 다음과 같다.
+* **# 1**: 변경사항 없음
+* **# 2**: 사이트 제목의 문구를 바꾸었고, 스타일을 bold/italic 체로, 마진(mx, mb)을 넓게 조정했다. \<a\> 태그 대신에 \<span\> 태그로 변경해서, 제목에는 링크를 달지 않았다.
+* **# 3**: 메뉴 이름을 Home, Bookmark, Blog, Photo로 변경했고, 각 제목에는 {% url %} 태그를 활용해 링크를 달았다. 글자색을 흰색(text-white)으로, 메뉴 간 간격 조정(mx-1), 마우스 오버시 버트(btn) 모양이 되도록 변경했다. Photo 앱은 9장에서 개발 예정.
+* **# 4**: 드롭다운 메뉴명을 Util이라고 했고, Admin/Archive/Search 서브 메뉴를 만든다. 각 서브 메뉴에는 해당 URL 링크를 연결한다. Search 기능은 8장에서 개발 예정.
+* **# 5**: 폼 메뉴에는 서버로 요청을 보낼 수 있도록 action/method/name 속성을 추가했고, [{% csrf_token %}](#--csrf_token-) 태그도 추가했다. Search 버튼은 없어도 되므로 삭제했다.
+* **# 6**: 테스트 용도로 기입했던 bg-warning 클래스는 삭제한다.
+* **# 7**: 아이콘을 사용하기 위해 폰트어썸(FontAwesome) CDN 링크를 추가했다.
+
+<br>
+
+### 4.2.9 템플릿 코딩하기 - home.html 완성
 
 
 
@@ -297,12 +416,36 @@ home.html에는 모든 페이지에서 공통으로 사용하는 제목과 메�
 
 
 
-
-# 
-## {% block %}
+# 한 걸음 더
+## ✅ {% block %}
 ```python
 {% block content %}
 {% endblock %}
 ```
 위 코드는 block을 만든 것과 같다. 템플릿 태그 {% block %}으로 HTML 내에 들어갈 수 있는 공간을 만든 것이다. 
+
+<br>
+
+## ✅ {% csrf_token %}
+> Django의 CSRF공격에 대한 방어
+
+### 1. CSRF(Cross Site Request Forgery)
+웹사이트 취약점 공격의 하나로, 사용자가 자신의 의지와는 무관하게 공격자가 의도한 행위(수정, 삭제, 등록 등)를 특정 웹사이트에 요청하게 하는 공격이다.
+
+### 2. Django의 CSRF공격에 대한 방어
+CSRF 공격을 방어하기 위한 다양한 방법이 있지만 Django에서는 기본적으로 csrf token을 이용한다.
+
+POST 요청에 대해서만 csrf token을 발급하고 체크한다. POST 양식을 사용하는 템플릿에서 \<form\> 태그 안에 {% csrf_token %} 태그를 사용.
+
+### 3. 동작 과정
+1. 사용자가 해당 페이지에 접속하면 Django에서 자동으로 csrf_token을 클라이언트로 보내어 cookie에 저장
+2. 사용자가 form을 모두 입력한 후 제출버튼을 클릭한다.
+3. form과 cookie의 csrf_token을 함께 POST로 전송한다.
+4. 전송된 token의 유효성을 검증
+5. 유효한 요청이면 요청을 처리
+    * token이 유효하지 않거나(없거나 값이 잘못된 경우) 검증 오류 시에는 403 Forbidden Response 반환
+
+### Reference
+https://chagokx2.tistory.com/49
+
 
