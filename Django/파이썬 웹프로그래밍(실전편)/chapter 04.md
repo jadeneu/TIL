@@ -77,9 +77,75 @@ home.html에는 모든 페이지에서 공통으로 사용하는 제목과 메�
 새로운 디렉토리를 만들고 home.html 템플릿 파일에 다음과 같이 입력한다.
 * 부트스트랩 메인 메뉴 - templates/home.html
 ```html
+<!DOCTYPE html>
+<html lang="ko">  # 1
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django WEb Programming</title>  # 2
 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">  # 3
+</head>
+
+<body style="padding-top:90px;">  # 4
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">  # 5 (<nav> 전체)
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">  # 6
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+                        Dropdown
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdowm-item" href="#">Action</a>
+                        <a class="dropdowm-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdowm-item" href="#">Something else here</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#" tabindex="-1">Disabled</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search">
+                <button class="btn btn-outline-successs my-2 ny-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>  # 5 (<nav> 전체)
+
+    <div class="container ng-warning">  # 7 (<div> 전체)
+        <h4>This is CONTENT area.</h4>
+    </div>
+
+    <footer class="fixed-bottom bg-info">  # 8 (<footer> 전체)
+        <h4>This is FOOTER area.</h4>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>                        # 9 (<script> 전체)
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/und/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>  # 9 (<script> 전체)
+</body>
+</html>
 ```
 
+라인별로 설명하면 다음과 같다.
+* **# 1**: HTML5 스펙을 준수하는, 일반적인 head 태그 내용이다.
+* **# 2**: 페이지 제목을 지정한다. 브라우저의 최상단 탭에 표시되는 내용이다.
+* **# 3**: 부트스트랩의 CDN 리크 중 CSS 링크 복사 (보안과 관련된 integrity/crossorigin 속성은 삭제했다)
+* **# 4**: <body>는 크게 3개 영역 즉 메인 메뉴 영역, CONTENT 영역, FOOTER 영역으로 나누었다. 그리고 '# 5'의 메인 메뉴에 fixed-top 클래스를 사용한 경우에는 \<body\>에 padding-top 스타일 속성을 충분히 줘야 메뉴 영역과 CONTENT 영역이 겹치지 않는다.
+* **# 5**: 메인 메뉴 영역이다. 메뉴를 만드는 navbar 클래스를 사용했고, 배경색을 bg-primary로 지정했다. 클래스 fixed-top을 사용하면, 상하 스크롤이 되어도 메뉴 영역이 브라우저 상단에 고정된다.
 
 
 
@@ -102,5 +168,5 @@ home.html에는 모든 페이지에서 공통으로 사용하는 제목과 메�
 
 
 
-
+ 
 
