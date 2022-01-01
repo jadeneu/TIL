@@ -125,7 +125,7 @@ home.html에는 모든 페이지에서 공통으로 사용하는 제목과 메�
         </div>
     </nav>  # 5 (<nav> 전체)
 
-    <div class="container ng-warning">  # 6 (<div> 전체)
+    <div class="container bg-warning">  # 6 (<div> 전체)
         <h4>This is CONTENT area.</h4>
     </div>
 
@@ -156,6 +156,99 @@ home.html에는 모든 페이지에서 공통으로 사용하는 제목과 메�
 
 이번에는 home.html 코드에 장고의 상속 기능을 적용해서, base.html과 home.html 두 개의 파일로 나눈다.
 
+다음과 같이 base.html 파일에 입력한다. base.html에는 모든 페이지에서 공통으로 사용하는 제목과 메뉴, 그리고 상속 기능에 맞춰 페이지 구성 요소들을 배치하는 [{% block %}](#-block-) 태그 기능이 들어 있다. 
+
+* 상속 기능 적용 - base.html 코딩
+```html
+<!DOCTYPE html>  # 1
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  # 1
+    
+    <title>{% block title %}Django Web Programming{% endblock %}</title>  # 2
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    {% block extra-style %}{% endblock %}  # 3
+</head>
+
+<body style="padding-top: 90px;">  # 4 (<nav> 끝까지)
+    
+    ######## home.html 의 중간 내용과 동일 ########
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+                        Dropdown
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdowm-item" href="#">Action</a>
+                        <a class="dropdowm-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdowm-item" href="#">Something else here</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#" tabindex="-1">Disabled</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search">
+                <button class="btn btn-outline-successs my-2 ny-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>  # 4 (<nav> 끝까지)
+
+    <div class="container bg-warning">  # 5
+        {% block content %}{% endblock %}
+    </div>  # 5
+
+    {% block footer %}{% endblock %}  # 6
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/und/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    {% block extra-script %}{% endblock %}
+    
+</body>
+</html>
+```
+
+라인별로 설명하면 다음과 같다.
+* **# 1**: 이 부분은 {% block %} 태그가 없으므로, 상속을 받는 하위 html 파일, 이번 절에서는 home.html에도 동일하게 들어간다.
+* **# 2**: \<title\> 태그 부분은 각 페이지마다 달라지는 부분이므로 {% block %} 태그를 사용했다. 하위 html 파일에서 오버라이딩하지 않으면, 즉 {% block title %} 태그를 사용하지 않으면 Django Web Programming이라는 문구가 디폴트로 사용된다. 아래와 같이 코딩하는 것과의 차이점을 이해하자.<br>
+```python
+<title>{% block title %}{% endblock %}</title>
+```
+* **# 3**: 하위 html 파일에서 이 부분에 \<style\> 태그를 추가할 가능성이 있으므로, {% block %} 태그를 기입했다. 이때 블록 태그 이름 extra-style은 변경해도 된다.
+* **# 4**: 변경 사항 없음. {% block %} 태그가 없으므로 하위 html 파일에 동일하게 나타난다.
+* **# 5**: 본문 내용은 각 페이지마다 달라질 수 있으므로, {% block %} 태그를 사용했다. 블록 태그 이름은 content이다. 하위 html 파일에서 채우는 {% block content %} 내용에는 container 클래스가 적용되도록 했다. 즉 아래와 같이 코딩하는 것과의 차이점을 이해하자.<br>
+```python
+{% block content %}{% endblock %}
+```
+* **# 6**: 하위 html 파일에서 이 부분에 FOOTER 내용을 추가할 가능성이 있으므로, {% block %} 태그를 기입했다. 블록 태그 이름은 footer이다. '# 5'와 유사한 설명인데, 하위 html 파일에서는 FOOTER 내용이 없을 수도 있으므로, 아래와 같이 코딩하지 않았다.
+```python
+<footer class="fixed-bottom bg-info">
+{% block footer %}{% endblock %}
+</footer>
+```
+
+이번 base.html 템플릿 파일에는 하위 템플릿 파일에서 재정의할 수 있도록 다음 4가지 블록을 정의하고 있다.
 
 
 
@@ -176,5 +269,29 @@ home.html에는 모든 페이지에서 공통으로 사용하는 제목과 메�
 
 
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 
+## {% block %}
+```python
+{% block content %}
+{% endblock %}
+```
+위 코드는 block을 만든 것과 같다. 템플릿 태그 {% block %}으로 HTML 내에 들어갈 수 있는 공간을 만든 것이다. 
 
