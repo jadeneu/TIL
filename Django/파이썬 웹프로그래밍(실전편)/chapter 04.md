@@ -91,7 +91,7 @@ home.html에는 모든 페이지에서 공통으로 사용하는 제목과 메�
 <body style="padding-top:90px;">  # 4
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">  # 5 (<nav> 전체)
         <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">  # 6
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -125,17 +125,17 @@ home.html에는 모든 페이지에서 공통으로 사용하는 제목과 메�
         </div>
     </nav>  # 5 (<nav> 전체)
 
-    <div class="container ng-warning">  # 7 (<div> 전체)
+    <div class="container ng-warning">  # 6 (<div> 전체)
         <h4>This is CONTENT area.</h4>
     </div>
 
-    <footer class="fixed-bottom bg-info">  # 8 (<footer> 전체)
+    <footer class="fixed-bottom bg-info">  # 7 (<footer> 전체)
         <h4>This is FOOTER area.</h4>
     </footer>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>                        # 9 (<script> 전체)
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/und/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>  # 9 (<script> 전체)
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
 ```
@@ -144,9 +144,17 @@ home.html에는 모든 페이지에서 공통으로 사용하는 제목과 메�
 * **# 1**: HTML5 스펙을 준수하는, 일반적인 head 태그 내용이다.
 * **# 2**: 페이지 제목을 지정한다. 브라우저의 최상단 탭에 표시되는 내용이다.
 * **# 3**: 부트스트랩의 CDN 리크 중 CSS 링크 복사 (보안과 관련된 integrity/crossorigin 속성은 삭제했다)
-* **# 4**: <body>는 크게 3개 영역 즉 메인 메뉴 영역, CONTENT 영역, FOOTER 영역으로 나누었다. 그리고 '# 5'의 메인 메뉴에 fixed-top 클래스를 사용한 경우에는 \<body\>에 padding-top 스타일 속성을 충분히 줘야 메뉴 영역과 CONTENT 영역이 겹치지 않는다.
+* **# 4**: \<body\>는 크게 3개 영역 즉 메인 메뉴 영역, CONTENT 영역, FOOTER 영역으로 나누었다. 그리고 '# 5'의 메인 메뉴에 fixed-top 클래스를 사용한 경우에는 \<body\>에 padding-top 스타일 속성을 충분히 줘야 메뉴 영역과 CONTENT 영역이 겹치지 않는다.
 * **# 5**: 메인 메뉴 영역이다. 메뉴를 만드는 navbar 클래스를 사용했고, 배경색을 bg-primary로 지정했다. 클래스 fixed-top을 사용하면, 상하 스크롤이 되어도 메뉴 영역이 브라우저 상단에 고정된다.
+* **# 6**: CONTENT 영역이다. 부트스트랩의 container 클래스를 사용하면 내용이 화면 중앙에 위치하고, 사용하지 않으면 화면을 좌우로 모두 채운다. 화면 영역을 보여주기 위해 임시로 배경색을 bg-warning으로 지정했다.
+* **# 7**: FOOTER 영역이다. 부트스트랩의 fixed-bottom 클래스를 사용하면 화면 맨 아래에 위치한다. 화면의 세로 길이가 한 페이지 분량보다 작을 때 FOOTER로 많이 사용하는 클래스이다. FOOTER 영역의 배경색을 bg-info로 지정했다.
 
+<br>
+
+### 4.2.6 템플릿 코딩하기 - 상속 기능: base.html
+> 상속 기능을 사용하는 이유는 모든 페이지에 공통인 메인 메뉴를 base.html 파일에 코딩하고, 각 페이지에서는 base.html 코드를 재활용하기 위함이다.
+
+이번에는 home.html 코드에 장고의 상속 기능을 적용해서, base.html과 home.html 두 개의 파일로 나눈다.
 
 
 
