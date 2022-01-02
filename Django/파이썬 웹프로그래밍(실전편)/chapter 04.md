@@ -378,6 +378,77 @@ home.html에는 모든 페이지에서 공통으로 사용하는 제목과 메�
 <br>
 
 ### 4.2.9 템플릿 코딩하기 - home.html 완성
+첫 페이지의 내용, 즉 CONTENT 영역과 FOOTER 영역을 채워보자. 아래와 같이 home.html의 내용을 대체한다.
+```html
+{% extends 'base.html' %}  # 1
+
+{% load static %}  # 2
+
+{% block title %}home.html{% endblock %}
+
+{% block extra-style %}  ----------------------------------------------- # 3
+<style type="text/css">
+    .home-image{  -------------------------------------------------- # 4
+        background-image: url("{% static 'img/lion.jpg' %}");  ----- # 4
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 100%;
+        height: 500px;  -------------------------------------------- # 5
+        border-top: 10px solid #ccc;
+        border-bottom: 10px solid #ccc;
+        padding: 20px 0 0 20px;  ----------------------------------- # 5
+    }
+    .title{  ------------------------------------------------------- # 6
+        color: #c80;
+        font-weight: bold;
+    }  ------------------------------------------------------------- # 6
+    .powered{  ----------------------------------------------------- # 7
+        position: relative;
+        top: 77%;
+        color: #cc0;
+        font-style: italic;
+    }  ------------------------------------------------------------- # 7
+</style>
+{% endblock %}  -------------------------------------------------------- # 3
+
+{% block content %}  # 8
+    <div class="home-image">
+        <h2 class="title">Django - Python Web Programming</h2>
+        <h4 class="powered"><i class="fas fa-arrow-circle-right"></i> powered vy django and bootstrap.</h4>  # 9
+    </div>
+
+    <hr style="margin: 10px 0;">  # 10
+
+    <div class="row text-center">  ---------------------------------------------------------------- # 11
+        <div class="col-sm-6">
+            <h3>Bookmark App</h3>
+            <p>Bookmark is a Uniform Resource Identifier (URI)
+                that is stored for later retrieval in any of various storage formats.
+                You can store your own bookmarks by Bookmark application.
+                It's also possible to update or delete your bookmarks.
+            </p>
+        </div>
+        <div class="col-sm-6">
+            <h3>Blog App</h3>
+            <p>This application makes it possible to log daily events or write your own interests
+                such as hobbies, techniques, etc.
+                A typical blog combines text, digital images, and links to other blogs, web pages,
+                and other media related to its topic.
+            </p>
+        </div>
+    </div>  --------------------------------------------------------------------------------------- # 11
+{% endblock content %}
+
+{% block footer %}  ---------------------------------------------------------------------------------------- # 12
+<footer class="fixed-bottom bg-info">
+    <div class="text-white font-italic text-right mr-5">Copyright &copy; 2019 DjangoBook by shkim</div>  # 13
+</footer>
+{% endblock %}  -------------------------------------------------------------------------------------------- # 12
+```
+
+라인별로 설명하면 다음과 같다.
+* **# 1**: {% extends %} 태그 문장은 항상 첫 줄에 작성해야 한다.
+* **# 2**: {% static %} 템플릿 태그를 사용하기 위해서는 [{% load static %}](#--load-static-) 문장으로 템플릿 태그 파일 static을 로딩해야 한다.
 
 
 
@@ -414,9 +485,7 @@ home.html에는 모든 페이지에서 공통으로 사용하는 제목과 메�
 
 
 
-
-
-# 한 걸음 더
+# 개념 정리
 ## ✅ {% block %}
 ```python
 {% block content %}
@@ -445,7 +514,89 @@ POST 요청에 대해서만 csrf token을 발급하고 체크한다. POST 양식
 5. 유효한 요청이면 요청을 처리
     * token이 유효하지 않거나(없거나 값이 잘못된 경우) 검증 오류 시에는 403 Forbidden Response 반환
 
-### Reference
-https://chagokx2.tistory.com/49
+### References
+* https://chagokx2.tistory.com/49
+
+<br>
+
+## ✅ {% load static %}
+### static 파일이란?
+static 파일이란 js, css, image, font 등과 같이 개발자가 사전에 미리 서버에 저장 해둔 파일들을 말한다. 정적인 파일들이라고 할 수 있다.
+
+### settings.py 에서의 설정
+* **STATIC_URL**<br>
+프로젝트 폴더의 settings.py 파일에서 최하단으로 내려보자.<br><br>
+<img src="https://user-images.githubusercontent.com/55045377/147866522-430176d7-497e-463b-9fa3-9c00db5cb77e.png" width=50%><br>
+STATIC_URL: static 파일이 제공되는 URL<br><br>
+이미 settings 에 위와 같이 설정이 되어있다. 이를 통해 각 static 파일에 대한 URL의 고정값을 설정할 수 있다. 예시를 들자면 `{% static '경로' %}` 에 대해서 해당 URL 이 `STATIC_URL+'경로'` 로 바뀌게 되고 이는 다시 `'/static/경로'` 다음과 같이 바뀌게 되어 참조를 할 수 있다.
+
+* **STATICFILES_DIRS**<br>
+    ```python
+    STATICFILES_DIRS = [
+        BASE_DIR / 'static',
+    ]
+    ```
+    STATICFILES_DIRS: static 파일 경로<br><br>
+    추가로 지정을 해야하는 부분이다. 프로젝트 전반적으로 사용되는 static 경로가 어딘지 설정한다. <br>
+    > ※ 참고로 static이라는 이름으로 폴더를 만들어야 장고에서 인식한다.
+    
+    <br>
+    만약 프로젝트 폴더의 하위가 아닌, 앱 폴더 하위에 static 폴더를 관리하고 싶다면?<br>
+    가령 config라는 폴더 안에 있는 static 폴더를 사용하고 싶다면 다음과 같이 작성해준다.
+    
+    ```python
+    STATICFILES_DIRS = [
+        BASE_DIR / 'static',
+        os.path.join(BASE_DIR, 'config', 'static')
+    ]
+    ```
+    config 내에 static 폴더를 추가로 만들었다. 이렇게 작성해주면 위 2경로에 있는 static 파일들을 가지고 온다.
+
+* **STATIC_ROOT**<br>
+    각 static 파일들은 각자 다른 경로에 나눠져 있다. 왜냐하면 프로젝트 전반적으로 사용하는 파일들은 STATICFILES_DIRS 에 담겨 있고, 각자의 app 안에는 app 에서 사용되는 파일들이 따로 모여있기 때문이다.<br>
+    배포를 하기 위해서는 이들을 하나의 디렉토리에 모아야 하는데 아래 명령어로 한 번에 모을 수 있다.
+    ```python
+    python manage.py collectstatic
+    ```
+    하지만 어디로 모을지는 따로 지정을 해줘야 하는데, 그 경로가 바로 STATIC_ROOT 이다.<br>
+    ```python
+    STATIC_ROOT = os.path.join("staticfiles")
+    ```
+    STATIC_ROOT: static 복사 파일 경로
+    > "staticfiles"라는 이름으로 설정한 이유는 collectstatic 명령어를 사용하면 staticfiles 폴더가 만들어지기 때문이다.
+
+<br>
+    
+### templates 에서 사용
+```html
+{% load static %}
+```
+{% load static %}을 통해 settings.py에 작성한 static 파일들을 가져오게 된다. 즉, 준비한 static 파일들을 해당 html에 로드해달라는 의미이다.
+
+이후에는 다음과 같이 img, css, js 등 여러 정적 파일들을 불러올 수 있다.
+```html
+{% static 'STATIC_URL 이후의 경로' %}
+```
+
+### References
+* https://ssungkang.tistory.com/entry/Django-static-%ED%8C%8C%EC%9D%BC-%EB%8B%A4%EB%A3%A8%EA%B8%B0
+* https://0ver-grow.tistory.com/912
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
