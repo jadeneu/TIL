@@ -414,7 +414,7 @@ home.html에는 모든 페이지에서 공통으로 사용하는 제목과 메�
 {% block content %}  # 8
     <div class="home-image">
         <h2 class="title">Django - Python Web Programming</h2>
-        <h4 class="powered"><i class="fas fa-arrow-circle-right"></i> powered vy django and bootstrap.</h4>  # 9
+        <h4 class="powered"><i class="fas fa-arrow-circle-right"></i> powered by django and bootstrap.</h4>  # 9
     </div>
 
     <hr style="margin: 10px 0;">  # 10
@@ -449,6 +449,34 @@ home.html에는 모든 페이지에서 공통으로 사용하는 제목과 메�
 라인별로 설명하면 다음과 같다.
 * **# 1**: {% extends %} 태그 문장은 항상 첫 줄에 작성해야 한다.
 * **# 2**: {% static %} 템플릿 태그를 사용하기 위해서는 [{% load static %}](#--load-static-) 문장으로 템플릿 태그 파일 static을 로딩해야 한다.
+* **# 3**: 이 파일에서는 \<style\> 정의가 필요하므로 {% block extra-style %} 블록을 오버라이딩한다. 이 부분은 별도의 \*.css 파일로 분리할 수도 있다.
+* **# 4**: 사자 이미지가 표시될 영억인 home-image 클래스를 정의한다. 배경 이미지를 img/lion.jpg로 지정했고 이를 {% static %} 템플릿 태그를 사용하여 URL을 링크했다.
+* **# 5**: 이 영역의 높이, 위 아래 테두리, 안쪽 여백 등을 지정한다.
+* **# 6**: 사자 이미지 내에서 제목 문장이 표시될 title 클래스를 정의한다. 글자색과 폰트 굵기를 지정한다.
+* **# 7**: 사자 이미지 내에서 두 번째 문장이 표시될 powered 클래스를 정의한다. 문장의 위치와 글자색, 폰트 스타일을 지정한다.
+* **# 8**: CONTENT 영역에는 사자 이미지와 애플리케이션 설명 두 부분으로 구성되어 있다.
+* **# 9**: 폰트어썸의 화살표 아이콘을 사용하였고, 아이콘을 사용할 때 \<i\> 태그를 사용한다. 
+* **# 10**: 이미지 영역 밑에 10px 간격을 두고 수평선을 출력한다.
+* **# 11**: 북마크 앱과 블로그 앱에 대한 설명은 각각 6-컬럼 너비를 차지한다. 부트스트랩은 총 12-컬럼 그리드 구조이므로 반반씩 차지한다. 
+* **# 12**: FOOTER 영역, 즉 footer 블록을 재정의(오버라이딩)한다.
+* **# 13**: 글자색, 폰트 스타일, 오른쪽 정렬, 오른쪽 바깥 여백 등을 지정한다. HTML 특수문자 &copy;를 사용했다.
+
+<br>
+
+**# 4**에서 설명한 것처럼, 그림 파일을 지정한 위치에 등록해야 한다. {% static %} 템플릿 태그 기능에 따르면 lion.jpg 파일은 아래 위치에 있어야 한다.
+```
+# settings.py 파일의 STATIC_URL, STATICFILES_DIRS 항목과 관련됨
+C:\Users\LG\Desktop\tave django study\textbook\django-textbook\projects\static\img
+```
+이는 {% static 'img/lion.jpg' %} 문장에 의해, STATICFILES_DIRS 디렉터리 하위에서 img/lion.jpg 파일을 찾기 때문이다. 
+* settings.py
+```python
+STATICFILES_DIRS = [
+        BASE_DIR / 'static',
+]
+```
+
+<br><br><br>
 
 
 
@@ -478,12 +506,7 @@ home.html에는 모든 페이지에서 공통으로 사용하는 제목과 메�
 
 
 
-
-
-
-
-
-
+---
 
 # 개념 정리
 ## ✅ {% block %}
