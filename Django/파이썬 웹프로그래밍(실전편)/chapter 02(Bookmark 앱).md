@@ -24,7 +24,7 @@
 
 ### URL 설계
 URL 설계 내용은 URLconf 코딩에 반영되고, urls.py 파일에 코딩한다.<br>
-이 단계에서 중요한 점은 어떤 [제네릭 뷰](#제네릭-뷰)를 사용할 것인지 등을 결정하는 것이다.
+이 단계에서 중요한 점은 어떤 [제네릭 뷰](#-제네릭-뷰)를 사용할 것인지 등을 결정하는 것이다.
 
 ### 작업/코딩 순서
 * 작업/코딩 순서
@@ -209,7 +209,7 @@ from django.urls import path
 
 from bookmark.views import BookmarkLV, BookmarkDV
 
-app_name = 'bookmark'
+
 urlpatterns = [
     path('admin/', admin.site.urls),  # 1
     
@@ -221,6 +221,21 @@ urlpatterns = [
 * path() 함수는 route, view 2개의 필수 인자와 kwargs, name 2개의 선택 인자를 받는다. 여기서 정해준 name 인자값은 템플릿 파일에서 많이 사용된다.
 * **# 1**: 장고의 Admin 사이트에 대한 URLconf는 이미 정의되어 있는데, Admin 사이트를 사용하기 위해서는 항상 이렇게 정의한다.
 * **# 2**: URL /bookmark/ 요청을 처리할 뷰 클래스를 BookmarkLV로 지정한다. URL 패턴의 이름은 'index'로 명명한다.
+* **# 3**: URL /bookmark/99/ 요청을 처리할 뷰 클래스를 BookmarkDV로 지정한다. URL 패턴의 이름은 'detail'이라고 명명한다. BookmarkDV 뷰 클래스에 pk=99라는 인자가 전달된다.
+
+<br><br>
+
+## 2.5 개발 코딩하기 - 뷰
+앞에서 URLconf를 코딩하면서 뷰를 클래스형 뷰로 정의하기 위해 각 URL에 따른 해당 클래스 및 [as_view()](#-as_view) 메소드를 지정했다.
+
+
+
+
+
+
+
+
+
 
 
 
@@ -243,8 +258,8 @@ urlpatterns = [
 
 
 <br><br>
-
-## 제네릭 뷰
+# 개념 정리
+## ✅ 제네릭 뷰
 > 제네릭 뷰는 장고에서 기본적으로 제공하는 뷰 클래스를 의미한다. 
 
 장고는 모델(Model), 템플릿(Template), 뷰(View)로 구성된 MTV패턴 웹프레임워크이다.<br>
@@ -304,8 +319,30 @@ HTTP OPTIONS 요청에 대한 응답을 처리한다.
         return response
 ```
 
-## references
+### references
 * https://velog.io/@reowjd/Djangoview-%EC%82%B4%ED%8E%B4%EB%B3%B4%EA%B8%B0
+
+<br>
+
+## ✅ as_view()
+```python
+# urls.py
+
+from django.urls import path
+from bookmark.views import BookmarkLV, BookmarkDV
+
+urlpatterns = [
+    path('bookmark/', BookmarkLV.as_view(), name='index'), 
+    path('bookmark/<int:pk>/', BookmarkDV.as_view(), name='detail'),
+]
+```
+장고의 URL해석기는 요청과 관련된 파라미터들을 클래스가 아니라 함수에 전달하기 때문에, 클래스형 뷰는 클래스로 진입하기 위한 **as_view()** (진입 메소드) 클래스 메소드를 제공한다.<br>
+
+as_view() 진입 메소드의 역할은 클래스의 인스턴스를 생성하고, 그 인스턴스의 dispatch() 메소드를 호출한다.<br>
+dispatch() 메소드는 요청을 검사해서 GET, POST 등의 어떤 HTTP 메소드로 요청되었는지를 알아낸 다음, 인스턴스 내에서 해당 이름을 갖는 메소드로 요청을 중계해준다. 만일 해당 메소드가 정의되어 있지 않으면 HttpResponseNotAllowed Exception을 발생시킨다.
+
+### References
+* https://coshin.tistory.com/13
 
 
 
