@@ -260,6 +260,8 @@ class BookmarkDV(DetailView):  # 2
 <br><br>
 
 ## 2.6 개발 코딩하기 - 템플릿
+
+### bookmark_list.html 템플릿 작성하기
 다음 코드는 화면에 Bookmark 객체를 표시하고 해당 텍스트를 클릭하는 경우, \<a href\> 태그 기능에 의해 'detail' URL 패턴(/bookmark/1/ 형식)으로 웹 요청을 보낸다는 의미이다. URL 패턴을 만들어 주는 [{% url %}](#--url-) 태그 기능은 자주 사용된다.
 ```html
 <a href="{% url 'detail' bookmark.id %}">{{ bookmark }}</a>
@@ -275,22 +277,10 @@ class BookmarkDV(DetailView):  # 2
 
 
 
+<br><br><br>
 
+---
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-<br><br>
 # 개념 정리
 ## ✅ 제네릭 뷰
 > 제네릭 뷰는 장고에서 기본적으로 제공하는 뷰 클래스를 의미한다. 
