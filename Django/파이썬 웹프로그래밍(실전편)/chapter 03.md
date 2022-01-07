@@ -66,7 +66,16 @@ class Post(models.Model):
 
 <br>
 
-* **# 4**: 
+* **# 4**: description 컬럼은 빈칸(blank)도 가능하다.
+* **# 5**: content 컬럼은 TextField를 사용했으므로, 여러 줄 입력이 가능하다.
+* **# 6**: create_dt 컬럼은 날짜와 시간을 입력하는 DateTimeField이며, auto_now_add 속성은 객체가 생성될 때의 시각을 자동으로 기록하게 한다.
+* **# 7**: modify_dt 컬럼은 날짜와 시간을 입력하는 DateTimeField이며, auto_now 속성은 객체가 데이터베이스에 저장될 때의 시각을 자동으로 기록하게 한다. 즉, 객체가 변경될 때의 시각이 기록되는 것이다.
+* **# 8**: 필드 속성 외에 필요한 파라미터가 있으면, [Meta 내부 클래스](#-django-모델의-meta-클래스)로 정의한다.
+* **# 9**: 테이블의 별칭은 단수와 복수로 가질 수 있는데, 단수 별칭을 'post'로 한다.
+* **# 10**: 테이블의 복수 별칭을 'posts'로 한다.
+* **# 11**: 데이터베이스에 저장되는 테이블의 이름을 'blog_posts'로 지정한다. 이 항목을 생략하면 디폴트는 '앱명_모델클래스명'을 테이블명으로 지정한다. 즉, db_table 항목을 지정하지 않았다면 테이블명은 blog_post가 되었을 것이다.
+* **# 12**: 모델 객체의 리스트 출력 시 modify_dt 컬럼을 기준으로 내림차순으로 정렬한다.
+* 
 
 
 
@@ -164,9 +173,74 @@ www.example.com/article/the-46-year-old-virgin
 * https://itmining.tistory.com/119
 * https://django-orm-cookbook-ko.readthedocs.io/en/latest/slugfield.html
 
+<br>
+
+## ✅ Django 모델의 Meta 클래스
+메타 데이터는 다른 데이터에 대한 정보를 제공하는 특정 데이터 집합을 나타낸다. Django에서는 Django 모델을 사용하여 데이터베이스의 테이블과 해당 필드를 설계한다. 모델 자체에 대한 데이터를 추가해야하는 경우 **Meta 클래스**를 사용한다. 
+
+**Meta 클래스**는 내부 클래스이다. 즉, 다음과 같이 모델 내부에 정의된다.
+```python
+from django.db import models
+
+class MyModel(models.Model):
+    ...
+    class Meta:
+        ...
+```
+**Meta 클래스**는 권한, 데이터베이스 이름, 단/복수 이름, 추상화, 순서 지정 등과 같은 모델에 대한 다양한 사항을 정의하는 데 사용할 수 있다. 
+> ※ Django 모델에 Meta 클래스를 추가하는 것은 전적으로 선택 사항이다.
+
+이 클래스에는 구성할 수 있는 많은 옵션도 제공된다. 다음은 일반적으로 사용되는 몇 가지 메타 옵션이다. [여기](https://docs.djangoproject.com/en/3.0/ref/models/options/)에서 모든 메타 옵션을 탐색 할 수 있다.
+
+### 👉 db_table
+이 옵션은 데이터베이스 내에서 테이블을 식별하는 데 사용해야하는 이름을 설정하는 데 사용된다. 예를 들어 다음과 같은 작업을 수행하면 데이터베이스에서 모델 이름이 `job`이 된다.
+```python
+from django.db import models
+
+class JobPosting(models.Model):
+    
+    class Meta:
+        db_table = "job"
+```
+
+### 👉 ordering
+이 옵션은 모델 객체의 순서를 정의하는 데 사용된다. 이 모델의 객체가 검색되면 이 순서대로 표시된다.
+```python
+from django.db import models
+
+class JobPosting(models.Model):
+    dateTimeOfPosting = models.DateTimeField(auto_now_add = True)
+    
+    class Meta:
+        ordering = ["-dateTimeOfPosting"]
+```
+위의 예에서 검색된 객체는 `dateTimeOfPosting`필드를 기준으로 내림차순으로 정렬된다. (`-` 접두사는 내림차순을 정의하는 데 사용된다)
+
+### 👉 verbose_name
+이 옵션은 사람이 읽을 수있는 모델의 단일 이름을 정의하는 데 사용되며 Django의 기본 명명 규칙을 덮어 쓴다. 이 이름은 관리자 패널 (`/admin/`)에도 반영된다.
+```python
+from django.db import models
+
+class JobPosting(models.Model):
+    
+    class Meta:
+        verbose_name = "Job Posting"
+```
+
+### 👉 vervose_name_plural
+이 옵션은 모델에 대해 사람이 읽을 수있는 복수형 이름을 정의하는 데 사용되며 Django의 기본 명명 규칙을 덮어 쓴다. 이 이름은 관리자 패널 (`/admin/`)에도 반영된다.
+```python
+from django.db import models
+
+class JobPosting(models.Model):
+    
+    class Meta:
+        verbose_name_plural = "Job Postings"
+```
 
 
-
+### References
+* https://www.delftstack.com/ko/howto/django/class-meta-in-django/
 
 
 
