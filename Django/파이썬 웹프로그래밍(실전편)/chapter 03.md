@@ -104,6 +104,41 @@ class PostAdmin(admin.ModelAdmin):  # 2
 <br>
 
 ### URLconf 코딩하기
+2장에서는 URLconf를 projects/urls.py 한곳에만 코딩했지만, 앞으로는 ROOP_URLCONF와 APP_URLCONF, 2개의 파일에 코딩할 것이다. 이번 블로그 앱도 projects/urls.py와 blog/urls.py 2개의 파일에 코딩하고, 2장에서 작성했던 북마크 앱의 URL도 projects/urls.py와 bookmark/urls.py 2개의 파일로 수정한다.
+
+---
+
+**NOTE_** ROOT_URLCONF vs APP_URLCONF
+* ROOT_URLCONF와 APP_URLCONF 용어는 장고의 공식 용어가 아니며 이 책에서 설명을 위해 편의상 사용하는 용어이다. 이 경우 상위 계층 URL을 ROOT_URLCONF, 하위 계층 URL을 APP_URLCONF라고 부른다.
+* **ROOT_URLCONF**: URL 패턴에서 보통 첫 단어는 애플리케이션을 식별하는 단어가 온다. 첫 단어를 인식하고 해당 애플리케이션의 urls.py 파일을 포함시키기(include)위한 URLconf이다. 프로젝트 디렉터리에 있는 urls.py 파일을 의미한다.
+* **APP_URLCONF**: URL 패턴에서 애플리케이션을 식별하는 첫 단어를 제외한 그 이후 단어들을 인식해서 해당 뷰를 매핑하기 위한 URLCONF이다. 각 애플리케이션 디렉터리에 있는 urls.py 파일을 의미한다.
+
+---
+
+먼저 ROOT_URLCONF인 projects/urls.py 파일을 다음과 같이 코딩한다.
+* projects/urls.py
+```python
+from django.contrib import admin
+from django.urls import path, include               # include 추가
+#from bookmark.views import BookmarkLV, BookmarkDV  # 삭제 ----- # 1
+
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('bookmark/', include('bookmark.urls')),    # 추가 ----- # 2
+    path('blog/', include('blog.urls')),            # 추가 ----- # 3
+    
+    # 기존 2개 라인 삭제
+    #path('', BookmarkLV.as_view(), name='index'),  
+    #path('<int:pk>/', BookmarkDV.as_view(), name='detail'), 
+]
+```
+코드 설명은 다음과 같다.
+* **# 1**: 기존 줄 중 APP_URLCONF로 옮길 줄은 삭제(주석 처리)한다.
+* **# 2**: **[include()](#-include)** 함수를 사용하여, 북마크 앱의 APP_CONF로 처리를 위임한다.
+* **# 3**: include() 함수를 사용하여, 북마크 앱의 APP_CONF로 처리를 위임한다.
+
+
 
 
 
@@ -326,6 +361,10 @@ def get_previous(self):
 ### References
 * https://sys09270883.github.io/web/56/#get_next_by_fookwargs
 
+<br>
+
+## ✅ include()
+django를 쓸 때, 프로젝트의 url을 **include**를 써서 고정적인 url을 쉽게 관리하거나, 앱별로 url을 관리 할 수 있는 강력한 기능이 있다. 
 
 
 
