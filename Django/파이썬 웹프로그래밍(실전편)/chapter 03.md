@@ -75,7 +75,9 @@ class Post(models.Model):
 * **# 10**: 테이블의 복수 별칭을 'posts'로 한다.
 * **# 11**: 데이터베이스에 저장되는 테이블의 이름을 'blog_posts'로 지정한다. 이 항목을 생략하면 디폴트는 '앱명_모델클래스명'을 테이블명으로 지정한다. 즉, db_table 항목을 지정하지 않았다면 테이블명은 blog_post가 되었을 것이다.
 * **# 12**: 모델 객체의 리스트 출력 시 modify_dt 컬럼을 기준으로 내림차순으로 정렬한다.
-* 
+* **# 13**: 객체의 문자열 표현 메소드인 \_\_str\_\_()은 2장에서 설명한 바 있다. 객체의 문자열을 객체.title 속성으로 표시되도록 한다.
+* **# 14**: **[get_absolute_url()](#-get_absolute_url)** 메소드는 이 메소드가 정의된 객체를 지칭하는 URL을 반환한다. 메소드 내에서는 장고의 내장 함수인 reverse()를 호출한다.
+* **# 15**: get_previous() 메소드는 메소드 내에서 장고의 내장 함수인 **[get_previous_by_modify_dt()](#-get_previous_by_fookwargs-get_next_by_fookwargs)** 를 호출한다. **# 12**번 설명처럼 최신 포스트를 먼저 보여주고 있으므로, get_previous_by_modify_dt() 함수는 modify_dt 컬럼을 기준으로 최신 포스트를 반환한다.
 
 
 
@@ -190,7 +192,7 @@ class MyModel(models.Model):
 **Meta 클래스**는 권한, 데이터베이스 이름, 단/복수 이름, 추상화, 순서 지정 등과 같은 모델에 대한 다양한 사항을 정의하는 데 사용할 수 있다. 
 > ※ Django 모델에 Meta 클래스를 추가하는 것은 전적으로 선택 사항이다.
 
-이 클래스에는 구성할 수 있는 많은 옵션도 제공된다. 다음은 일반적으로 사용되는 몇 가지 메타 옵션이다. [여기](https://docs.djangoproject.com/en/3.0/ref/models/options/)에서 모든 메타 옵션을 탐색 할 수 있다.
+이 클래스에는 구성할 수 있는 많은 옵션도 제공된다. 다음은 일반적으로 사용되는 몇 가지 메타 옵션이다. **[여기](https://docs.djangoproject.com/en/3.0/ref/models/options/)** 에서 모든 메타 옵션을 탐색 할 수 있다.
 
 ### 👉 db_table
 이 옵션은 데이터베이스 내에서 테이블을 식별하는 데 사용해야하는 이름을 설정하는 데 사용된다. 예를 들어 다음과 같은 작업을 수행하면 데이터베이스에서 모델 이름이 `job`이 된다.
@@ -214,7 +216,7 @@ class JobPosting(models.Model):
     class Meta:
         ordering = ["-dateTimeOfPosting"]
 ```
-위의 예에서 검색된 객체는 `dateTimeOfPosting`필드를 기준으로 내림차순으로 정렬된다. (`-` 접두사는 내림차순을 정의하는 데 사용된다)
+위의 예에서 검색된 객체는 `dateTimeOfPosting`필드를 기준으로 내림차순으로 정렬된다. (`-`접두사는 내림차순을 정의하는 데 사용된다)
 
 ### 👉 verbose_name
 이 옵션은 사람이 읽을 수있는 모델의 단일 이름을 정의하는 데 사용되며 Django의 기본 명명 규칙을 덮어 쓴다. 이 이름은 관리자 패널 (`/admin/`)에도 반영된다.
@@ -241,6 +243,107 @@ class JobPosting(models.Model):
 
 ### References
 * https://www.delftstack.com/ko/howto/django/class-meta-in-django/
+
+<br>
+
+## ✅ get_absolute_url()
+> 어떠한 모델에 대해서 detail 뷰를 만들게 되면 get_absolute_url() 멤버 함수를 무조건 선언!
+
+get_absolute_url()는 reverse 함수를 통해 모델의 개별 데이터 url을 문자열로 반환한다.
+
+### 👉 예시
+아래와 같은 모델이 있다.
+
+방에 대한 모델인데, db에 수많은 방에 대한 레코드들 중에서 특정 방에 대한 접근을 하려면 그 URL을 하드코딩한다는게 상당히 피곤한 일일 것이다.
+```
+http://127.0.0.1:8000/admin/rooms/room/480/change/
+```
+481, 482.. 이렇게 방의 PK가 있는걸 유추해 낼 수 있다.
+
+이때 **get_absolute_url()** 메소드는 내가 원하는 모델을 찾을 수 있는 url을 준다.
+```python
+def get_absolute_url(self):
+    return reverse('rooms:detail', kwargs={'pk':self.pk})
+```
+`rooms`는 namespace 부분이고 `detail`은 name 부분이다.<br>
+`kwargs`는 `'pk'`가 url에 입력했던 부분이므로 그대로 스트링으로 입력하고 `self.pk` 인스턴스의 필드인 pk를 입력해주면 끝나게 된다.
+
+이 방법은 어느 한 페이지에만 국한되는 게 아니라 거의 대부분의 페이지에서 이렇게 작동하고, 특히 Detail 페이지로 넘어가기 위해 자주 사용되는 코드이니 꼭 숙지하자!
+
+### 👉 url template tag로 활용 예시
+기존 {% url %} template 태그방식은 주석 처리 하고, get_absolute_url로 대체하였다.
+```html
+<!-- <a class="nav-link" href="{% url 'blog:blog_detail' list.id %}"> -->
+<a class="nav-link" href="{{ list.get_absolute_url }}">
+```
+
+### References
+* https://wayhome25.github.io/django/2017/05/05/django-url-reverse/
+* https://velog.io/@hyeseong-dev/django-getabsoluteurl
+
+<br>
+
+## ✅ get_previous_by_FOO(\*\*kwargs), get_next_by_FOO(\*\*kwargs)
+```python
+# blog/models.py
+
+# 모델 클래스
+class Post(models.Model):
+
+    # 모델 속성
+    title = models.CharField(verbose_name='TITLE', max_length=50)
+    slug = models.SlugField('SLUG', unique=True, allow_unicode=True, help_text='One word for title alias.')
+    description = models.CharField('DESCRIPTION', max_length=100, blank=True, help_text='Simple description text.')
+    content = MarkdownxField('CONTENT')
+    create_dt = models.DateTimeField('CREATE DATE', auto_now_add=True)
+    modify_dt = models.DateTimeField('MODIFY DATE', auto_now=True)
+    tags = TaggableManager(blank=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+
+    # 내부의 Meta 클래스
+    class Meta:
+        # Meta 클래스 속성
+        verbose_name = 'post'
+        verbose_name_plural = 'posts'
+        db_table = 'blog_posts'
+        ordering = ('-modify_dt',)
+
+    # 모델 메소드
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('blog:post_detail', args=(self.slug,))
+
+    def get_previous(self):
+        return self.get_previous_by_modify_dt()
+
+    def get_next(self):
+        return self.get_next_by_modify_dt()
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title, allow_unicode=True)
+        super().save(*args, **kwargs)
+
+    def formatted_markdown(self):
+        return markdownify(self.content)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
