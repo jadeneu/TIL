@@ -364,9 +364,103 @@ def get_previous(self):
 <br>
 
 ## ✅ include()
-django를 쓸 때, 프로젝트의 url을 **include**를 써서 고정적인 url을 쉽게 관리하거나, 앱별로 url을 관리 할 수 있는 강력한 기능이 있다. 
+django를 쓸 때, 프로젝트의 url을 **include**를 써서 고정적인 url을 쉽게 관리하거나, 앱별로 url을 관리 할 수 있는 강력한 기능이 있다.
+
+### 👉 예시1
+`projects/urls.py` 파일에 `blog.urls`를 가져오는 행을 추가해 보자. <br>
+`blog.urls`를 가져오려면, `include` 함수가 필요하다.
+
+이제 `projects/urls.py` 파일은 아래처럼 보일 것이다.
+* projects/urls.py
+```python
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('blog.urls')),
+]
+```
+장고는 http://127.0.0.1:8000/ 로 들어오는 모든 접속 요청을 `blog.urls`로 전송해 추가 명령을 찾을 것이다.
+> ※ 이때 `blog.urls`는 blog 앱 안에 있는 urls 파일을 의미한다.
 
 
+#### blog.urls
+아래 두 줄을 추가하자.
+* blog/urls.py
+```python
+from django.urls import path
+from . import views
+```
+여기서 장고 함수인 `path`와 `blog` 애플리케이션에서 사용할 모든 `views`를 가져왔다.
+
+그 다음, URL 패턴을 추가하자.
+* blog/urls.py
+```python
+urlpatterns = [
+    path('', views.post_list, name='post_list'),
+]
+```
+이제 `post_list`라는 `view`가 루트 URL에 할당되었다. 이 URL 패턴은 빈 문자열에 매칭이 되며, 장고 URL 확인자(resolver)는 전체 URL 경로에서 접두어(prefix)에 포함되는 도메인 이름(i.e. http://127.0.0.1:8000/) 을 무시하고 받아들인다. 이 패턴은 장고에게 누군가 웹사이트에 'http://127.0.0.1:8000/' 주소로 들어왔을 때 `views.post_list`를 보여주라고 말해준다.<br>
+`name='post_list'`는 URL에 이름을 붙인 것으로 뷰를 식별한다. 
+
+### 👉 예시2
+프로젝트 폴더의 urls.py는 다음과 같다.
+ 
+* projects/urls.py
+```python
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('service/', include('service.urls')),
+    path('review/', include('review.urls')),
+]
+```
+
+review 앱의 urls.py를 수정해보자.
+
+작성할 URL 경로는 다음 2가지이며,
+* 127.0.0.1:8000/review
+* 127.0.0.1:8000/review/first
+
+각 URL에서 사용할 함수명은 다음과 같다.
+* home
+* first
+
+<br>
+
+* review/urls.py
+```python
+from django.urls import path, include
+from review import views
+
+urlpatterns = [
+    # 127.0.0.1:8000/review 에 해당
+    path('', views.home),  # home 함수 실행
+    
+    # 127.0.0.1:8000/review/first 에 해당
+    path('first/', views.first),  # first 함수 실행
+]
+```
+
+<br>
+
+* review/views.py
+```python
+from django.shortcuts import render
+
+def home(request):
+    return render(request, "home.html")
+    
+def first(request):
+    return render(request, "first.html")
+```
+
+### References
+* https://tutorial.djangogirls.org/ko/django_urls/
+* https://0ver-grow.tistory.com/906
 
 
 
