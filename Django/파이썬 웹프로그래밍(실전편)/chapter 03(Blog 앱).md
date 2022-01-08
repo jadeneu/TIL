@@ -138,6 +138,24 @@ urlpatterns = [
 * **# 2**: **[include()](#-include)** 함수를 사용하여, 북마크 앱의 APP_CONF로 처리를 위임한다.
 * **# 3**: include() 함수를 사용하여, 북마크 앱의 APP_CONF로 처리를 위임한다.
 
+<br>
+
+다음은 북마크 앱의 APP_URLCONF인 bookmark/urls.py 파일을 다음과 같이 코딩한다.
+* bookmark/urls.py
+```python
+from django.urls import path
+from bookmark.views import BookmarkLV, BookmarkDV  # 1
+
+
+app_name = 'bookmark'  # 2
+urlpatterns = [  # 3
+    path('', BookmarkLV.as_view(), name='index'),  # 4
+    path('<int:pk>/', BookmarkDV.as_view(), name='detail'),  # 5
+]
+```
+위 코드는 **projects/urls.py**의 ROOT_URLCONF에서 삭제하고 북마크 앱의 APP_URLCONF로 옮긴 줄들을 코딩한 것이다. <br>
+코드 설명은 다음과 같다.
+* **# 1**:
 
 
 
