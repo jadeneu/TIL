@@ -527,12 +527,15 @@ def first(request):
 <br>
 
 ## ✅ re_path()
+Django 2.0 이상 버전에서는 일반적인 URL 패턴 지정을 위해 django.urls.path() 함수를 사용하되, path()에서 지정하지 못하는 복잡한 패턴의 경우 **[정규표현식](https://github.com/jadeneu/TIL/blob/main/Programming/%EC%A0%95%EA%B7%9C%ED%91%9C%ED%98%84%EC%8B%9D.md)** 을 사용하는 django.urls.re_path() 함수를 사용한다.
+
 **re_path 기호**
 * ^: 정규식 시작 기호
 * $: 정규식 종료 기호
 * r: 이스케이프 기호
 
-정규표현식 보러 가기 -> [여기](https://github.com/jadeneu/TIL/blob/main/Programming/%EC%A0%95%EA%B7%9C%ED%91%9C%ED%98%84%EC%8B%9D.md)
+### References
+* http://pythonstudy.xyz/python/article/311-URL-%EB%A7%A4%ED%95%91
 
 <br>
 
