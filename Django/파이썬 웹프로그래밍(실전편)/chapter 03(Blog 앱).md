@@ -155,7 +155,51 @@ urlpatterns = [  # 3
 ```
 위 코드는 **projects/urls.py**의 ROOT_URLCONF에서 삭제하고 북마크 앱의 APP_URLCONF로 옮긴 줄들을 코딩한 것이다. <br>
 코드 설명은 다음과 같다.
-* **# 1**:
+* **# 1**: URLconf에서 뷰를 호출하므로, 뷰 모듈의 관련 클래스를 임포트한다.
+* **# 2**: 애플리케이션 이름공간(namespace)을 'bookmark'로 지정한다. 애플리케이션 네임스페이스는 URL 패턴의 이름을 정하는 데 사용한다.
+* **# 3**: path() 함수의 URL 스트링 부분만 달라졌다. URL의 /bookmark/ 부분은 ROOT_URLCONF에서 이미 정의했으므로, /bookmark/ 이외의 부분만 정의하면 된다.
+* **# 4**: URL /bookmark/ 요청을 처리할 뷰 클래스를 지정한다. URL 패턴의 이름은 네임스페이스를 포함해 'bookmark:index'가 된다.
+* **# 5**: URL /bookmark/숫자/ 요청을 처리할 뷰 클래스를 지정한다. 숫자 자리에는 레코드의 기본 키가 들어간다. URL 패턴의 이름은 네임스페이스를 포함해 'bookmark:detail'이 된다. BookmarkDV 뷰 클래스 호출시, URL 스트링에서 추출된 파라미터가 인자로(예, pk=99) 전달된다. URL 패턴의 이름이 변경되었으므로(bookmark:detail), 관련된 템플릿 파일도 변경해줘야 한다.
+
+<br>
+
+마지막으로 블로그 앱의 APP_URLCONF인 blog/urls.py 파일을 다음과 같이 코딩한다. 날짜와 관련된 제네릭 뷰를 정의하고 있어 내용이 많다.
+* blog/urls.py
+```python
+from django.urls import path, re_path  # 1
+from blog import views  # 2
+
+app_name = 'blog'
+urlpatterns = [
+
+    # Example: /blog/  # 3
+    path('', views.PostLV.as_view(), name='index'),  # 4
+    
+    # Example: /blog/post/ (same as /blog/)
+    path('post/', views.PostLV.as_view(), name='post_list'),  # 5
+    
+    # Example: /blog/post/django-example/
+    re_path(r'^post/(?P<slug>[-\w]+)/$', views.PostDV.as_view(), name='post_detail'),  # 6
+    
+    # Example: /blog/archive/
+    path('archive/', views.PostAV.as_view(), name='post_archive'),  # 7
+    
+    # Example: /blog/archive/2019/
+    path('archive/<int:year>/', views.PostYAV.as_view(), name='post_year_archive'),  # 8
+    
+    # Example: /blog/archive/2019/nov/
+    path('archive/<int:year>/<str:month>/', views.PostMAV.as_view(), name='post_month_archive'),  # 9
+    
+    # Example: /blog/archive/2019/nov/10/
+    path('archive/<int:year>/<str:month>/<int:day>/', views.PostDAV.as_view(), name='post_day_archive'),  # 10
+    
+    # Example: /blog/archive/today/
+    path('archive/today/', views.PostTAV.as_view(), name='post_today_archive'),  # 11
+]
+```
+코드 설명은 다음과 같다.
+* **# 1**: URL 패턴을 정의할 때, path()와 [re_path()](#-re_path) 함수를 같이 사용하는 것도 가능하다. 한글 슬러그를 위해 re_path()를 사용하고 있다. (아래 **# 6**번, **# 10**번 참고)
+* 
 
 
 
@@ -480,6 +524,15 @@ def first(request):
 * https://tutorial.djangogirls.org/ko/django_urls/
 * https://0ver-grow.tistory.com/906
 
+<br>
+
+## ✅ re_path()
+**re_path 기호**
+* ^: 정규식 시작 기호
+* $: 정규식 종료 기호
+* r: 이스케이프 기호
+
+<br>
 
 
 
