@@ -532,6 +532,8 @@ def first(request):
 * $: 정규식 종료 기호
 * r: 이스케이프 기호
 
+정규표현식 보러 가기 -> [여기](https://github.com/jadeneu/TIL/blob/main/Programming/%EC%A0%95%EA%B7%9C%ED%91%9C%ED%98%84%EC%8B%9D.md)
+
 <br>
 
 
