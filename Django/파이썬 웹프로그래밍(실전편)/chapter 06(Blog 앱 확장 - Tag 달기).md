@@ -59,6 +59,42 @@ class PostAdmin(admin.ModelAdmin):
 
 taggit 패키지에는 자체 테이블이 정의되어 있어서 makemigrations/migrate 명령을 실행하면 tags 컬럼만 추가되는 것이 아니라 새로운 2개의 테이블, Tag과 TaggedItem이 데이터베이스에 추가된다.
 
+### 뷰 코딩하기
+* blog/views.py
+```python
+from django.views.generic import ListView, DetailView, TemplateView  # 추가 # 1
+
+# 중간 내용 동일
+
+class PostTAV(TodayArchiveView):
+    model = Post
+    date_field = 'modify_dt'
+    
+# 아래 2개의 클래스형 뷰 추가
+class TagCloudTV(TemplateView):  # 2
+    template_name = 'taggit/taggit_cloud.html'  # 3
+    
+class TaggedObjectLV(ListView):  # 4
+    template_name = 'taggit/taggit_post_list.html'  # 5
+    model = Post  # 6
+    
+    def get_queryset(self):
+        return Post.objects.filter(tags_name=self.kwargs.get('tag'))
+    
+    def get_context_data(self, **kwargs):  # 7
+        context = super().get_context_data(**kwargs)  # 8
+        context['tagname'] = self.kwargs['tag']  # 9
+        return context  # 10
+```
+코드 설명은 다음과 같다.
+* **# 1**: TemplateView 클래스형 제네릭 뷰를 임포트한다.
+* **# 2**: TemplateView 제네릭 뷰를 상속받아 TagCloudTV 클래스형 뷰를 정의한다. TemplateView 제네릭 뷰는 테이블 처리 없이 단순히 템플릿 렌더링 처리만 하는 뷰이다. 코드가 간단한 이유는 클라우드 처리 기능이 뷰에 있는 게 아니라 taggit_cloud.html 파일에 들어 있기 때문이다. {% get_tagcloud %} 템플릿 태그가 그 처리를 한다.
+* **# 3**: 템플릿 파일은 'taggit/taggit_cloud.html'로 지정한다. 이 템플릿 파일에 있는 {% get_tagcloud %} 템플릿 태그가 태그 클라우드를 보여주는 기능을 처리한다.
+* **# 4**: ListView 제네릭 뷰를 상속받아 TaggedObjectLV 클래스형 뷰를 정의한다. 예를 들어 Django라는 태그가 달려 있는 포스트들의 리스트를 보여주는 뷰이다.
+* **# 5**: 템플릿 파일은 'taggit/taggit_post_list.html'로 지정한다.
+* **# 6**: TaggedObjectLV 클래스의 대상 테이블은 Post 테이블이다.
+* **# 7**: 템플릿 파일 'taggit/taggit_post_list.html'에 넘겨줄 컨텍스트 변수를 추가하기 위해 **[get_context_data()](#-get_context_data)** 메소드를 오버라이딩한다.
+
 
 
 
@@ -279,6 +315,40 @@ https://wave1994.tistory.com/70 참고.
 * https://jupiny.tistory.com/entry/selectrelated%EC%99%80-prefetchrelated
 * https://wave1994.tistory.com/70
 
+<br>
+
+## ✅ get_context_data()
+기본적으로 장고는 `object_list` 변수를 만들어 그 안에 해당 객체를 넣어 보내준다. 하지만 템플릿 작성자는 이 사실을 알고 있어야만 쓸 수 있다. 이 변수를 바꿀 수 있는 속성이 있다.
+```python
+# views.py
+from django.views.generic import ListView
+from books.models import Publisher
+
+class PublisherList(ListView):
+    model = Publisher
+    context_object_name = 'my_favorite_publishers'
+```
+`context_object_name` 속성을 사용하면 다른 변수를 설정할 수 있다.
+
+하나만이 아니라 다른 객체들도 context에 넣어 보내고 싶다면 `get_context_data` 메서드를 구현하는 것으로 해결할 수 있다.
+```python
+from django.views.generic import DetailView
+from books.models import Publisher, Book
+
+class PublisherDetail(DetailView):
+
+    model = Publisher
+
+    def get_context_data(self, **kwargs):
+        # 기본 구현을 호출해 context를 가져온다.
+        context = super(PublisherDetail, self).get_context_data(**kwargs)
+        # 모든 책을 쿼리한 집합을 context 객체에 추가한다.
+        context['book_list'] = Book.objects.all()
+        return context 
+```
+
+### References
+* https://yonghyunlee.gitlab.io/python/django-master-10/
 
 
 
