@@ -98,7 +98,7 @@ class TaggedObjectLV(ListView):  # 4
     model = Post  # 6
     
     def get_queryset(self):
-        return Post.objects.filter(tags_name=self.kwargs.get('tag'))
+        return Post.objects.filter(tags__name=self.kwargs.get('tag'))
     
     def get_context_data(self, **kwargs):  # 7
         context = super().get_context_data(**kwargs)  # 8
