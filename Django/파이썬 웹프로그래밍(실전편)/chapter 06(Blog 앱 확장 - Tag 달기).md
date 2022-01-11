@@ -1,4 +1,23 @@
 # 목차
+* [chapter 06](#chapter-06-blog-앱-확장---tag-달기)
+  * [6.1 애플리케이션 설계하기](#61-애플리케이션-설계하기)
+  * [6.2 개발 코딩하기](#62-개발-코딩하기)
+    * [모델 코딩하기](#모델-코딩하기)
+    * [뷰 코딩하기](#뷰-코딩하기)
+    * [템플릿 코딩하기](#템플릿-코딩하기)
+
+---
+* [개념 정리](#개념-정리)
+  * [✅ super()](#-super)
+  * [✅ get_queryset()](#-get_queryset)
+  * [✅ prefetch_related()](#-prefetch_related)
+  * [✅ get_context_data()](#-get_context_data)
+
+<br>
+
+---
+
+<img src="https://user-images.githubusercontent.com/55045377/148935349-f6810e54-41b4-47ba-8f7e-348b2cff1e20.png" width="40%">
 
 # chapter 06 Blog 앱 확장 - Tag 달기
 6장에서는 각 포스트마다 태그를 달 수 있는 기능을 개발한다. 태그를 달고 태그별로 포스트의 리스트를 보여주며 태그 클라우드를 만드는 방법도 소개한다.
