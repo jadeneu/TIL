@@ -94,6 +94,58 @@ class TaggedObjectLV(ListView):  # 4
 * **# 5**: 템플릿 파일은 'taggit/taggit_post_list.html'로 지정한다.
 * **# 6**: TaggedObjectLV 클래스의 대상 테이블은 Post 테이블이다.
 * **# 7**: 템플릿 파일 'taggit/taggit_post_list.html'에 넘겨줄 컨텍스트 변수를 추가하기 위해 **[get_context_data()](#-get_context_data)** 메소드를 오버라이딩한다.
+* **# 8**: super().get_context_data()를 호출하여 상위 클래스의 컨텍스트 변수, 즉 변경 전의 컨텍스트 변수를 구한다.
+* **# 9**: 추가할 컨텍스트 변수명은 tagname이고, 그 값은 URL에서 tag 파라미터로 넘어온 값을 사용한다. 아래와 같은 URL 패턴에서 넘어오는 값을 self.kwargs['tag']로 추출한다는 점에 유의하자.
+* **# 10**: return 문장에 의해 컨텍스트 변수들이 템플릿 파일로 전달된다.
+
+### 템플릿 코딩하기
+#### post_detail.html 수정
+* blog/post_detail.html
+```html
+    <div class="body">
+        {{ object.content|linebreaks }}
+    </div>
+# 상단 내용 동일
+
+    <br>
+    <div>
+        <b>TAGS</b> <i class="fas fa-tag"></i>
+        {% load taggit_templatetags2_tags %}  # 1
+        {% get_tags_for_object object as "tags" %}  # 2
+        {% for tag in tags %}
+        <a href="{% url 'blog:tagged_object_list' tag.name %}">{{tag.name}}</a>
+        {% endfor %}
+	&emsp;
+        <a href="{% url 'blog:tag_cloud' %}"> <span class="btn btn-info btn-sm">TagCloud</span> </a>
+    </div>
+
+# 하단 내용 동일
+{% endblock %}
+```
+코드 설명은 다음과 같다.
+* **# 1**: taggit_templatetags2 패키지에 정의된 커스텀 태그를 사용하기 위해 taggit_templatetags2_tags 모듈을 로딩한다.
+* **# 2**: {% get_tags_for_object %} 커스텀 태그를 사용해 object 객체에 달려 있는 태그들의 리스트를 추출한다.<br>
+{% get_tags_for_object %} 커스텀 태그를 통해 views에서 보내준 Post 모델에 달린 태그들의 리스트를 추출할 수 있다.<br>
+object 객체는 PostDV 클래스형 뷰에서 넘겨주는 컨텍스트 변수로서, 특정 Post 객체가 담겨 있다. 추출한 태그 리스트는 tags 템플릿 변수에 할당한다.
+
+<br>
+
+#### taggit_cloud.html
+이번 절의 목표는 태그 클라우드를 보여주는 템플릿 파일을 코딩하는 것이다. 태그가 블로그에 올린 글이나 이미지, 콘텐츠 등을 찾아갈 수 있는 링크를 나타내는 키워드라고 한다면, 태그 클라우드란 이러한 태그들에게 가중치를 부여해 위치나 글자 크기 등을 강조함으로써 태그들의 리스트를 효과적으로 시각화한 것을 말한다.
+
+blog/templates/taggit/taggit_cloud.html 파일에서 태그 객체와 관련해 사용된 속성의 의미는 아래와 같다.
+* **{{tag.name}}**: 태그의 이름이다.
+* **{{tag.num_times}}**: 태그가 몇 번 사용되었는지를 의미한다.
+* **{{tag.weight}}**: 태그의 중요도를 의미한다. tag.num_times 값을 미리 정의한 MIN~MAX 이내의 값으로 변환한 수치이다. 디폴트 값은 TAGGIT_TAGCLOUD_MIN=1.0, TAGGIT_TAGCLOUD_MAX=6.0 이다.
+* **{{tag.weight|floatformat:0}}**: tag.weight 값은 실수형인데, floatformat:0 템플릿 필터에 의해 반올림해서 정수형으로 변환된다.
+
+<br>
+
+#### taggit_post_list.html
+다음은 태그 클라우드에서 특정 태그를 클릭했을 때, 그 태그가 걸려 있는 포스트의 리스트를 보여주는 taggit_post_list.html 템플릿 파일을 코딩한다.
+
+
+<br><br>
 
 
 
@@ -115,10 +167,7 @@ class TaggedObjectLV(ListView):  # 4
 
 
 
-
-
-
-
+---
 
 # 개념 정리
 ## ✅ super()
@@ -349,6 +398,9 @@ class PublisherDetail(DetailView):
 
 ### References
 * https://yonghyunlee.gitlab.io/python/django-master-10/
+
+<br>
+
 
 
 
