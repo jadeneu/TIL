@@ -198,10 +198,104 @@ urlpatterns = [
 ]
 ```
 코드 설명은 다음과 같다.
-* **# 1**: URL 패턴을 정의할 때, path()와 [re_path()](#-re_path) 함수를 같이 사용하는 것도 가능하다. 한글 슬러그를 위해 re_path()를 사용하고 있다. (아래 **# 6**번, **# 10**번 참고)
-* 
+* **# 1**: URL 패턴을 정의할 때, path()와 **[re_path()](#-re_path)** 함수를 같이 사용하는 것도 가능하다. 한글 슬러그를 위해 re_path()를 사용하고 있다. (아래 **# 6**번, **# 10**번 참고)
+* **# 2**: 뷰 모듈의 모든 클래스를 각각 임포트해도 되지만, 뷰 클래스가 많을 때는 이렇게 뷰 모듈 자체를 임포트하면 편리하다.
+* **# 3**: 필수는 아니지만 이렇게 예시 URL을 기록해주면 이해하기가 쉬워진다.
+* **# 4**: URL /blog/ 요청을 처리할 뷰 클래스를 PostLV로 지정한다. URL 패턴의 이름은 네임스페이스를 포함해 'blog:index'가 된다.
+* **# 5**: URL /blog/post/ 요청을 처리할 뷰 클래스를 PostLV로 지정한다. URL 패턴의 이름은 네임스페이스를 포함해 'blog:post_list'가 된다. PostLV 뷰 클래스는 /blog/와 /blog/post/ 2가지 요청을 모두 처리한다는 점을 유의하자.
+* **# 6**: URL /blog/post/슬러그/ 요청을 처리할 뷰 클래스를 PostDV로 지정한다. URL 패턴의 이름은 네임스페이스를 포함해 'blog:post_detail'이 된다. 아래와 같이 하면 한글이 포함된 슬러그는 처리를 못한다. \<slug\> 컨버터(SlugConverter)는 '[-a-zA-Z0-9_]+'만 인식하기 때문이다.<br>
+    ```python
+    path('post/<slug:slug>/', views.PostDV.as_view(), name='post_detail'),
+    ```
+* **# 7**: URL /blog/archive/ 요청을 처리할 뷰 클래스를 PostAV로 지정한다. URL 패턴의 이름은 네임스페이스를 포함해 'blog:post_archive'가 된다.
+* **# 8**: URL /blog/archive/숫자/ 요청을 처리할 뷰 클래스를 PostYAV로 지정한다. URL 패턴의 이름은 네임스페이스를 포함해 'blog:post_year_archive'가 된다.
+* **# 9**: URL /blog/archive/숫자/문자/ 요청을 처리할 뷰 클래스를 PostMAV로 지정한다. URL 패턴의 이름은 네임스페이스를 포함해 'blog:post_month_archive'가 된다.
+* **# 10**: URL /blog/archive/숫자/문자/숫자/ 요청을 처리할 뷰 클래스를 PostDAV로 지정한다. URL 패턴의 이름은 네임스페이스를 포함해 'blog:post_day_archive'가 된다. 만일 /연/월/일/ 부분을 좀 더 제한하여 /blog/archive/4자리 숫자/3자리 소문자/한두 자리 숫자/로 지정하고 싶다면, 아래와 같이 re_path() 함수를 사용하여 정규식으로 표현할 수 있다.<br>
+    ```python
+    re_path(r'^archive/(?<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\d{1,2})/$', views.PostDAV.as_view(), name='post_day_archive'),
+    ```
+* **# 11**: URL /blog/archive/today/ 요청을 처리할 뷰 클래스를 PostTAV로 지정한다. URL 패턴의 이름은 네임스페이스를 포함해 'blog:post_today_archive'가 된다.
+
+<br>
+
+### 뷰 코딩하기
+이제 URLconf에서 지정한 클래스형 제네릭 뷰를 코딩한다.<br>
+이번 블로그 앱의 특징은 기본적인 ListView, DetailView 외에도 날짜를 기준으로 연도별, 월별, 일별 포스트를 찾아주는 날짜 제네릭 뷰를 사용하고 있다는 점이다. 대부분의 블로그 앱에서 아카이브(Archive) 메뉴로 제공하는 기능이다. 이에 대해 살펴보자.
+* blog/views.py
+```python
+from django.views.generic import ListView, DetailView  ------------------------------ # 1
+from django.views.generic import ArchiveIndexView, YearArchiveView, MonthArchiveView
+from django.views.generic import DayArchiveView, TodayArchiveView  ------------------ # 1
+
+from blog.models import Post  # 2
 
 
+#--- ListView
+class PostLV(ListView):  # 3
+    model = Post  # 4
+    template_name = 'blog/post_all.html'  # 5
+    context_object_name = 'posts'  # 6
+    paginate_by = 2  # 7
+
+#--- DetailView
+class PostDV(DetailView):  # 8
+    model = Post  # 9
+
+#--- ArchiveView
+class PostAV(ArchiveIndexView):  # 10
+    model = Post  # 11
+    date_field = 'modify_dt'  # 12
+
+
+class PostYAV(YearArchiveView):  # 13
+    model = Post  # 14
+    date_field = 'modify_dt'  # 15
+    make_object_list = True  # 16
+
+
+class PostMAV(MonthArchiveView):  # 17
+    model = Post  # 18
+    date_field = 'modify_dt'  # 19
+
+
+class PostDAV(DayArchiveView):  # 20
+    model = Post  # 21
+    date_field = 'modify_dt'  # 22
+
+
+class PostTAV(TodayArchiveView):  # 23
+    model = Post  # 24
+    date_field = 'modify_dt'  # 25
+```
+코드 설명은 다음과 같다.
+* **# 1**: 뷰 작성에 필요한 클래스형 제네릭 뷰를 임포트한다.
+* **# 2**: 테이블 조회를 위해 Post 모델 클래스를 임포트한다.
+* **# 3**: ListView 제네릭 뷰를 상속받아 PostLV 클래스형 뷰를 정의한다. ListView 제네릭 뷰는 테이블로부터 객체 리스트를 가져와 그 리스트를 출력한다.
+* **# 4**: PostLV 클래스의 대상 테이블은 Post 테이블이다.
+* **# 5**: 템플릿 파일은 'blog/post_all.html'로 지정한다. 만일 지정하지 않으며, 디폴트 템플릿 파일명은 'blog/post_list.html'이 된다.
+* **# 6**: 템플릿 파일로 넘겨주는 객체 리스트에 대한 컨텍스트 변수명을 'posts'로 지정한다. 이렇게 별도로 지정하더라도 디폴트 컨텍스트 변수명인 'object_list' 역시 사용할 수 있다.
+* **# 7**: 한 페이지에 보여주는 객체 리스트의 숫자는 2이다. 클래스형 뷰에서는 이렇게 paginate_by 속성을 정의하는 것만으로도 장고가 제공하는 페이징 기능을 사용할 수 있습니다. 페이징 기능이 활성화되면 객체 리스트 하단에 페이지를 이동할 수 있는 버튼을 만들 수 있다.
+* **# 8**: DetailView 제네릭 뷰를 상속받아 PostDV 클래스형 뷰를 정의한다. DetailView 제네릭 뷰는 테이브로부터 특정 객체를 가져와 그 객체의 상세 정보를 출력한다. 테이블에서 특정 객체를 조회하기 위한 키는 기본 키 대신 slug 속성을 사용하고 있다. 이 slug 파라미터는 URLconf에서 추출해 뷰로 넘겨준다.
+* **# 9**: PostDV 클래스의 대상 테이블은 Post 테이블이다. 다른 속성들은 지정하지 않았으므로, 디폴트값을 사용한다.
+
+다음부터는 날짜 제네릭 뷰에 대한 설명이다.
+
+* **# 10**: ArchiveIndexView 제네릭 뷰를 상속받아 PostAV 클래스형 뷰를 정의한다. ArchiveIndexView 제네릭 뷰는 테이블로부터 객체 리스트를 가져와, 날짜 필드를 기준으로 최신 객체를 먼저 출력한다.
+* **# 11**: PostAV 클래스의 대상 테이블은 Post 테이블이다.
+* **# 12**: 기준이 되는 날짜 필드는 'modify_dt' 컬럼을 사용한다. 즉, 변경 날짜가 최근인 포스트를 먼저 출력한다.
+* **# 13**: YearArchiveView 제네릭 뷰를 상속받아 PostYAV 클래스형 뷰를 정의한다. YearArchiveView 제네릭 뷰는 테이블로부터 날짜 필드의 연도를 기준으로 객체 리스트를 가져와 그 객체들이 속한 월을 리스트로 출력한다. 날자 필드의 연도 파라미터는 URLconf에서 추출해 뷰로 넘겨준다.
+* **# 14**: PostYAV 클래스의 대상 테이블은 Post 테이블이다.
+* **# 15**: 기준이 되는 날짜 필드는 'modify_dt' 컬럼을 사용한다. 즉 변경 날짜가 YYYY 연도인 포스트를 검색해, 그 포스트들의 변경 월을 출력한다.
+* **# 16**: make_object_list 속성이 True면 해당 연도에 해당하는 객체의 리스트를 만들어서 템플릿에 넘겨준다. 즉 템플릿 파일에서 object_list 컨텍스트 변수를 사용할 수 있다. 디폴트는 False이다.
+* **# 17**: MonthArchiveView 제네릭 뷰를 상속받아 PostMAV 클래스형 뷰를 정의한다. MonthArchiveView 제네릭 뷰는 테이블로부터 날짜 필드의 연월을 기준으로 객체 리스트를 가져와 그 리스트를 출력한다. 날짜 필드의 연도 및 월 파라미터는 URLconf에서 추출해 뷰로 넘겨준다.
+* **# 18**: PostMAV 클래스의 대상 테이블은 Post 테이블이다.
+* **# 19**: 기준이 되는 날짜 필드는 'modify_dt' 컬럼을 사용한다. 즉 변경 날짜의 연월을 기준으로 포스트를 검색해 그 포스트들의 리스트를 출력한다.
+* **# 20**: DayArchiveView 제네릭 뷰를 상속받아 PostDAV 클래스형 뷰를 정의한다. DaxyArchiveView 제네릭 뷰는 테이블로부터 날짜 필드의 연월일을 기준으로 객체 리스트를 가져와 그 리스트를 출력한다. 날짜 필드의 연도, 월, 일 파라미터는 URLconf에서 추출해 뷰로 넘겨준다.
+* **# 21**: PostDAV 클래스의 대상 테이블은 Post 테이블이다.
+* **# 22**: 기준이 되는 날짜 필드는 'modify_dt' 컬럼을 사용한다. 즉 변경 날짜의 연월일을 기준으로 포스트를 검색해 그 포스트들의 리스트를 출력한다.
+* **# 23**: TodayArchiveView 제네릭 뷰를 상속받아 PostTAV 클래스형 뷰를 정의한다. TodayArchiveView 제네릭 뷰는 테이블로부터 날짜 필드가 오늘인 객체 리스트를 가져와 그 리스트를 출력한다. TodayArchiveView는 오늘 날짜를 기준 연월일로 지정한다는 점 이외에는 DayArchiveView와 동일하다.
+* **# 24**: PostTAV 클래스의 대상 테이블은 Post 테이블이다.
+* **# 25**: 기준이 되는 날짜 필드는 'modify_dt' 컬럼을 사용한다. 즉 변경 날짜가 오늘인 포스트를 검색해, 그 포스트들의 리스트를 출력한다.
 
 
 
@@ -539,7 +633,18 @@ Django 2.0 이상 버전에서는 일반적인 URL 패턴 지정을 위해 djang
 
 <br>
 
+## ✅ Generic Date Views
+Generic Date Views는 날짜 관련 필터링을 하는 클래스 Views이다.
+* ArchiveIndexView: 지정 날짜 필드 역순으로 정렬된 목록. 주로 최신 현황을 확인할 때 사용
+* YearArchiveView: 지정 year 년도의 목록
+* MonthArchiveView: 지정 year/month 월의 목록
+* WeekArchiveView: 지정 year/week 주의 목록
+* DayArchiveView: 지정 year/month/day 일의 목록
+* TodayArchiveView: 오늘 날짜의 목록
+* DateDetailView: DetailView에서 지정 year/month/day가 추가되었다고 생각하면 됨.
 
+### References
+* https://moz1e.tistory.com/163
 
 
 
