@@ -98,13 +98,7 @@ class SearchFormView(FormView):  # 1
 * **# 10**: 검색 결과 리스트인 post_list를 컨텍스트 변수 object_list에 지정한다.
 * **# 11**: 단축 함수 **[render()](#-render)** 는 템플릿 파일과 컨텍스트 변수를 처리해, 최종적으로 HttpResponse 객체를 반환한다. form_valid() 메소드는 보통 리다이렉트 처리를 위해 HttpResponseRedirect 객체를 반환한다. 여기서는 form_valid() 메소드를 재정의하여 render() 함수를 사용함으로써, HttpResponseRedirect가 아니라 HttpResponse 객체를 반환한다. 즉 리다이렉트 처리가 되지 않는다.
 
-
-
-
-
-
-
-
+<br><br>
 
 
 
