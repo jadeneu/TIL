@@ -92,6 +92,11 @@ class SearchFormView(FormView):  # 1
 * **# 4**: POST 요청으로 들어온 데이터의 유효성 검사를 실시해 에러가 없으면 form_valid() 메소드를 실행한다.
 * **# 5**: 유효성 검사를 통과하면, 사용자가 입력한 데이터들은 cleaned_data 사전에 존재한다. 이 사전에서 search_word 값을 추출해 searchWord 변수에 지정한다. search_word 키는 PostSearchForm 클래스에서 정의한 필드 이름이다.
 * **# 6**: Q 객체는 filter() 메소드의 매칭 조건을 다양하게 줄 수 있도록 한다. 예제에서는 3개의 조건을 OR 문장으로 연결하고 있다. 각 조건의 icontains 연산자는 대소문자를 구분하지 않고 단어가 포함되어 있는지 검사한다. distinct() 메소드는 중복된 객체를 제외한다. 즉 이 줄의 의미는 Post 테이블의 모든 레코드에 대해 title, description, content 컬럼에 searchWord가 포함된 레코드를 대소문자 구별 없이 검색하고 서로 다른 레코드들만 리스트로 만들어서 post_list 변수에 지정한다.
+* **# 7**: 템플릿에 넘겨줄 컨텍스트 변수 context를 사전 형식으로 정의한다.
+* **# 8**: form 객체, 즉 PostSearchForm 객체를 컨텍스트 변수 form에 지정한다.
+* **# 9**: 검색용 단어 searchWord를 컨텍스트 변수 search_term에 지정한다.
+* **# 10**: 검색 결과 리스트인 post_list를 컨텍스트 변수 object_list에 지정한다.
+* **# 11**: 단축 함수 **[render()](#-render)** 는 템플릿 파일과 컨텍스트 변수를 처리해, 최종적으로 HttpResponse 객체를 반환한다. form_valid() 메소드는 보통 리다이렉트 처리를 위해 HttpResponseRedirect 객체를 반환한다. 여기서는 form_valid() 메소드를 재정의하여 render() 함수를 사용함으로써, HttpResponseRedirect가 아니라 HttpResponse 객체를 반환한다. 즉 리다이렉트 처리가 되지 않는다.
 
 
 
@@ -226,6 +231,30 @@ Account.objects.filter(user_account='abc')
 
 ### References
 * https://velog.io/@ybear90/Django-Django-ORM-queryset-%EC%A0%95%EB%A6%ACmodel-filter-all-get-filter-exists-create-save
+
+<br>
+
+## ✅ render()
+#### render
+```python
+render(request, template_name, context=None, content_type=None, status=None, using=None)
+```
+`render` 는 다음과 같은 파라미터들을 가진다. 이 중에서 `request` 와 `template_name` 은 필수적으로 필요하다. request 는 위와 동일하게 써주게 되고, template_name 은 불러오고 싶은 템플릿을 기재해준다. 쉽게 생각해서 화면에 html 파일을 띄운다고 생각하면 된다. 이 때 `context` 로 원하는 인자를, 즉 view 에서 사용하던 파이썬 변수를 html 템플릿으로 넘길 수 있다. context 는 딕셔너리형으로 사용하며 key 값이 템플릿에서 사용할 변수이름, value 값이 파이썬 변수가 된다.
+```python
+# views.py
+
+from django.shortcuts import render
+
+def my_view(request):
+    name = "minsung"
+    return render(request, 'myapp/index.html', {
+        'name': name,
+    }
+```
+
+### References
+* https://ssungkang.tistory.com/entry/Django-render-%EC%99%80-redirect-%EC%9D%98-%EC%B0%A8%EC%9D%B4
+
 
 
 
