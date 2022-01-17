@@ -174,8 +174,58 @@ for account in accounts:
 ```
 #### WHERE Clause
 #### SQL
+```sql
+SELECT * FROM Account
+WHERE user_account='abc';
+```
+#### Python Django ORM
+```python
+Account.objects.filter(user_account='abc')
+```
+* **filter() 메소드와 같이 쓰였던 exists()**<br>
+  해당 메소드는 DB에서 filter를 통해 원하는 조건의 데이터가 유무에 따라 True, False를 반환하는 메소드이다. queryset은 아니다. (`type()`함수 등을 통해 확인 가능) 어떤 특정 조건에 대해서 이벤트나 로직을 처리할 때 많이 쓰임.
+* **get() 메소드**<br>
+  해당 메소드는 queryset이 아닌 모델 객체를 반환하는 함수이다. 특정 column 조건에 해당하는 결과를 객체로 반환하는 함수로 찾는 결과가 없다면 DoesNotExist 예외를 발생시킨다. 따라서 해당 메소드를 이용하여 원하는 결과를 가져오고자 할 때에는
 
+  `try-except` 구문등으로 예외처리를 해주는 것이 좋다.
+  ```python
+  # try-except 사용예제
+  try:
+      if Account.objects.filter(user_account=account_data['user_account']).exists():
+          account = Account.objects.get(user_account=account_data['user_account'])
 
+          if account.password == account_data['password']:
+              return JsonResponse({'message':'Welcome back!'}, status=200)
+          return HttpResponse(status=401)
+
+       return HttpResponse(status=400)
+
+    except KeyError:
+        return HttpResponse(status=400)
+  ```
+  
+<br>
+
+### 👉 UPDATE
+아래 메소드의 결과들은 모두다 같은 효과를 지니게 된다.
+```python
+>>> Account.objects.create(user_account='ghi', password=5678)
+```
+```python
+>>> Account(
+		user_account='ghi',
+		password=5678,
+).save()
+```
+둘다 모델 객체를 생성하여 실제 DB에 UPDATE를 진행하는 방법으로 알고 있으면 된다.
+
+<br>
+
+### 👉 ETC
+기타 다른 queryset이나 그에 해당하는 SQL 구문과 관련된 내용은 [django queryset 공식문서](https://docs.djangoproject.com/en/4.0/ref/models/querysets/)를 참고하자.
+
+### References
+* https://velog.io/@ybear90/Django-Django-ORM-queryset-%EC%A0%95%EB%A6%ACmodel-filter-all-get-filter-exists-create-save
 
 
 
